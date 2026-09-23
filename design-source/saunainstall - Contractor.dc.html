@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&family=Newsreader:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: #FCF8F1; color: #272019; font-family: "Hanken Grotesk", system-ui, sans-serif; font-size: 17px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: #8A5424; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+</style>
+<template id="__bundler_thumbnail" data-bg-color="#2A2219">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#2A2219"></rect>
+    <rect x="470" y="290" width="260" height="260" rx="56" fill="#CDA468" transform="rotate(45 600 420)"></rect>
+    <rect x="530" y="350" width="140" height="140" rx="24" fill="#2A2219" transform="rotate(45 600 420)"></rect>
+    <text x="600" y="690" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="72" font-weight="700" letter-spacing="-3" fill="#FCF8F1">for contractors</text>
+  </svg>
+</template>
+</helmet>
+<div style="background: #FCF8F1; color: #272019; font-family: 'Hanken Grotesk', system-ui, sans-serif; font-size: 17px; line-height: 1.55; min-height: 100vh; display: flex; flex-direction: column;">
+
+  <header style="position: sticky; top: 0; z-index: 50; background: rgba(252,248,241,.82); backdrop-filter: blur(12px) saturate(1.2); border-bottom: 1px solid #E4D8C5;">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 11px 28px; display: flex; align-items: center; justify-content: space-between; min-height: 70px; gap: 18px; flex-wrap: wrap; row-gap: 9px;">
+      <a href="saunainstall%20-%20Landing.dc.html" style="display: flex; align-items: center; gap: 11px; font-weight: 800; font-size: 20px; letter-spacing: -.03em;">
+        <span style="width: 32px; height: 32px; border-radius: 9px; background: #8A5424; display: grid; place-items: center; box-shadow: 0 1px 2px rgba(42,34,25,.06); flex: none;"><i style="width: 13px; height: 13px; border: 2px solid #F4ECE0; transform: rotate(45deg); border-radius: 2px; display: block;"></i></span>
+        <b style="font-weight: 800;">sauna<span style="color: #8A5424;">install</span></b>
+      </a>
+      <nav style="display: flex; align-items: center; gap: 22px; flex-wrap: nowrap; margin-left: auto;">
+        <a href="saunainstall%20-%20Landing.dc.html#how" style="font-size: 15.5px; font-weight: 500; color: #6B6253; white-space: nowrap;" style-hover="color: #272019;">How it works</a>
+        <a href="saunainstall%20-%20Homeowner.dc.html" style="font-size: 15.5px; font-weight: 500; color: #6B6253; white-space: nowrap;" style-hover="color: #272019;">List your sauna project</a>
+        <a href="saunainstall%20-%20Contractor.dc.html" style="font-size: 15.5px; font-weight: 600; color: #272019; white-space: nowrap;" style-hover="color: #8A5424;">For contractors</a>
+      </nav>
+      <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; row-gap: 4px; justify-content: flex-end; flex: none;">
+        <a href="saunainstall%20-%20Homeowner.dc.html#login" style="font-family: inherit; font-size: 15.5px; font-weight: 600; color: #272019; background: none; border: 1px solid #D8C8AF; border-radius: 11px; padding: 9px 16px; white-space: nowrap; cursor: pointer;" style-hover="background: #F4ECE0; color: #8A5424;">Sauna owner log in</a>
+        <button type="button" onClick="{{ openLogin }}" style="display: {{ loginBtnDisplay }}; font-family: inherit; font-size: 15.5px; font-weight: 600; color: #272019; background: none; border: 1px solid #D8C8AF; border-radius: 11px; padding: 9px 16px; white-space: nowrap; cursor: pointer;" style-hover="background: #F4ECE0; color: #8A5424;">Contractor log in</button>
+        <button type="button" onClick="{{ goDashboard }}" style="display: {{ myBidsDisplay }}; font-family: inherit; font-size: 15.5px; font-weight: 600; color: #272019; background: none; border: 1px solid #D8C8AF; border-radius: 11px; padding: 9px 16px; white-space: nowrap; cursor: pointer;" style-hover="background: #F4ECE0; color: #8A5424;">My bids</button>
+      </div>
+    </div>
+  </header>
+
+  <main style="flex: 1; padding: 46px 0 90px;">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 0 28px;">
+
+      <div style="max-width: 860px; margin: 0 auto 44px; display: {{ railDisplay }}; align-items: center;">
+        <sc-for list="{{ rail }}" as="r" hint-placeholder-count="4">
+          <div style="display: flex; align-items: center; flex: {{ r.flex }}; min-width: 0;">
+            <div style="display: flex; align-items: center; gap: 11px; flex: none;">
+              <span style="width: 32px; height: 32px; flex: none; border-radius: 50%; display: grid; place-items: center; font-size: 14.5px; font-weight: 700; background: {{ r.bg }}; color: {{ r.fg }}; border: 1px solid {{ r.bd }};">{{ r.num }}</span>
+              <span style="font-size: 14.5px; font-weight: 600; color: {{ r.labelFg }}; white-space: nowrap;">{{ r.label }}</span>
+            </div>
+            <span style="height: 2px; flex: 1; min-width: 16px; margin: 0 12px; border-radius: 2px; background: {{ r.line }}; display: {{ r.lineDisplay }};"></span>
+          </div>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{ isLogin }}">
+        <div style="max-width: 470px; margin: 30px auto 0; animation: fade .25s ease;">
+          <span style="font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #8A5424; display: inline-flex; align-items: center; gap: 9px;"><span style="width: 18px; height: 2px; background: #8A5424; border-radius: 2px;"></span>Contractor log in</span>
+          <h1 style="font-size: clamp(28px, 3.8vw, 38px); margin: 16px 0 0; letter-spacing: -.03em; line-height: 1.05; font-weight: 700;">Welcome back, Contractors.</h1>
+          <p style="font-size: 17.5px; color: #6B6253; margin: 12px 0 0;">Log in to go straight to your bids dashboard.</p>
+
+          <div style="margin-top: 26px; background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px; box-shadow: 0 10px 30px -12px rgba(42,34,25,.22), 0 2px 6px rgba(42,34,25,.06);">
+            <div>
+              <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Email<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+              <input type="email" placeholder="you@company.com" value="{{ loginEmailVal }}" onChange="{{ loginEmailOn }}" onKeyDown="{{ loginKeyDown }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ loginEmailBd }}; border-radius: 11px; padding: 13px 14px;" />
+              <span style="display: {{ loginEmailErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ loginEmailMsg }}</span>
+            </div>
+            <div style="margin-top: 14px;">
+              <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Password<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+              <input type="password" placeholder="••••••••" value="{{ loginPassVal }}" onChange="{{ loginPassOn }}" onKeyDown="{{ loginKeyDown }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ loginPassBd }}; border-radius: 11px; padding: 13px 14px;" />
+              <span style="display: {{ loginPassErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ loginPassMsg }}</span>
+            </div>
+            <button type="button" onClick="{{ submitLogin }}" style="width: 100%; margin-top: 22px; display: inline-flex; align-items: center; justify-content: center; gap: 9px; font-family: inherit; font-size: 17px; font-weight: 600; cursor: pointer; border-radius: 11px; border: 1px solid transparent; padding: 16px 28px; background: #8A5424; color: #fff;" style-hover="background: #6F421A;">
+              Log in to my dashboard
+              <svg viewBox="0 0 20 20" fill="none" style="width: 17px; height: 17px;"><path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </button>
+            <p style="font-size: 13.5px; color: #8A8071; margin: 16px 0 0; text-align: center;">No account yet? <button type="button" onClick="{{ goSignup }}" style="font-family: inherit; font-size: 13.5px; font-weight: 600; color: #8A5424; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px;">Create an installer account</button></p>
+          </div>
+          <p style="font-size: 13px; color: #8A8071; margin: 16px 0 0; text-align: center;">Unlimited bids · $24.99 a month · first month free.</p>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isSignup }}" hint-placeholder-val="{{ true }}">
+        <div style="animation: fade .25s ease;">
+          <div style="background: #2A2219; color: #F4ECE0; border-radius: 28px; padding: 46px 44px; display: grid; grid-template-columns: 1.2fr .8fr; gap: 40px; align-items: center; box-shadow: 0 18px 44px -20px rgba(42,34,25,.45);">
+            <div>
+              <span style="font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #CDA468; display: inline-flex; align-items: center; gap: 9px;"><span style="width: 18px; height: 2px; background: #CDA468; border-radius: 2px;"></span>Installer membership</span>
+              <h1 style="font-size: clamp(34px, 4.4vw, 52px); margin: 18px 0 0; letter-spacing: -.035em; line-height: 1.02; font-weight: 800; color: #FCF8F1;">Unlimited bids for <em style="font-family: 'Newsreader', serif; font-style: italic; font-weight: 400; color: #CDA468;">$24.99</em> a month.</h1>
+              <p style="font-size: 19px; color: #C9BCA7; margin: 16px 0 0; max-width: 34em;">One flat membership, unlimited bids — no connects, no per-lead charges. Homeowners in your service area post sauna installs every day.</p>
+              <div style="display: grid; gap: 12px; margin-top: 26px; font-size: 15.5px; color: #E7DCC9;">
+                <div style="display: flex; gap: 11px; align-items: flex-start;"><svg viewBox="0 0 20 20" fill="none" style="width: 19px; height: 19px; color: #7FC592; flex: none; margin-top: 3px;"><path d="M4 10.5l3.5 3.5L16 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg><span><b style="font-weight: 700; color: #FCF8F1;">Unlimited bids</b> in every ZIP code and city you serve</span></div>
+                <div style="display: flex; gap: 11px; align-items: flex-start;"><svg viewBox="0 0 20 20" fill="none" style="width: 19px; height: 19px; color: #7FC592; flex: none; margin-top: 3px;"><path d="M4 10.5l3.5 3.5L16 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>Full specs, make, model, and site notes before you quote</span></div>
+                <div style="display: flex; gap: 11px; align-items: flex-start;"><svg viewBox="0 0 20 20" fill="none" style="width: 19px; height: 19px; color: #7FC592; flex: none; margin-top: 3px;"><path d="M4 10.5l3.5 3.5L16 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>ACH payout as soon as the homeowner marks the job completed</span></div>
+                <div style="display: flex; gap: 11px; align-items: flex-start;"><svg viewBox="0 0 20 20" fill="none" style="width: 19px; height: 19px; color: #7FC592; flex: none; margin-top: 3px;"><path d="M4 10.5l3.5 3.5L16 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>Cancel any time — no contract, no commission on your work</span></div>
+              </div>
+            </div>
+
+            <div style="background: #FCF8F1; color: #272019; border-radius: 22px; padding: 30px; box-shadow: 0 14px 34px -16px rgba(0,0,0,.5);">
+              <span style="display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #3E7A4E; background: #E9F1EA; border: 1px solid #CFE3D3; padding: 5px 12px; border-radius: 999px;">First month free</span>
+              <div style="display: flex; align-items: baseline; gap: 8px; margin-top: 18px;">
+                <span style="font-size: 52px; font-weight: 800; letter-spacing: -.04em; line-height: 1;">$24.99</span>
+                <span style="font-size: 17px; font-weight: 600; color: #8A8071;">/ month</span>
+              </div>
+              <p style="font-size: 15px; color: #6B6253; margin: 12px 0 0;">Free for your first 30 days, then $24.99 a month for unlimited bids. Cancel any time.</p>
+              <a href="#signup-form" style="width: 100%; margin-top: 22px; display: inline-flex; align-items: center; justify-content: center; gap: 9px; font-family: inherit; font-size: 17px; font-weight: 600; border-radius: 11px; border: 1px solid transparent; padding: 16px 24px; background: #8A5424; color: #fff;" style-hover="background: #6F421A; color: #fff;">
+                Start my free month
+                <svg viewBox="0 0 20 20" fill="none" style="width: 17px; height: 17px;"><path d="M10 4v12M5 11l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              </a>
+              <div style="display: grid; gap: 8px; margin-top: 18px; padding-top: 16px; border-top: 1px solid #E4D8C5; font-size: 14px; color: #6B6253;">
+                <div style="display: flex; justify-content: space-between; gap: 12px;"><span style="color: #8A8071;">Bids included</span><b style="font-weight: 700; color: #272019;">Unlimited</b></div>
+                <div style="display: flex; justify-content: space-between; gap: 12px;"><span style="color: #8A8071;">Per-lead fees</span><b style="font-weight: 700; color: #272019;">None</b></div>
+                <div style="display: flex; justify-content: space-between; gap: 12px;"><span style="color: #8A8071;">Commission on jobs</span><b style="font-weight: 700; color: #272019;">0%</b></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="signup-form" style="max-width: 760px; margin: 72px auto 0; scroll-margin-top: 96px;">
+            <span style="font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #8A5424; display: inline-flex; align-items: center; gap: 9px;"><span style="width: 18px; height: 2px; background: #8A5424; border-radius: 2px;"></span>Step 1 · Create your account</span>
+            <h2 style="font-size: clamp(26px, 3.2vw, 36px); margin: 16px 0 0; letter-spacing: -.03em; line-height: 1.05; font-weight: 700;">Tell us about your business.</h2>
+            <p style="font-size: 17.5px; color: #6B6253; margin: 12px 0 0;">Takes about a minute. Your first month is free — a card is only processed before your first bid.</p>
+
+            <div style="margin-top: 28px; background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px; box-shadow: 0 10px 30px -12px rgba(42,34,25,.22), 0 2px 6px rgba(42,34,25,.06);">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                <div>
+                  <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">First name<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+                  <input placeholder="Sam" value="{{ firstVal }}" onChange="{{ firstOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ firstBd }}; border-radius: 11px; padding: 13px 14px;" />
+                  <span style="display: {{ firstErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ firstMsg }}</span>
+                </div>
+                <div>
+                  <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Last name<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+                  <input placeholder="Nordquist" value="{{ lastVal }}" onChange="{{ lastOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ lastBd }}; border-radius: 11px; padding: 13px 14px;" />
+                  <span style="display: {{ lastErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ lastMsg }}</span>
+                </div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px;">
+                <div>
+                  <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Phone number<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+                  <input inputmode="tel" placeholder="(208) 555-0142" value="{{ phoneVal }}" onChange="{{ phoneOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ phoneBd }}; border-radius: 11px; padding: 13px 14px;" />
+                  <span style="display: {{ phoneErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ phoneMsg }}</span>
+                </div>
+                <div>
+                  <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Email<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+                  <input type="email" placeholder="you@company.com" value="{{ emailVal }}" onChange="{{ emailOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ emailBd }}; border-radius: 11px; padding: 13px 14px;" />
+                  <span style="display: {{ emailErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ emailMsg }}</span>
+                </div>
+              </div>
+
+              <hr style="border: none; border-top: 1px solid #E4D8C5; margin: 26px 0;" />
+              <div style="font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8A8071;">Business address</div>
+              <div style="margin-top: 14px;">
+                <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Street address<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+                <input placeholder="118 Warm Springs Rd" value="{{ addrVal }}" onChange="{{ addrOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ addrBd }}; border-radius: 11px; padding: 13px 14px;" />
+                <span style="display: {{ addrErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ addrMsg }}</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 1.3fr .5fr .6fr; gap: 12px; margin-top: 14px;">
+                <div>
+                  <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">City<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+                  <input placeholder="Ketchum" value="{{ cityVal }}" onChange="{{ cityOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ cityBd }}; border-radius: 11px; padding: 13px 14px;" />
+                  <span style="display: {{ cityErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ cityMsg }}</span>
+                </div>
+                <div>
+                  <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">State<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+                  <input placeholder="ID" maxlength="2" value="{{ stateVal }}" onChange="{{ stateOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ stateBd }}; border-radius: 11px; padding: 13px 14px; text-transform: uppercase;" />
+                  <span style="display: {{ stateErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ stateMsg }}</span>
+                </div>
+                <div>
+                  <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">ZIP code<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+                  <input inputmode="numeric" maxlength="5" placeholder="83340" value="{{ zipVal }}" onChange="{{ zipOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ zipBd }}; border-radius: 11px; padding: 13px 14px;" />
+                  <span style="display: {{ zipErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ zipMsg }}</span>
+                </div>
+              </div>
+              <div style="margin-top: 16px;">
+                <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Company website <span style="color: #8A8071; font-weight: 400;">(optional)</span></label>
+                <input placeholder="northwoodsauna.com" value="{{ siteVal }}" onChange="{{ siteOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ siteBd }}; border-radius: 11px; padding: 13px 14px;" />
+                <p style="font-size: 13px; color: #8A8071; margin: 8px 0 0;">We use your site to verify licensing and past sauna work during review.</p>
+              </div>
+
+              <button type="button" onClick="{{ submitSignup }}" style="width: 100%; margin-top: 24px; display: inline-flex; align-items: center; justify-content: center; gap: 9px; font-family: inherit; font-size: 17px; font-weight: 600; cursor: pointer; border-radius: 11px; border: 1px solid transparent; padding: 16px 28px; background: #8A5424; color: #fff;" style-hover="background: #6F421A;">
+                Create account · first month free
+                <svg viewBox="0 0 20 20" fill="none" style="width: 17px; height: 17px;"><path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              </button>
+              <p style="font-size: 13px; color: #8A8071; margin: 14px 0 0; text-align: center;">A card on file is required and processed once before your first bid. ACH payout details are added in the same step.</p>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isBrowse }}">
+        <div style="animation: fade .25s ease;">
+          <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
+            <div>
+              <span style="font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #8A5424; display: inline-flex; align-items: center; gap: 9px;"><span style="width: 18px; height: 2px; background: #8A5424; border-radius: 2px;"></span>Available projects</span>
+              <h1 style="font-size: clamp(28px, 3.6vw, 40px); margin: 14px 0 0; letter-spacing: -.03em; line-height: 1.05; font-weight: 700;">{{ resultCount }} open projects in your areas.</h1>
+            </div>
+            <div style="display: inline-flex; align-items: center; gap: 9px; font-size: 14.5px; font-weight: 700; color: #8A5424; background: #EFE0CC; border: 1px solid #E0CBA8; padding: 9px 16px; border-radius: 999px;">
+              <svg viewBox="0 0 20 20" fill="none" style="width: 16px; height: 16px;"><path d="M10 2v16M4 7h12M4 13h12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path></svg>
+              Unlimited bids · no per-bid fees
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: .68fr 1.32fr; gap: 24px; margin-top: 28px; align-items: start;">
+            <div style="position: sticky; top: 96px; display: grid; gap: 16px;">
+              <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 24px;">
+                <div style="font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8A8071;">Service areas</div>
+                <p style="font-size: 14px; color: #6B6253; margin: 8px 0 14px;">Add every ZIP code or city you cover to see the full picture.</p>
+                <div style="display: flex; gap: 8px;">
+                  <input placeholder="ZIP or city" value="{{ locInputVal }}" onChange="{{ locInputOn }}" onKeyDown="{{ locKeyDown }}" style="flex: 1; min-width: 0; font-family: inherit; font-size: 15.5px; color: #272019; background: #FCF8F1; border: 1px solid #D8C8AF; border-radius: 11px; padding: 12px 13px;" />
+                  <button type="button" onClick="{{ addLoc }}" style="font-family: inherit; font-size: 15.5px; font-weight: 600; cursor: pointer; border-radius: 11px; border: 1px solid transparent; padding: 12px 18px; background: #8A5424; color: #fff;" style-hover="background: #6F421A;">Add</button>
+                </div>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px;">
+                  <sc-for list="{{ locs }}" as="loc" hint-placeholder-count="3">
+                    <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: #272019; background: #F4ECE0; border: 1px solid #D8C8AF; border-radius: 999px; padding: 7px 9px 7px 14px;">
+                      {{ loc.label }}
+                      <button type="button" onClick="{{ loc.remove }}" style="width: 20px; height: 20px; border-radius: 50%; border: none; background: #E4D8C5; cursor: pointer; display: grid; place-items: center; color: #6B6253; font-family: inherit;" style-hover="background: #D8C8AF;">
+                        <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
+                      </button>
+                    </span>
+                  </sc-for>
+                </div>
+                <p style="font-size: 13px; color: #8A8071; margin: 14px 0 0; display: {{ emptyLocDisplay }};">No areas added — showing every open project.</p>
+              </div>
+              <div style="background: #F4ECE0; border: 1px solid #D8C8AF; border-radius: 22px; padding: 24px;">
+                <div style="font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8A8071;">Bidding status</div>
+                <div style="display: flex; align-items: center; gap: 10px; margin-top: 12px; font-size: 15px; font-weight: 600; color: {{ statusFg }};">
+                  <span style="width: 9px; height: 9px; border-radius: 50%; background: {{ statusFg }}; flex: none;"></span>{{ statusLabel }}
+                </div>
+                <p style="font-size: 14px; color: #6B6253; margin: 10px 0 0;">{{ statusBody }}</p>
+                <button type="button" onClick="{{ goPayment }}" style="width: 100%; margin-top: 16px; display: {{ payBtnDisplay }}; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer; border-radius: 11px; border: 1px solid #D8C8AF; padding: 12px 18px; background: #FFFDF9; color: #272019;" style-hover="background: #FCF8F1;">{{ payBtnLabel }}</button>
+              </div>
+            </div>
+
+            <div style="display: grid; gap: 16px;">
+              <sc-for list="{{ projects }}" as="p" hint-placeholder-count="4">
+                <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 26px; box-shadow: 0 1px 2px rgba(42,34,25,.06);">
+                  <div style="display: flex; justify-content: space-between; gap: 18px; align-items: flex-start;">
+                    <div>
+                      <h3 style="font-size: 21px; margin: 0; letter-spacing: -.02em; line-height: 1.15; font-weight: 700;">{{ p.title }}</h3>
+                      <div style="font-size: 14px; color: #8A8071; margin-top: 6px;">{{ p.meta }}</div>
+                    </div>
+                    <div style="text-align: right; flex: none;">
+                      <div style="font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #8A8071;">Homeowner budget</div>
+                      <div style="font-size: 20px; font-weight: 800; letter-spacing: -.02em; color: #8A5424;">{{ p.budget }}</div>
+                    </div>
+                  </div>
+                  <div style="display: flex; flex-wrap: wrap; gap: 7px; margin-top: 16px;">
+                    <sc-for list="{{ p.tags }}" as="tag" hint-placeholder-count="3">
+                      <span style="font-size: 12.5px; font-weight: 600; color: #6B6253; background: #F4ECE0; border: 1px solid #E4D8C5; border-radius: 999px; padding: 5px 12px;">{{ tag }}</span>
+                    </sc-for>
+                  </div>
+                  <p style="color: #6B6253; font-size: 15.5px; margin: 16px 0 0; max-width: 62ch;">{{ p.notes }}</p>
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 20px; padding-top: 18px; border-top: 1px solid #E4D8C5; flex-wrap: wrap;">
+                    <div style="font-size: 14px; color: #8A8071;">{{ p.proposals }} proposals so far · {{ p.distance }}</div>
+                    <button type="button" onClick="{{ p.bid }}" style="display: inline-flex; align-items: center; gap: 9px; font-family: inherit; font-size: 16px; font-weight: 600; cursor: pointer; border-radius: 11px; border: 1px solid transparent; padding: 13px 22px; background: #8A5424; color: #fff;" style-hover="background: #6F421A;">
+                      Bid on project
+                      <svg viewBox="0 0 20 20" fill="none" style="width: 16px; height: 16px;"><path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    </button>
+                  </div>
+                </div>
+              </sc-for>
+              <div style="display: {{ noResultsDisplay }}; background: #F4ECE0; border: 1px dashed #D8C8AF; border-radius: 22px; padding: 40px; text-align: center; color: #6B6253;">
+                No open projects in those areas yet. Add more ZIP codes or cities to widen your view.
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isPayment }}">
+        <div style="animation: fade .25s ease; max-width: 900px; margin: 0 auto;">
+          <span style="font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #8A5424; display: inline-flex; align-items: center; gap: 9px;"><span style="width: 18px; height: 2px; background: #8A5424; border-radius: 2px;"></span>Payment &amp; payouts</span>
+          <h1 style="font-size: clamp(28px, 3.6vw, 40px); margin: 16px 0 0; letter-spacing: -.03em; line-height: 1.05; font-weight: 700;">Add your card to unlock unlimited bids.</h1>
+          <p style="font-size: 18px; color: #6B6253; margin: 14px 0 0; max-width: 44em;">Your first month is free, then $24.99 a month for unlimited bids. Your card is processed once for membership. ACH details are where we send your payout after the homeowner marks the project completed.</p>
+
+          <div style="margin-top: 28px; background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px; box-shadow: 0 1px 2px rgba(42,34,25,.06);">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
+              <div style="font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8A8071;">Credit card — $24.99/mo after your free month</div>
+              <span style="display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 600; color: #6B6253;">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 1l5 2v4c0 3.5-2.2 6.2-5 7-2.8-.8-5-3.5-5-7V3l5-2z" stroke="#8A8071" stroke-width="1.3"></path></svg>
+                Encrypted · PCI compliant
+              </span>
+            </div>
+            <div style="margin-top: 16px;">
+              <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Name on card</label>
+              <input placeholder="Sam Nordquist" value="{{ ccNameVal }}" onChange="{{ ccNameOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ ccNameBd }}; border-radius: 11px; padding: 13px 14px;" />
+              <span style="display: {{ ccNameErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ ccNameMsg }}</span>
+            </div>
+            <div style="margin-top: 14px;">
+              <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Card number</label>
+              <input inputmode="numeric" placeholder="4242 4242 4242 4242" value="{{ ccNumVal }}" onChange="{{ ccNumOn }}" style="width: 100%; font-family: inherit; font-size: 16px; letter-spacing: .04em; color: #272019; background: #FCF8F1; border: 1px solid {{ ccNumBd }}; border-radius: 11px; padding: 13px 14px;" />
+              <span style="display: {{ ccNumErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ ccNumMsg }}</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 14px;">
+              <div>
+                <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Expiry</label>
+                <input placeholder="09 / 29" value="{{ ccExpVal }}" onChange="{{ ccExpOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ ccExpBd }}; border-radius: 11px; padding: 13px 14px;" />
+                <span style="display: {{ ccExpErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ ccExpMsg }}</span>
+              </div>
+              <div>
+                <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">CVC</label>
+                <input inputmode="numeric" maxlength="4" placeholder="123" value="{{ ccCvcVal }}" onChange="{{ ccCvcOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ ccCvcBd }}; border-radius: 11px; padding: 13px 14px;" />
+                <span style="display: {{ ccCvcErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ ccCvcMsg }}</span>
+              </div>
+              <div>
+                <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Billing ZIP</label>
+                <input inputmode="numeric" maxlength="5" placeholder="83340" value="{{ ccZipVal }}" onChange="{{ ccZipOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ ccZipBd }}; border-radius: 11px; padding: 13px 14px;" />
+                <span style="display: {{ ccZipErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ ccZipMsg }}</span>
+              </div>
+            </div>
+
+            <hr style="border: none; border-top: 1px solid #E4D8C5; margin: 28px 0;" />
+
+            <div style="font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8A8071;">ACH payout details</div>
+            <p style="font-size: 14.5px; color: #6B6253; margin: 8px 0 0;">Paid out when a project is marked <b style="font-weight: 700;">completed</b> in your project viewport.</p>
+            <div style="display: grid; grid-template-columns: 1.2fr .8fr; gap: 12px; margin-top: 16px;">
+              <div>
+                <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Account holder</label>
+                <input placeholder="Northwood Sauna Co." value="{{ achNameVal }}" onChange="{{ achNameOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ achNameBd }}; border-radius: 11px; padding: 13px 14px;" />
+                <span style="display: {{ achNameErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ achNameMsg }}</span>
+              </div>
+              <div>
+                <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Account type</label>
+                <select value="{{ achTypeVal }}" onChange="{{ achTypeOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid #D8C8AF; border-radius: 11px; padding: 13px 30px 13px 14px; appearance: none; cursor: pointer;">
+                  <option value="Business checking">Business checking</option>
+                  <option value="Business savings">Business savings</option>
+                  <option value="Personal checking">Personal checking</option>
+                </select>
+              </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px;">
+              <div>
+                <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Routing number</label>
+                <input inputmode="numeric" maxlength="9" placeholder="123456789" value="{{ achRouteVal }}" onChange="{{ achRouteOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ achRouteBd }}; border-radius: 11px; padding: 13px 14px;" />
+                <span style="display: {{ achRouteErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ achRouteMsg }}</span>
+              </div>
+              <div>
+                <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Account number</label>
+                <input inputmode="numeric" placeholder="000123456789" value="{{ achAcctVal }}" onChange="{{ achAcctOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ achAcctBd }}; border-radius: 11px; padding: 13px 14px;" />
+                <span style="display: {{ achAcctErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ achAcctMsg }}</span>
+              </div>
+            </div>
+            <label style="display: flex; align-items: flex-start; gap: 10px; margin-top: 18px; font-size: 14.5px; color: #272019; cursor: pointer;">
+              <input type="checkbox" checked="{{ authVal }}" onChange="{{ authOn }}" style="width: 18px; height: 18px; margin-top: 3px; accent-color: #8A5424; flex: none;" />
+              <span>I authorize saunainstall to charge this card for membership and to send payouts to the ACH account above.</span>
+            </label>
+            <span style="display: {{ authErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ authMsg }}</span>
+
+            <div style="display: flex; gap: 12px; margin-top: 26px;">
+              <button type="button" onClick="{{ backToBrowse }}" style="font-family: inherit; font-size: 16px; font-weight: 600; cursor: pointer; border-radius: 11px; border: 1px solid #D8C8AF; padding: 15px 24px; background: transparent; color: #272019;" style-hover="background: #F4ECE0;">Back</button>
+              <button type="button" onClick="{{ processCard }}" style="flex: 1; font-family: inherit; font-size: 17px; font-weight: 600; cursor: pointer; border-radius: 11px; border: 1px solid transparent; padding: 15px 28px; background: #8A5424; color: #fff;" style-hover="background: #6F421A;">{{ processLabel }}</button>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isBid }}">
+        <div style="animation: fade .25s ease; max-width: 1060px; margin: 0 auto;">
+          <button type="button" onClick="{{ backToBrowse }}" style="display: inline-flex; align-items: center; gap: 8px; font-family: inherit; font-size: 14.5px; font-weight: 600; cursor: pointer; border: none; background: none; color: #6B6253; padding: 0; margin-bottom: 18px;" style-hover="color: #8A5424;">
+            <svg viewBox="0 0 20 20" fill="none" style="width: 15px; height: 15px;"><path d="M16 10H4M9 5l-5 5 5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            All projects
+          </button>
+          <div style="display: grid; grid-template-columns: 1.25fr .95fr; gap: 24px; align-items: start;">
+            <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px;">
+              <span style="font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #8A5424;">Project review</span>
+              <h1 style="font-size: clamp(26px, 3.2vw, 34px); margin: 12px 0 0; letter-spacing: -.03em; line-height: 1.1; font-weight: 700;">{{ activeTitle }}</h1>
+              <div style="font-size: 14.5px; color: #8A8071; margin-top: 8px;">{{ activeMeta }}</div>
+              <div style="display: grid; gap: 12px; margin-top: 24px; font-size: 15.5px;">
+                <div style="display: flex; justify-content: space-between; gap: 16px; padding-bottom: 12px; border-bottom: 1px solid #E4D8C5;"><span style="color: #8A8071;">Sauna type</span><b style="font-weight: 600; text-align: right;">{{ activeType }}</b></div>
+                <div style="display: flex; justify-content: space-between; gap: 16px; padding-bottom: 12px; border-bottom: 1px solid #E4D8C5;"><span style="color: #8A8071;">Model</span><b style="font-weight: 600; text-align: right;">{{ activeModel }}</b></div>
+                <div style="display: flex; justify-content: space-between; gap: 16px; padding-bottom: 12px; border-bottom: 1px solid #E4D8C5;"><span style="color: #8A8071;">Size specs</span><b style="font-weight: 600; text-align: right;">{{ activeSize }}</b></div>
+                <div style="display: flex; justify-content: space-between; gap: 16px; padding-bottom: 12px; border-bottom: 1px solid #E4D8C5;"><span style="color: #8A8071;">Location</span><b style="font-weight: 600; text-align: right;">{{ activeLoc }}</b></div>
+                <div style="display: flex; justify-content: space-between; gap: 16px;"><span style="color: #8A8071;">Homeowner budget</span><b style="font-weight: 700; text-align: right; color: #8A5424;">{{ activeBudget }}</b></div>
+              </div>
+              <div style="margin-top: 24px; background: #F4ECE0; border: 1px solid #D8C8AF; border-radius: 14px; padding: 18px;">
+                <div style="font-size: 12.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8A8071;">Special information from homeowner</div>
+                <p style="font-size: 15.5px; color: #272019; margin: 8px 0 0;">{{ activeNotes }}</p>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px; margin-top: 20px; font-size: 14px; color: #8A8071;">
+                <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: #3E7A4E; background: #E9F1EA; border: 1px solid #CFE3D3; padding: 4px 10px; border-radius: 999px;">
+                  <svg viewBox="0 0 16 16" fill="none" style="width: 12px; height: 12px;"><path d="M3 8.5l3.2 3.2L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                  Card verified
+                </span>
+                Unlimited bids · this proposal costs you nothing
+              </div>
+            </div>
+
+            <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px; box-shadow: 0 10px 30px -12px rgba(42,34,25,.22), 0 2px 6px rgba(42,34,25,.06);">
+              <h2 style="font-size: 23px; margin: 0; letter-spacing: -.025em; line-height: 1.1; font-weight: 700;">Your proposal</h2>
+              <p style="font-size: 15px; color: #6B6253; margin: 8px 0 0;">Sent straight to the homeowner's inbox.</p>
+              <div style="margin-top: 22px;">
+                <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Proposed start date</label>
+                <input type="date" value="{{ bidDateVal }}" onChange="{{ bidDateOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ bidDateBd }}; border-radius: 11px; padding: 13px 14px;" />
+                <span style="display: {{ bidDateErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ bidDateMsg }}</span>
+              </div>
+              <div style="margin-top: 16px;">
+                <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Bid amount</label>
+                <div style="position: relative;">
+                  <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 16px; font-weight: 700; color: #8A8071;">$</span>
+                  <input inputmode="numeric" placeholder="2,400" value="{{ bidAmountVal }}" onChange="{{ bidAmountOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ bidAmountBd }}; border-radius: 11px; padding: 13px 14px 13px 30px;" />
+                </div>
+                <span style="display: {{ bidAmountErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ bidAmountMsg }}</span>
+                <p style="font-size: 13px; color: #8A8071; margin: 8px 0 0;">Fixed price, all-in. Paid by ACH when the homeowner marks the project completed.</p>
+              </div>
+              <div style="margin-top: 16px;">
+                <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Note to homeowner <span style="color: #8A8071; font-weight: 400;">(optional)</span></label>
+                <textarea rows="4" placeholder="What's included, crew size, how long the install takes, anything you need on site…" value="{{ bidNoteVal }}" onChange="{{ bidNoteOn }}" style="width: 100%; font-family: inherit; font-size: 16px; line-height: 1.5; color: #272019; background: #FCF8F1; border: 1px solid #D8C8AF; border-radius: 11px; padding: 13px 14px; resize: vertical;"></textarea>
+              </div>
+              <button type="button" onClick="{{ sendBid }}" style="width: 100%; margin-top: 22px; display: inline-flex; align-items: center; justify-content: center; gap: 9px; font-family: inherit; font-size: 17px; font-weight: 600; cursor: pointer; border-radius: 11px; border: 1px solid transparent; padding: 16px 28px; background: #8A5424; color: #fff;" style-hover="background: #6F421A;">
+                Send
+                <svg viewBox="0 0 20 20" fill="none" style="width: 17px; height: 17px;"><path d="M3 10h13M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isSent }}">
+        <div style="animation: fade .25s ease; max-width: 900px; margin: 0 auto;">
+          <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 24px; padding: 44px; text-align: center; box-shadow: 0 10px 30px -12px rgba(42,34,25,.22), 0 2px 6px rgba(42,34,25,.06);">
+            <div style="width: 70px; height: 70px; border-radius: 50%; background: #E9F1EA; border: 1px solid #CFE3D3; display: grid; place-items: center; margin: 0 auto 20px; color: #3E7A4E;"><svg viewBox="0 0 24 24" fill="none" style="width: 34px; height: 34px;"><path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+            <h1 style="font-size: clamp(28px, 3.8vw, 40px); margin: 0; letter-spacing: -.03em; line-height: 1.05; font-weight: 700;">Proposal sent.</h1>
+            <p style="font-size: 18px; color: #6B6253; margin: 14px auto 0; max-width: 34em;">{{ sentSummary }}</p>
+          </div>
+
+          <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px; margin-top: 20px;">
+            <div style="font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8A5424;">Bid process</div>
+            <h2 style="font-size: 24px; margin: 10px 0 0; letter-spacing: -.025em; line-height: 1.1; font-weight: 700;">What happens from here</h2>
+            <div style="margin-top: 24px; display: grid; gap: 4px;">
+              <sc-for list="{{ pipeline }}" as="st" hint-placeholder-count="5">
+                <div style="display: grid; grid-template-columns: 34px 1fr; gap: 16px;">
+                  <div style="display: flex; flex-direction: column; align-items: center;">
+                    <span style="width: 26px; height: 26px; border-radius: 50%; flex: none; display: grid; place-items: center; background: {{ st.dotBg }}; border: 2px solid {{ st.dotBd }}; color: #FFFDF9; font-size: 12px; font-weight: 800;">{{ st.mark }}</span>
+                    <span style="width: 2px; flex: 1; min-height: 26px; background: {{ st.line }}; display: {{ st.lineDisplay }};"></span>
+                  </div>
+                  <div style="padding-bottom: 22px;">
+                    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                      <b style="font-size: 16.5px; font-weight: 700; color: {{ st.titleFg }};">{{ st.title }}</b>
+                      <span style="font-size: 11.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: {{ st.pillFg }}; background: {{ st.pillBg }}; border: 1px solid {{ st.pillBd }}; padding: 3px 9px; border-radius: 999px;">{{ st.status }}</span>
+                    </div>
+                    <p style="color: #6B6253; font-size: 14.5px; margin: 5px 0 0; max-width: 52ch;">{{ st.body }}</p>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display: flex; gap: 12px; margin-top: 6px; flex-wrap: wrap;">
+              <button type="button" onClick="{{ goDashboard }}" style="display: inline-flex; align-items: center; gap: 9px; font-family: inherit; font-size: 16px; font-weight: 600; cursor: pointer; border-radius: 11px; border: 1px solid transparent; padding: 14px 24px; background: #8A5424; color: #fff;" style-hover="background: #6F421A;">Go to my bids</button>
+              <button type="button" onClick="{{ backToBrowse }}" style="display: inline-flex; align-items: center; justify-content: center; font-family: inherit; font-size: 16px; font-weight: 600; cursor: pointer; border-radius: 11px; border: 1px solid #D8C8AF; padding: 14px 24px; background: transparent; color: #272019;" style-hover="background: #F4ECE0;">Browse more projects</button>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isDashboard }}">
+        <div style="animation: fade .25s ease;">
+          <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
+            <div>
+              <span style="font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #8A5424; display: inline-flex; align-items: center; gap: 9px;"><span style="width: 18px; height: 2px; background: #8A5424; border-radius: 2px;"></span>My bids</span>
+              <h1 style="font-size: clamp(28px, 3.6vw, 40px); margin: 14px 0 0; letter-spacing: -.03em; line-height: 1.05; font-weight: 700;">{{ dashHeading }}</h1>
+              <p style="font-size: 17px; color: #6B6253; margin: 12px 0 0;">Everything you've bid on, and where each one stands. Unlimited bids — send as many as you like.</p>
+            </div>
+            <button type="button" onClick="{{ backToBrowse }}" style="display: inline-flex; align-items: center; gap: 9px; font-family: inherit; font-size: 16px; font-weight: 600; cursor: pointer; border-radius: 11px; border: 1px solid transparent; padding: 14px 24px; background: #8A5424; color: #fff;" style-hover="background: #6F421A;">
+              Place more bids
+              <svg viewBox="0 0 20 20" fill="none" style="width: 16px; height: 16px;"><path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </button>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 30px;">
+            <sc-for list="{{ stats }}" as="k" hint-placeholder-count="4">
+              <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 18px; padding: 22px 24px; box-shadow: 0 1px 2px rgba(42,34,25,.06);">
+                <div style="font-size: 12.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8A8071;">{{ k.label }}</div>
+                <div style="font-size: 32px; font-weight: 800; letter-spacing: -.03em; line-height: 1.1; margin-top: 8px; color: {{ k.fg }};">{{ k.value }}</div>
+                <div style="font-size: 13.5px; color: #6B6253; margin-top: 2px;">{{ k.sub }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1.45fr .55fr; gap: 24px; margin-top: 24px; align-items: start;">
+            <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 8px 26px 26px;">
+              <div style="display: flex; align-items: center; gap: 10px; padding: 20px 0 14px; border-bottom: 1px solid #E4D8C5;">
+                <h2 style="font-size: 21px; margin: 0; letter-spacing: -.025em; font-weight: 700;">Bid activity</h2>
+                <span style="font-size: 12.5px; font-weight: 700; color: #8A5424; background: #EFE0CC; border: 1px solid #E0CBA8; padding: 3px 10px; border-radius: 999px;">{{ bidCount }} total</span>
+              </div>
+              <sc-for list="{{ bids }}" as="b" hint-placeholder-count="4">
+                <div style="display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; padding: 20px 0; border-bottom: 1px solid #F0E6D6;">
+                  <div style="min-width: 0;">
+                    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                      <b style="font-size: 17px; font-weight: 700; letter-spacing: -.01em;">{{ b.title }}</b>
+                      <span style="font-size: 11.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: {{ b.pillFg }}; background: {{ b.pillBg }}; border: 1px solid {{ b.pillBd }}; padding: 3px 9px; border-radius: 999px; white-space: nowrap;">{{ b.status }}</span>
+                    </div>
+                    <div style="font-size: 14px; color: #8A8071; margin-top: 5px;">{{ b.meta }}</div>
+                    <div style="font-size: 14px; color: #6B6253; margin-top: 6px;">{{ b.note }}</div>
+                  </div>
+                  <div style="text-align: right; flex: none;">
+                    <div style="font-size: 21px; font-weight: 800; letter-spacing: -.02em; color: #272019;">{{ b.amount }}</div>
+                    <div style="font-size: 13px; color: #8A8071;">start {{ b.start }}</div>
+                    <div style="font-size: 13px; font-weight: 600; color: {{ b.payoutFg }}; margin-top: 5px;">{{ b.payout }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="display: grid; gap: 16px;">
+              <div style="background: #2A2219; color: #F4ECE0; border-radius: 22px; padding: 26px;">
+                <div style="font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #CDA468;">Payouts</div>
+                <div style="font-size: 34px; font-weight: 800; letter-spacing: -.03em; color: #FCF8F1; margin-top: 10px; line-height: 1.05;">{{ pendingPayout }}</div>
+                <p style="font-size: 14.5px; color: #C9BCA7; margin: 8px 0 18px;">Awaiting release. Funds move by ACH to your {{ achTypeLower }} account once the homeowner marks a project completed.</p>
+                <div style="font-size: 14px; color: #E7DCC9; display: flex; justify-content: space-between; gap: 12px; padding-top: 14px; border-top: 1px solid #4E4030;">
+                  <span style="color: #B6A88F;">Paid year to date</span><b style="font-weight: 700;">{{ paidToDate }}</b>
+                </div>
+              </div>
+              <div style="background: #F4ECE0; border: 1px solid #D8C8AF; border-radius: 22px; padding: 24px;">
+                <div style="font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8A8071;">Membership</div>
+                <div style="display: flex; align-items: center; gap: 9px; margin-top: 12px; font-size: 16px; font-weight: 700; color: {{ memberFg }};">
+                  <svg viewBox="0 0 16 16" fill="none" style="width: 15px; height: 15px; display: {{ memberCheckDisplay }};"><path d="M3 8.5l3.2 3.2L13 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                  {{ memberLabel }}
+                </div>
+                <p style="font-size: 14px; color: #6B6253; margin: 10px 0 16px;">{{ memberBody }}</p>
+                <button type="button" onClick="{{ goPayment }}" style="width: 100%; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer; border-radius: 11px; border: 1px solid #D8C8AF; padding: 12px 18px; background: #FFFDF9; color: #272019;" style-hover="background: #FCF8F1;">{{ memberBtnLabel }}</button>
+              </div>
+              <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 24px;">
+                <div style="font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8A8071;">Service areas</div>
+                <div style="display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px;">
+                  <sc-for list="{{ locs }}" as="loc" hint-placeholder-count="3">
+                    <span style="font-size: 13.5px; font-weight: 600; color: #272019; background: #F4ECE0; border: 1px solid #D8C8AF; border-radius: 999px; padding: 6px 13px;">{{ loc.label }}</span>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+    </div>
+  </main>
+
+  <footer style="background: #221B14; color: #B6A88F; padding: 40px 0;">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 0 28px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-size: 13.5px; color: #8A7C64;">
+      <span>© 2026 saunainstall. Unlimited bids for verified installers.</span>
+      <div style="display: flex; gap: 22px;">
+        <a href="saunainstall%20-%20Landing.dc.html#faq" style="color: #C2B49B;" style-hover="color: #FCF8F1;">FAQ</a>
+        <a href="saunainstall%20-%20Homeowner.dc.html" style="color: #C2B49B;" style-hover="color: #FCF8F1;">For homeowners</a>
+        <a href="saunainstall%20-%20Landing.dc.html" style="color: #C2B49B;" style-hover="color: #FCF8F1;">Privacy</a>
+      </div>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;startStep&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;1 · Sign up&quot;,&quot;options&quot;:[&quot;1 · Sign up&quot;,&quot;2 · Browse projects&quot;,&quot;3 · Payment&quot;,&quot;4 · Bid on project&quot;,&quot;5 · Proposal sent&quot;,&quot;6 · My bids dashboard&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Preview&quot;},&quot;requireCardBeforeBid&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Behavior&quot;}}">
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    const map = { "1 · Sign up": 0, "2 · Browse projects": 1, "3 · Payment": 2, "4 · Bid on project": 3, "5 · Proposal sent": 4, "6 · My bids dashboard": 5 };
+    this.state = {
+      step: map[props.startStep] ?? 0,
+      first: "", last: "", phone: "", email: "", addr: "", city: "", state: "", zip: "", site: "",
+      locs: ["83340", "83333", "Boise"], locInput: "",
+      paid: false, pendingId: null, activeId: null,
+      ccName: "", ccNum: "", ccExp: "", ccCvc: "", ccZip: "",
+      achName: "", achType: "Business checking", achRoute: "", achAcct: "", auth: false,
+      bidDate: "", bidAmount: "", bidNote: "",
+      loginEmail: "", loginPass: "",
+      bids: [
+        { title: "Indoor sauna room in finished basement", meta: "Boise, ID 83702 · sent 2 days ago", amount: 2850, start: "Sep 8", status: "Shortlisted", note: "Homeowner opened your proposal and shortlisted it." },
+        { title: "2-person infrared cabin placement + circuit", meta: "Bellevue, ID 83313 · sent 5 days ago", amount: 940, start: "Sep 2", status: "Hired", note: "You were hired. Scheduled directly with the homeowner." },
+        { title: "Wood-fired barrel with chimney and cold plunge", meta: "Sun Valley, ID 83353 · sent 3 weeks ago", amount: 5200, start: "Aug 14", status: "Completed", note: "Homeowner marked the project completed on Aug 19." },
+        { title: "6-person outdoor cabin with changing room", meta: "Hailey, ID 83333 · sent 6 weeks ago", amount: 3900, start: "Jul 22", status: "Paid", note: "Paid by ACH on Aug 4." },
+        { title: "Custom tiled steam room retrofit", meta: "Twin Falls, ID 83301 · sent 4 weeks ago", amount: 6800, start: "Aug 20", status: "Declined", note: "Homeowner chose another installer." }
+      ],
+      err: {}
+    };
+  }
+
+  componentDidMount() {
+    if (typeof window !== "undefined" && window.location.hash === "#login") this.setState({ step: 6 });
+  }
+
+  STATUS = {
+    Sent: { fg: "#8A5424", bg: "#EFE0CC", bd: "#E0CBA8" },
+    Viewed: { fg: "#B07C1E", bg: "#F7EBD2", bd: "#E8D4A8" },
+    Shortlisted: { fg: "#B07C1E", bg: "#F7EBD2", bd: "#E8D4A8" },
+    Hired: { fg: "#3E7A4E", bg: "#E9F1EA", bd: "#CFE3D3" },
+    Completed: { fg: "#3E7A4E", bg: "#E9F1EA", bd: "#CFE3D3" },
+    Paid: { fg: "#3E7A4E", bg: "#E9F1EA", bd: "#CFE3D3" },
+    Declined: { fg: "#8A8071", bg: "#F1EBE4", bd: "#E4D8C5" }
+  };
+
+  money(n) { return "$" + n.toLocaleString("en-US"); }
+
+  shortDate(v) {
+    if (!v) return "TBD";
+    const parts = v.split("-");
+    if (parts.length !== 3) return v;
+    const m = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return m[parseInt(parts[1], 10) - 1] + " " + parseInt(parts[2], 10);
+  }
+
+  PROJECTS = [
+    { id: "p1", title: "7 ft panoramic barrel sauna install", type: "Barrel sauna", model: "7 ft Panoramic Barrel", size: "7 ft × 8 ft × 7 ft · 4-person", city: "Ketchum", st: "ID", zip: "83340", budget: "$1,800 – $2,600", posted: "Posted 2 days ago", proposals: 3, distance: "6 mi from you", notes: "Gravel pad is poured and level. Sauna arrives Friday on a pallet in the driveway; needs a 240V run about 40 ft from the garage subpanel." },
+    { id: "p2", title: "6-person outdoor cabin with changing room", type: "Outdoor cabin sauna", model: "Cabin 6-person + changing room", size: "8 ft × 12 ft × 8 ft · 6-person", city: "Hailey", st: "ID", zip: "83333", budget: "$3,200 – $4,500", posted: "Posted 4 hours ago", proposals: 1, distance: "14 mi from you", notes: "New build on a sloped lot. Need help with pier foundation, framing assist, and roof flashing. Electrical already stubbed to the site." },
+    { id: "p3", title: "Indoor sauna room in finished basement", type: "Indoor sauna room", model: "Indoor kit 4-person", size: "6 ft × 7 ft × 7 ft · 4-person", city: "Boise", st: "ID", zip: "83702", budget: "$2,400 – $3,300", posted: "Posted yesterday", proposals: 5, distance: "142 mi from you", notes: "Kit is in the garage. Room is framed but needs vapor barrier, cedar, bench install, and a dedicated circuit. Permit already pulled." },
+    { id: "p4", title: "2-person infrared cabin placement + circuit", type: "Infrared cabin", model: "2-person infrared", size: "4 ft × 4 ft × 6 ft · 2-person", city: "Bellevue", st: "ID", zip: "83313", budget: "$700 – $1,100", proposals: 2, posted: "Posted 3 days ago", distance: "19 mi from you", notes: "Straightforward: assemble in spare bedroom upstairs, run a dedicated 20A circuit. Narrow stairwell, two-person carry." },
+    { id: "p5", title: "Wood-fired barrel with chimney and cold plunge", type: "Sauna + cold plunge package", model: "Sauna + plunge package", size: "7 ft × 10 ft × 7 ft · 4-person", city: "Sun Valley", st: "ID", zip: "83353", budget: "$4,000 – $5,800", posted: "Posted 6 days ago", proposals: 4, distance: "9 mi from you", notes: "Wood-fired heater with roof jack and spark arrestor. Plunge tub needs a drain line and GFCI outlet for the chiller." },
+    { id: "p6", title: "Custom tiled steam room retrofit", type: "Steam room", model: "Custom tiled steam room", size: "5 ft × 6 ft × 8 ft · 2-person", city: "Twin Falls", st: "ID", zip: "83301", budget: "$5,500 – $7,500", posted: "Posted 8 days ago", proposals: 2, distance: "83 mi from you", notes: "Replacing an existing shower. Needs waterproofing, sloped ceiling, generator closet, and door glass. Tile is already purchased." }
+  ];
+
+  set(k, v) {
+    this.setState(s => { const err = { ...s.err }; delete err[k]; return { [k]: v, err }; });
+  }
+
+  digits(v, n) { return v.replace(/\D/g, "").slice(0, n); }
+
+  submitSignup = () => {
+    const s = this.state, err = {};
+    if (!s.first.trim()) err.first = "Enter your first name.";
+    if (!s.last.trim()) err.last = "Enter your last name.";
+    if (s.phone.replace(/\D/g, "").length < 10) err.phone = "Enter a 10-digit phone number.";
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(s.email.trim())) err.email = "Enter a valid email address.";
+    if (!s.addr.trim()) err.addr = "Enter your street address.";
+    if (!s.city.trim()) err.city = "Required.";
+    if (!s.state.trim()) err.state = "Required.";
+    if (!/^\d{5}$/.test(s.zip.trim())) err.zip = "5-digit ZIP.";
+    if (Object.keys(err).length) { this.setState({ err }); return; }
+    this.setState(st => ({
+      err: {}, step: 1,
+      locs: st.locs.indexOf(st.zip) === -1 ? [st.zip].concat(st.locs) : st.locs,
+      ccName: (st.first + " " + st.last).trim(), ccZip: st.zip,
+      achName: st.site.trim() ? st.site.trim().replace(/^www\./, "") : ""
+    }));
+    window.scrollTo(0, 0);
+  };
+
+  processCard = () => {
+    const s = this.state, err = {};
+    if (!s.ccName.trim()) err.ccName = "Enter the name on the card.";
+    if (s.ccNum.replace(/\D/g, "").length < 15) err.ccNum = "Enter a valid card number.";
+    if (!/^\d{2}\s*\/?\s*\d{2}$/.test(s.ccExp.trim())) err.ccExp = "MM / YY.";
+    if (s.ccCvc.length < 3) err.ccCvc = "3–4 digits.";
+    if (!/^\d{5}$/.test(s.ccZip.trim())) err.ccZip = "5-digit ZIP.";
+    if (!s.achName.trim()) err.achName = "Enter the account holder.";
+    if (s.achRoute.length !== 9) err.achRoute = "Routing number is 9 digits.";
+    if (s.achAcct.length < 6) err.achAcct = "Enter your account number.";
+    if (!s.auth) err.auth = "Please authorize the charge and payouts.";
+    if (Object.keys(err).length) { this.setState({ err }); return; }
+    this.setState(st => ({ err: {}, paid: true, step: st.pendingId ? 3 : 1, activeId: st.pendingId || st.activeId, pendingId: null }));
+    window.scrollTo(0, 0);
+  };
+
+  sendBid = () => {
+    const s = this.state, err = {};
+    if (!s.bidDate) err.bidDate = "Choose a proposed start date.";
+    if (!/\d/.test(s.bidAmount)) err.bidAmount = "Enter your bid amount.";
+    if (Object.keys(err).length) { this.setState({ err }); return; }
+    const a = this.PROJECTS.filter(p => p.id === s.activeId)[0] || this.PROJECTS[0];
+    const bid = {
+      title: a.title,
+      meta: a.city + ", " + a.st + " " + a.zip + " · sent just now",
+      amount: parseInt(s.bidAmount.replace(/\D/g, ""), 10) || 0,
+      start: this.shortDate(s.bidDate),
+      status: "Sent",
+      note: "Waiting on the homeowner to review your proposal."
+    };
+    this.setState(st => ({ err: {}, step: 4, bids: [bid].concat(st.bids) }));
+    window.scrollTo(0, 0);
+  };
+
+  bidOn(id) {
+    if (this.state.paid || this.props.requireCardBeforeBid === false) {
+      this.setState({ activeId: id, step: 3, err: {} });
+    } else {
+      this.setState({ pendingId: id, step: 2, err: {} });
+    }
+    window.scrollTo(0, 0);
+  }
+
+  submitLogin = () => {
+    const s = this.state, err = {};
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(s.loginEmail.trim())) err.loginEmail = "Enter a valid email address.";
+    if (s.loginPass.length < 6) err.loginPass = "Enter your password.";
+    if (Object.keys(err).length) { this.setState({ err }); return; }
+    this.setState(st => ({
+      err: {}, step: 5, paid: true, loginPass: "",
+      first: st.first || "Sam", last: st.last || "Nordquist",
+      email: st.email || st.loginEmail
+    }));
+    window.scrollTo(0, 0);
+  };
+
+  addLoc = () => {
+    const v = this.state.locInput.trim();
+    if (!v) return;
+    this.setState(s => ({ locs: s.locs.indexOf(v) === -1 ? s.locs.concat([v]) : s.locs, locInput: "" }));
+  };
+
+  timeline(defs, current) {
+    return defs.map((d, i) => {
+      const done = i < current, active = i === current;
+      return {
+        title: d[0], body: d[1],
+        mark: done ? "✓" : "",
+        dotBg: done ? "#8A5424" : "#FFFDF9",
+        dotBd: done || active ? "#8A5424" : "#E4D8C5",
+        line: i < current ? "#8A5424" : "#E4D8C5",
+        lineDisplay: i === defs.length - 1 ? "none" : "block",
+        titleFg: done || active ? "#272019" : "#8A8071",
+        status: done ? "Done" : active ? "In progress" : "Up next",
+        pillFg: done ? "#3E7A4E" : active ? "#8A5424" : "#8A8071",
+        pillBg: done ? "#E9F1EA" : active ? "#EFE0CC" : "#F4ECE0",
+        pillBd: done ? "#CFE3D3" : active ? "#E0CBA8" : "#E4D8C5"
+      };
+    });
+  }
+
+  dashVals() {
+    const s = this.state;
+    const open = ["Sent", "Viewed", "Shortlisted"];
+    const active = s.bids.filter(b => open.indexOf(b.status) !== -1);
+    const hired = s.bids.filter(b => b.status === "Hired");
+    const completed = s.bids.filter(b => b.status === "Completed");
+    const paid = s.bids.filter(b => b.status === "Paid");
+    const sum = arr => arr.reduce((t, b) => t + b.amount, 0);
+    const bids = s.bids.map(b => {
+      const c = this.STATUS[b.status] || this.STATUS.Sent;
+      const pendingPay = b.status === "Completed";
+      return {
+        title: b.title, meta: b.meta, note: b.note, status: b.status,
+        amount: this.money(b.amount), start: b.start,
+        pillFg: c.fg, pillBg: c.bg, pillBd: c.bd,
+        payout: b.status === "Paid" ? "Paid by ACH" : pendingPay ? "Payout pending" : b.status === "Declined" ? "—" : "Paid on completion",
+        payoutFg: b.status === "Paid" ? "#3E7A4E" : pendingPay ? "#B07C1E" : "#8A8071"
+      };
+    });
+    return {
+      bids,
+      bidCount: s.bids.length,
+      dashHeading: active.length === 0 ? "No bids awaiting a decision." : active.length === 1 ? "1 bid awaiting a decision." : active.length + " bids awaiting a decision.",
+      memberFg: s.paid ? "#3E7A4E" : "#B07C1E",
+      memberLabel: s.paid ? "Unlimited bids active" : "Card required before bidding",
+      memberBody: s.paid ? "Card on file · ACH payouts set up. No per-bid fees in any of your service areas." : "Add and process a card once to unlock unlimited bids, plus ACH details for payouts.",
+      memberCheckDisplay: s.paid ? "block" : "none",
+      memberBtnLabel: s.paid ? "Update payment details" : "Add payment details",
+      stats: [
+        { label: "Open bids", value: active.length, sub: "waiting on homeowners", fg: "#272019" },
+        { label: "Hired", value: hired.length, sub: "jobs on the calendar", fg: "#3E7A4E" },
+        { label: "Awaiting payout", value: this.money(sum(completed)), sub: completed.length + " completed", fg: "#B07C1E" },
+        { label: "Paid to date", value: this.money(sum(paid)), sub: "via ACH", fg: "#3E7A4E" }
+      ],
+      pendingPayout: this.money(sum(completed)),
+      paidToDate: this.money(sum(paid)),
+      achTypeLower: s.achType.toLowerCase()
+    };
+  }
+
+  renderVals() {
+    const s = this.state, e = s.err;
+    const out = {};
+    const caps = { zip: 5, ccCvc: 4, ccZip: 5, achRoute: 9, achAcct: 17 };
+    ["first", "last", "phone", "email", "addr", "city", "state", "zip", "site",
+     "ccName", "ccNum", "ccExp", "ccCvc", "ccZip", "achName", "achRoute", "achAcct",
+     "bidDate", "bidAmount", "bidNote", "locInput", "loginEmail", "loginPass"].forEach(k => {
+      out[k + "Val"] = s[k];
+      out[k + "On"] = ev => this.set(k, caps[k] ? this.digits(ev.target.value, caps[k]) : ev.target.value);
+      out[k + "Bd"] = e[k] ? "#C0492F" : "#D8C8AF";
+      out[k + "Err"] = e[k] ? "block" : "none";
+      out[k + "Msg"] = e[k] || "";
+    });
+
+    const railDefs = [["1", "Sign up"], ["2", "Find projects"], ["3", "Payment"], ["4", "Bid"]];
+    const railStep = [0, 1, 2, 3, 3, 3][s.step];
+    const rail = railDefs.map(([num, label], i) => {
+      const done = i < railStep, active = i === railStep;
+      return {
+        num: done ? "✓" : num, label,
+        flex: i === railDefs.length - 1 ? "none" : "1",
+        bg: done ? "#8A5424" : active ? "#EFE0CC" : "#FCF8F1",
+        fg: done ? "#FFFDF9" : active ? "#8A5424" : "#A89C88",
+        bd: done ? "#8A5424" : active ? "#D8C8AF" : "#E4D8C5",
+        labelFg: done || active ? "#272019" : "#A89C88",
+        line: i < railStep ? "#8A5424" : "#E4D8C5",
+        lineDisplay: i === railDefs.length - 1 ? "none" : "block"
+      };
+    });
+
+    const keys = s.locs.map(l => l.toLowerCase().trim());
+    const filtered = keys.length === 0 ? this.PROJECTS : this.PROJECTS.filter(p =>
+      keys.indexOf(p.zip.toLowerCase()) !== -1 || keys.indexOf(p.city.toLowerCase()) !== -1);
+    const projects = filtered.map(p => ({
+      title: p.title,
+      meta: p.city + ", " + p.st + " " + p.zip + " · " + p.posted,
+      budget: p.budget,
+      tags: [p.type, p.model, p.size],
+      notes: p.notes,
+      proposals: p.proposals,
+      distance: p.distance,
+      bid: () => this.bidOn(p.id)
+    }));
+
+    const a = this.PROJECTS.filter(p => p.id === s.activeId)[0] || this.PROJECTS[0];
+    const name = (s.first + " " + s.last).trim();
+
+    return {
+      ...out,
+      isSignup: s.step === 0,
+      isLogin: s.step === 6,
+      isBrowse: s.step === 1,
+      isPayment: s.step === 2,
+      isBid: s.step === 3,
+      isSent: s.step === 4,
+      isDashboard: s.step === 5,
+      rail,
+      railDisplay: (s.step === 0 || s.step === 5 || s.step === 6) ? "none" : "flex",
+      myBidsDisplay: (s.step > 0 && s.step !== 6) ? "inline-flex" : "none",
+      goDashboard: () => { this.setState({ step: 5, err: {} }); window.scrollTo(0, 0); },
+      loginBtnDisplay: (s.step === 0 || s.step === 6) ? "inline-flex" : "none",
+      openLogin: () => { this.setState({ step: 6, err: {} }); window.scrollTo(0, 0); },
+      goSignup: () => { this.setState({ step: 0, err: {} }); window.scrollTo(0, 0); },
+      submitLogin: this.submitLogin,
+      loginKeyDown: ev => { if (ev.key === "Enter") { ev.preventDefault(); this.submitLogin(); } },
+      ...this.dashVals(),
+      acctName: name || "",
+      acctDisplay: (s.step > 0 && name) ? "inline" : "none",
+      paidDisplay: s.paid ? "inline-flex" : "none",
+      locs: s.locs.map(l => ({ label: l, remove: () => this.setState(st => ({ locs: st.locs.filter(x => x !== l) })) })),
+      locKeyDown: ev => { if (ev.key === "Enter") { ev.preventDefault(); this.addLoc(); } },
+      addLoc: this.addLoc,
+      emptyLocDisplay: s.locs.length ? "none" : "block",
+      projects,
+      resultCount: filtered.length,
+      noResultsDisplay: filtered.length ? "none" : "block",
+      statusFg: s.paid ? "#3E7A4E" : "#B07C1E",
+      statusLabel: s.paid ? "Unlimited bids active" : "Card required before bidding",
+      statusBody: s.paid ? "Your card is on file and ACH payouts are set up. Bid on as many projects as you like." : "Add and process a card once to unlock unlimited bids, plus ACH details for payouts.",
+      payBtnDisplay: s.paid ? "none" : "block",
+      payBtnLabel: "Add payment details",
+      goPayment: () => { this.setState({ step: 2, err: {} }); window.scrollTo(0, 0); },
+      backToBrowse: () => { this.setState({ step: 1, err: {} }); window.scrollTo(0, 0); },
+      achTypeVal: s.achType,
+      achTypeOn: ev => this.set("achType", ev.target.value),
+      authVal: s.auth,
+      authOn: ev => this.set("auth", ev.target.checked),
+      authErr: e.auth ? "block" : "none",
+      authMsg: e.auth || "",
+      processCard: this.processCard,
+      processLabel: "Process card & unlock unlimited bids",
+      submitSignup: this.submitSignup,
+      sendBid: this.sendBid,
+      activeTitle: a.title,
+      activeMeta: a.city + ", " + a.st + " " + a.zip + " · " + a.posted + " · " + a.proposals + " proposals",
+      activeType: a.type,
+      activeModel: a.model,
+      activeSize: a.size,
+      activeLoc: a.city + ", " + a.st + " " + a.zip,
+      activeBudget: a.budget,
+      activeNotes: a.notes,
+      sentSummary: "Your $" + (s.bidAmount || "—") + " proposal for " + a.title.toLowerCase() + " is on its way to the homeowner in " + a.city + ". You'll be notified the moment they respond.",
+      pipeline: this.timeline([
+        ["Proposal sent", "Start date and fixed price delivered to the homeowner's inbox."],
+        ["Homeowner reviewing", "They compare your bid against other verified installers."],
+        ["Hired", "If chosen, you'll get contact details and schedule directly with them."],
+        ["Job completed", "The homeowner marks the project completed in their viewport."],
+        ["Paid by ACH", "Funds land in your " + s.achType.toLowerCase() + " account, typically in 2 business days."]
+      ], 1)
+    };
+  }
+}
+</script>
+</body>
+</html>

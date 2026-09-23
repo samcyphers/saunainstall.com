@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&family=Newsreader:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: #FCF8F1; color: #272019; font-family: "Hanken Grotesk", system-ui, sans-serif; font-size: 17px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: #8A5424; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+</style>
+<template id="__bundler_thumbnail" data-bg-color="#8A5424">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#8A5424"></rect>
+    <rect x="470" y="290" width="260" height="260" rx="56" fill="#F4ECE0" transform="rotate(45 600 420)"></rect>
+    <rect x="530" y="350" width="140" height="140" rx="24" fill="#8A5424" transform="rotate(45 600 420)"></rect>
+    <text x="600" y="690" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="72" font-weight="700" letter-spacing="-3" fill="#FCF8F1">list a project</text>
+  </svg>
+</template>
+</helmet>
+<div style="background: #FCF8F1; color: #272019; font-family: 'Hanken Grotesk', system-ui, sans-serif; font-size: 17px; line-height: 1.55; min-height: 100vh; display: flex; flex-direction: column;">
+
+  <header style="position: sticky; top: 0; z-index: 50; background: rgba(252,248,241,.82); backdrop-filter: blur(12px) saturate(1.2); border-bottom: 1px solid #E4D8C5;">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 11px 28px; display: flex; align-items: center; justify-content: space-between; min-height: 70px; gap: 18px; flex-wrap: wrap; row-gap: 9px;">
+      <a href="saunainstall%20-%20Landing.dc.html" style="display: flex; align-items: center; gap: 11px; font-weight: 800; font-size: 20px; letter-spacing: -.03em;">
+        <span style="width: 32px; height: 32px; border-radius: 9px; background: #8A5424; display: grid; place-items: center; box-shadow: 0 1px 2px rgba(42,34,25,.06); flex: none;"><i style="width: 13px; height: 13px; border: 2px solid #F4ECE0; transform: rotate(45deg); border-radius: 2px; display: block;"></i></span>
+        <b style="font-weight: 800;">sauna<span style="color: #8A5424;">install</span></b>
+      </a>
+      <nav style="display: flex; align-items: center; gap: 22px; flex-wrap: nowrap; margin-left: auto;">
+        <a href="saunainstall%20-%20Landing.dc.html#how" style="font-size: 15.5px; font-weight: 500; color: #6B6253; white-space: nowrap;" style-hover="color: #272019;">How it works</a>
+        <a href="saunainstall%20-%20Homeowner.dc.html" style="font-size: 15.5px; font-weight: 600; color: #272019; white-space: nowrap;" style-hover="color: #8A5424;">List your sauna project</a>
+        <a href="saunainstall%20-%20Contractor.dc.html" style="font-size: 15.5px; font-weight: 500; color: #6B6253; white-space: nowrap;" style-hover="color: #272019;">For contractors</a>
+      </nav>
+      <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; row-gap: 4px; justify-content: flex-end; flex: none;">
+        <button type="button" onClick="{{ openLogin }}" style="display: {{ loginBtnDisplay }}; font-family: inherit; font-size: 15.5px; font-weight: 600; color: #272019; background: none; border: 1px solid #D8C8AF; border-radius: 11px; padding: 9px 16px; white-space: nowrap; cursor: pointer;" style-hover="background: #F4ECE0; color: #8A5424;">Sauna owner log in</button>
+        <button type="button" onClick="{{ goDash }}" style="display: {{ myPropsDisplay }}; font-family: inherit; font-size: 15.5px; font-weight: 600; color: #272019; background: none; border: 1px solid #D8C8AF; border-radius: 11px; padding: 9px 16px; white-space: nowrap; cursor: pointer;" style-hover="background: #F4ECE0; color: #8A5424;">My proposals</button>
+        <a href="saunainstall%20-%20Contractor.dc.html#login" style="font-family: inherit; font-size: 15.5px; font-weight: 600; color: #272019; background: none; border: 1px solid #D8C8AF; border-radius: 11px; padding: 9px 16px; white-space: nowrap; cursor: pointer;" style-hover="background: #F4ECE0; color: #8A5424;">Contractor log in</a>
+      </div>
+    </div>
+  </header>
+
+  <main style="flex: 1; padding: 46px 0 90px;">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 0 28px;">
+
+      <div style="max-width: 760px; margin: 0 auto 44px; display: {{ railDisplay }}; align-items: center;">
+        <sc-for list="{{ rail }}" as="r" hint-placeholder-count="3">
+          <div style="display: flex; align-items: center; flex: {{ r.flex }}; min-width: 0;">
+            <div style="display: flex; align-items: center; gap: 11px; flex: none;">
+              <span style="width: 32px; height: 32px; flex: none; border-radius: 50%; display: grid; place-items: center; font-size: 14.5px; font-weight: 700; background: {{ r.bg }}; color: {{ r.fg }}; border: 1px solid {{ r.bd }};">{{ r.num }}</span>
+              <span style="font-size: 14.5px; font-weight: 600; color: {{ r.labelFg }}; white-space: nowrap;">{{ r.label }}</span>
+            </div>
+            <span style="height: 2px; flex: 1; min-width: 18px; margin: 0 14px; border-radius: 2px; background: {{ r.line }}; display: {{ r.lineDisplay }};"></span>
+          </div>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{ isLogin }}">
+        <div style="max-width: 470px; margin: 30px auto 0; animation: fade .25s ease;">
+          <span style="font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #8A5424; display: inline-flex; align-items: center; gap: 9px;"><span style="width: 18px; height: 2px; background: #8A5424; border-radius: 2px;"></span>Sauna owner log in</span>
+          <h1 style="font-size: clamp(28px, 3.8vw, 38px); margin: 16px 0 0; letter-spacing: -.03em; line-height: 1.05; font-weight: 700;">Welcome back, Sauna Owner.</h1>
+          <p style="font-size: 17.5px; color: #6B6253; margin: 12px 0 0;">Log in to review the proposals installers have sent for your project.</p>
+
+          <div style="margin-top: 26px; background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px; box-shadow: 0 10px 30px -12px rgba(42,34,25,.22), 0 2px 6px rgba(42,34,25,.06);">
+            <div>
+              <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Email<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+              <input type="email" placeholder="you@email.com" value="{{ loginEmailVal }}" onChange="{{ loginEmailOn }}" onKeyDown="{{ loginKeyDown }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ loginEmailBd }}; border-radius: 11px; padding: 13px 14px;" />
+              <span style="display: {{ loginEmailErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ loginEmailMsg }}</span>
+            </div>
+            <div style="margin-top: 14px;">
+              <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Password<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+              <input type="password" placeholder="••••••••" value="{{ loginPassVal }}" onChange="{{ loginPassOn }}" onKeyDown="{{ loginKeyDown }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ loginPassBd }}; border-radius: 11px; padding: 13px 14px;" />
+              <span style="display: {{ loginPassErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ loginPassMsg }}</span>
+            </div>
+            <button type="button" onClick="{{ submitLogin }}" style="width: 100%; margin-top: 22px; display: inline-flex; align-items: center; justify-content: center; gap: 9px; font-family: inherit; font-size: 17px; font-weight: 600; cursor: pointer; border-radius: 11px; border: 1px solid transparent; padding: 16px 28px; background: #8A5424; color: #fff;" style-hover="background: #6F421A;">
+              Log in to my dashboard
+              <svg viewBox="0 0 20 20" fill="none" style="width: 17px; height: 17px;"><path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </button>
+            <p style="font-size: 13.5px; color: #8A8071; margin: 16px 0 0; text-align: center;">No project yet? <button type="button" onClick="{{ goAccount }}" style="font-family: inherit; font-size: 13.5px; font-weight: 600; color: #8A5424; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px;">List a project</button></p>
+          </div>
+          <p style="font-size: 13px; color: #8A8071; margin: 16px 0 0; text-align: center;">We only use your email information to send proposals.</p>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isDash }}">
+        <div style="animation: fade .25s ease;">
+          <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
+            <div>
+              <span style="font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #8A5424; display: inline-flex; align-items: center; gap: 9px;"><span style="width: 18px; height: 2px; background: #8A5424; border-radius: 2px;"></span>My project</span>
+              <h1 style="font-size: clamp(28px, 3.6vw, 40px); margin: 14px 0 0; letter-spacing: -.03em; line-height: 1.05; font-weight: 700;">{{ dashHeading }}</h1>
+              <p style="font-size: 17px; color: #6B6253; margin: 12px 0 0;">Compare fixed-price proposals from verified installers near you. No obligation and no fee, whatever you decide.</p>
+            </div>
+            <button type="button" onClick="{{ goAccount }}" style="display: inline-flex; align-items: center; gap: 9px; font-family: inherit; font-size: 16px; font-weight: 600; cursor: pointer; border-radius: 11px; border: 1px solid transparent; padding: 14px 24px; background: #8A5424; color: #fff;" style-hover="background: #6F421A;">
+              List another project
+              <svg viewBox="0 0 20 20" fill="none" style="width: 16px; height: 16px;"><path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </button>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 30px;">
+            <sc-for list="{{ stats }}" as="k" hint-placeholder-count="4">
+              <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 18px; padding: 22px 24px; box-shadow: 0 1px 2px rgba(42,34,25,.06);">
+                <div style="font-size: 12.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8A8071;">{{ k.label }}</div>
+                <div style="font-size: 32px; font-weight: 800; letter-spacing: -.03em; line-height: 1.1; margin-top: 8px; color: {{ k.fg }};">{{ k.value }}</div>
+                <div style="font-size: 13.5px; color: #6B6253; margin-top: 2px;">{{ k.sub }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1.45fr .55fr; gap: 24px; margin-top: 24px; align-items: start;">
+            <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 8px 26px 26px;">
+              <div style="display: flex; align-items: center; gap: 10px; padding: 20px 0 14px; border-bottom: 1px solid #E4D8C5; flex-wrap: wrap;">
+                <h2 style="font-size: 21px; margin: 0; letter-spacing: -.025em; font-weight: 700;">Proposals received</h2>
+                <span style="font-size: 12.5px; font-weight: 700; color: #8A5424; background: #EFE0CC; border: 1px solid #E0CBA8; padding: 3px 10px; border-radius: 999px;">{{ proposalCount }} total</span>
+              </div>
+              <sc-for list="{{ proposals }}" as="p" hint-placeholder-count="4">
+                <div style="display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: start; padding: 22px 0; border-bottom: 1px solid #F0E6D6;">
+                  <div style="min-width: 0;">
+                    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                      <b style="font-size: 17.5px; font-weight: 700; letter-spacing: -.01em;">{{ p.company }}</b>
+                      <span style="font-size: 11.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: {{ p.pillFg }}; background: {{ p.pillBg }}; border: 1px solid {{ p.pillBd }}; padding: 3px 9px; border-radius: 999px; white-space: nowrap;">{{ p.status }}</span>
+                    </div>
+                    <div style="font-size: 14px; color: #8A8071; margin-top: 5px;">{{ p.meta }}</div>
+                    <p style="font-size: 15px; color: #6B6253; margin: 8px 0 0; max-width: 56ch;">{{ p.note }}</p>
+                    <div style="display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap;">
+                      <button type="button" onClick="{{ p.accept }}" style="display: {{ p.acceptDisplay }}; align-items: center; gap: 8px; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer; border-radius: 11px; border: 1px solid transparent; padding: 11px 20px; background: #8A5424; color: #fff;" style-hover="background: #6F421A;">Accept proposal</button>
+                      <button type="button" onClick="{{ p.decline }}" style="display: {{ p.declineDisplay }}; align-items: center; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer; border-radius: 11px; border: 1px solid #D8C8AF; padding: 11px 20px; background: transparent; color: #272019;" style-hover="background: #F4ECE0;">Decline</button>
+                      <button type="button" onClick="{{ p.complete }}" style="display: {{ p.completeDisplay }}; align-items: center; gap: 8px; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer; border-radius: 11px; border: 1px solid #CFE3D3; padding: 11px 20px; background: #E9F1EA; color: #3E7A4E;" style-hover="background: #DDEBE0;">Mark project completed</button>
+                      <span style="display: {{ p.doneDisplay }}; align-items: center; gap: 7px; font-size: 14px; font-weight: 600; color: #3E7A4E;">
+                        <svg viewBox="0 0 16 16" fill="none" style="width: 14px; height: 14px;"><path d="M3 8.5l3.2 3.2L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                        Completed · payment released by ACH
+                      </span>
+                    </div>
+                  </div>
+                  <div style="text-align: right; flex: none;">
+                    <div style="font-size: 23px; font-weight: 800; letter-spacing: -.02em; color: #272019;">{{ p.amount }}</div>
+                    <div style="font-size: 13px; color: #8A8071;">start {{ p.start }}</div>
+                    <div style="font-size: 13px; color: #8A8071; margin-top: 5px;">{{ p.rating }}</div>
+                  </div>
+                </div>
+              </sc-for>
+              <p style="font-size: 14.5px; color: #8A8071; margin: 20px 0 0;">Proposals keep arriving for about a week after a project goes live. You'll get an email each time one lands.</p>
+            </div>
+
+            <div style="display: grid; gap: 16px;">
+              <div style="background: #F4ECE0; border: 1px solid #D8C8AF; border-radius: 22px; padding: 24px;">
+                <div style="font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8A8071;">Your listing</div>
+                <div style="font-size: 19px; font-weight: 700; margin-top: 10px; letter-spacing: -.02em;">{{ dashTitle }}</div>
+                <div style="display: grid; gap: 9px; margin-top: 16px; font-size: 14.5px;">
+                  <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Type</span><b style="font-weight: 600; text-align: right;">{{ dashType }}</b></div>
+                  <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Make &amp; model</span><b style="font-weight: 600; text-align: right;">{{ dashModel }}</b></div>
+                  <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Power</span><b style="font-weight: 600; text-align: right;">{{ dashPower }}</b></div>
+                  <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Electrician</span><b style="font-weight: 600; text-align: right;">{{ elecSummary }}</b></div>
+                  <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Size</span><b style="font-weight: 600; text-align: right;">{{ dashSize }}</b></div>
+                  <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Install date</span><b style="font-weight: 600; text-align: right;">{{ dashDate }}</b></div>
+                  <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Location</span><b style="font-weight: 600; text-align: right;">{{ dashLoc }}</b></div>
+                </div>
+                <p style="font-size: 13px; color: #8A8071; margin: 16px 0 0; padding-top: 14px; border-top: 1px solid #D8C8AF;">{{ projectId }} · posted 3 days ago</p>
+              </div>
+
+              <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 24px;">
+                <div style="font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8A5424;">Project process</div>
+                <div style="margin-top: 16px; display: grid; gap: 2px;">
+                  <sc-for list="{{ dashStages }}" as="st" hint-placeholder-count="5">
+                    <div style="display: grid; grid-template-columns: 26px 1fr; gap: 12px;">
+                      <div style="display: flex; flex-direction: column; align-items: center;">
+                        <span style="width: 22px; height: 22px; border-radius: 50%; flex: none; display: grid; place-items: center; background: {{ st.dotBg }}; border: 2px solid {{ st.dotBd }}; color: #FFFDF9; font-size: 11px; font-weight: 800;">{{ st.mark }}</span>
+                        <span style="width: 2px; flex: 1; min-height: 18px; background: {{ st.line }}; display: {{ st.lineDisplay }};"></span>
+                      </div>
+                      <div style="padding-bottom: 16px;">
+                        <b style="font-size: 15px; font-weight: 700; color: {{ st.titleFg }};">{{ st.title }}</b>
+                        <p style="color: #8A8071; font-size: 13.5px; margin: 2px 0 0;">{{ st.body }}</p>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+
+              <div style="background: #2A2219; color: #F4ECE0; border-radius: 22px; padding: 24px;">
+                <div style="font-size: 16.5px; font-weight: 700; color: #FCF8F1;">Need to change something?</div>
+                <p style="font-size: 14.5px; color: #C9BCA7; margin: 8px 0 18px;">Edit your specs or install date any time before you accept a proposal.</p>
+                <button type="button" onClick="{{ editProject }}" style="width: 100%; font-family: inherit; font-size: 15.5px; font-weight: 600; cursor: pointer; border-radius: 11px; border: 1px solid #4E4030; padding: 13px 20px; background: transparent; color: #F4ECE0;" style-hover="background: #352B20;">Edit project details</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isAccount }}" hint-placeholder-val="{{ true }}">
+        <div style="max-width: 620px; margin: 0 auto; animation: fade .25s ease;">
+          <span style="font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #8A5424; display: inline-flex; align-items: center; gap: 9px;"><span style="width: 18px; height: 2px; background: #8A5424; border-radius: 2px;"></span>Homeowner account</span>
+          <h1 style="font-size: clamp(30px, 4vw, 42px); margin: 16px 0 0; letter-spacing: -.03em; line-height: 1.05; font-weight: 700;">Create your account to list a project.</h1>
+          <p style="font-size: 18px; color: #6B6253; margin: 14px 0 0;">Your account is where proposals from installers arrive. Free for homeowners, always.</p>
+
+          <div style="margin-top: 30px; background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px; box-shadow: 0 10px 30px -12px rgba(42,34,25,.22), 0 2px 6px rgba(42,34,25,.06);">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <div>
+                <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">First name<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+                <input placeholder="Jordan" value="{{ firstVal }}" onChange="{{ firstOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ firstBd }}; border-radius: 11px; padding: 13px 14px;" />
+                <span style="display: {{ firstErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ firstMsg }}</span>
+              </div>
+              <div>
+                <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Last name<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+                <input placeholder="Avery" value="{{ lastVal }}" onChange="{{ lastOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ lastBd }}; border-radius: 11px; padding: 13px 14px;" />
+                <span style="display: {{ lastErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ lastMsg }}</span>
+              </div>
+            </div>
+
+            <div style="margin-top: 16px;">
+              <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Email<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+              <input type="email" placeholder="you@email.com" value="{{ emailVal }}" onChange="{{ emailOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ emailBd }}; border-radius: 11px; padding: 13px 14px;" />
+              <div style="margin-top: 8px; display: flex; align-items: center; gap: 8px; font-size: 13px; color: #6B6253;">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="flex: none;"><path d="M8 1l5 2v4c0 3.5-2.2 6.2-5 7-2.8-.8-5-3.5-5-7V3l5-2z" stroke="#8A8071" stroke-width="1.3"></path></svg>
+                We only use your email information to send proposals.
+              </div>
+              <span style="display: {{ emailErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ emailMsg }}</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1.2fr .8fr; gap: 14px; margin-top: 16px;">
+              <div>
+                <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Phone number<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+                <input inputmode="tel" placeholder="(208) 555-0142" value="{{ phoneVal }}" onChange="{{ phoneOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ phoneBd }}; border-radius: 11px; padding: 13px 14px;" />
+                <span style="display: {{ phoneErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ phoneMsg }}</span>
+              </div>
+              <div>
+                <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">ZIP code<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+                <input inputmode="numeric" maxlength="5" placeholder="83340" value="{{ zipVal }}" onChange="{{ zipOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ zipBd }}; border-radius: 11px; padding: 13px 14px;" />
+                <span style="display: {{ zipErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ zipMsg }}</span>
+              </div>
+            </div>
+
+            <button type="button" onClick="{{ submitAccount }}" style="width: 100%; margin-top: 24px; display: inline-flex; align-items: center; justify-content: center; gap: 9px; font-family: inherit; font-size: 17px; font-weight: 600; cursor: pointer; border-radius: 11px; border: 1px solid transparent; padding: 16px 28px; background: #8A5424; color: #fff; box-shadow: 0 1px 2px rgba(42,34,25,.06);" style-hover="background: #6F421A;">
+              Create account &amp; continue
+              <svg viewBox="0 0 20 20" fill="none" style="width: 17px; height: 17px;"><path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </button>
+            <p style="font-size: 13px; color: #8A8071; margin: 14px 0 0; text-align: center;">No fees and no commission — homeowners never pay saunainstall.</p>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isProject }}">
+        <div style="animation: fade .25s ease;">
+          <div style="max-width: 1000px; margin: 0 auto;">
+            <span style="font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #8A5424; display: inline-flex; align-items: center; gap: 9px;"><span style="width: 18px; height: 2px; background: #8A5424; border-radius: 2px;"></span>Step 2 · Project details</span>
+            <h1 style="font-size: clamp(28px, 3.6vw, 40px); margin: 16px 0 0; letter-spacing: -.03em; line-height: 1.05; font-weight: 700;">List your sauna project.</h1>
+            <p style="font-size: 18px; color: #6B6253; margin: 14px 0 0; max-width: 46em;">Installers in your area see this listing and send proposals. The more specific the specs, the tighter the pricing.</p>
+
+            <div style="display: grid; grid-template-columns: 1.5fr .8fr; gap: 24px; margin-top: 30px; align-items: start;">
+              <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px; box-shadow: 0 1px 2px rgba(42,34,25,.06);">
+                <div style="max-width: 300px;">
+                  <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Install date<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+                  <input type="date" value="{{ dateVal }}" onChange="{{ dateOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ dateBd }}; border-radius: 11px; padding: 13px 14px; cursor: pointer;" />
+                  <span style="display: {{ dateErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ dateMsg }}</span>
+                  <p style="font-size: 13px; color: #8A8071; margin: 8px 0 0;">Your ideal start date — installers can propose an alternative.</p>
+                </div>
+
+                <hr style="border: none; border-top: 1px solid #E4D8C5; margin: 26px 0;" />
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                  <div>
+                    <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Sauna type<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+                    <select value="{{ typeVal }}" onChange="{{ typeOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ typeBd }}; border-radius: 11px; padding: 13px 34px 13px 14px; appearance: none; cursor: pointer;">
+                      <sc-for list="{{ typeOptions }}" as="o" hint-placeholder-count="8">
+                        <option value="{{ o.v }}">{{ o.label }}</option>
+                      </sc-for>
+                    </select>
+                    <span style="display: {{ typeErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ typeMsg }}</span>
+                  </div>
+                  <div>
+                    <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Make<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+                    <select value="{{ makeVal }}" onChange="{{ makeOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ makeBd }}; border-radius: 11px; padding: 13px 34px 13px 14px; appearance: none; cursor: pointer;">
+                      <option value="">Choose a make</option>
+                      <option value="Golden Designs">Golden Designs</option>
+                      <option value="Finnmark">Finnmark</option>
+                      <option value="SunRay">SunRay</option>
+                      <option value="Maxxus">Maxxus</option>
+                      <option value="Dynamic">Dynamic</option>
+                    </select>
+                    <span style="display: {{ makeErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ makeMsg }}</span>
+                  </div>
+                  <div>
+                    <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Model<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+                    <select value="{{ modelVal }}" onChange="{{ modelOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ modelBd }}; border-radius: 11px; padding: 13px 34px 13px 14px; appearance: none; cursor: pointer;">
+                      <sc-for list="{{ modelOptions }}" as="o" hint-placeholder-count="4">
+                        <option value="{{ o.v }}">{{ o.label }}</option>
+                      </sc-for>
+                    </select>
+                    <span style="display: {{ modelErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ modelMsg }}</span>
+                  </div>
+                  <div>
+                    <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Electrical power<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+                    <select value="{{ powerVal }}" onChange="{{ powerOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ powerBd }}; border-radius: 11px; padding: 13px 34px 13px 14px; appearance: none; cursor: pointer;">
+                      <option value="">Choose power requirement</option>
+                      <option value="120V standard outlet">120V standard outlet</option>
+                      <option value="120V dedicated 20A circuit">120V dedicated 20A circuit</option>
+                      <option value="240V single phase">240V single phase</option>
+                      <option value="240V 50A dedicated circuit">240V 50A dedicated circuit</option>
+                      <option value="Wood-fired — no power needed">Wood-fired — no power needed</option>
+                      <option value="Not sure — need installer advice">Not sure — need installer advice</option>
+                    </select>
+                    <span style="display: {{ powerErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ powerMsg }}</span>
+                  </div>
+                </div>
+                <label style="display: flex; align-items: flex-start; gap: 11px; margin-top: 18px; padding: 16px 18px; background: #F4ECE0; border: 1px solid #D8C8AF; border-radius: 14px; cursor: pointer;">
+                  <input type="checkbox" checked="{{ elecVal }}" onChange="{{ elecOn }}" style="width: 18px; height: 18px; margin-top: 3px; accent-color: #8A5424; flex: none;" />
+                  <span>
+                    <b style="display: block; font-size: 15.5px; font-weight: 700; color: #272019;">Need an electrician</b>
+                    <span style="display: block; font-size: 14px; color: #6B6253; margin-top: 3px;">Some saunas plug into a wall, others require dedicated electrical circuits. Check this box if you need an electrician for your install.</span>
+                  </span>
+                </label>
+
+                <hr style="border: none; border-top: 1px solid #E4D8C5; margin: 26px 0;" />
+
+                <div style="font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8A8071;">Size specs</div>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 14px;">
+                  <div>
+                    <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Width<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+                    <input placeholder="7 ft" value="{{ wVal }}" onChange="{{ wOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ wBd }}; border-radius: 11px; padding: 13px 14px;" />
+                  </div>
+                  <div>
+                    <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Length<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+                    <input placeholder="8 ft" value="{{ lVal }}" onChange="{{ lOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ lBd }}; border-radius: 11px; padding: 13px 14px;" />
+                  </div>
+                  <div>
+                    <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Height<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+                    <input placeholder="7 ft" value="{{ hVal }}" onChange="{{ hOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ hBd }}; border-radius: 11px; padding: 13px 14px;" />
+                  </div>
+                  <div>
+                    <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Capacity<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+                    <select value="{{ seatsVal }}" onChange="{{ seatsOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid #D8C8AF; border-radius: 11px; padding: 13px 28px 13px 14px; appearance: none; cursor: pointer;">
+                      <option value="2-person">2-person</option>
+                      <option value="4-person">4-person</option>
+                      <option value="6-person">6-person</option>
+                      <option value="8-person or larger">8+ person</option>
+                    </select>
+                  </div>
+                </div>
+                <span style="display: {{ sizeErr }}; color: #C0492F; font-size: 12.5px; margin-top: 8px; font-weight: 600;">{{ sizeMsg }}</span>
+                <p style="font-size: 13px; color: #8A8071; margin: 10px 0 0;">Rough dimensions are fine — the installer confirms on site.</p>
+
+                <hr style="border: none; border-top: 1px solid #E4D8C5; margin: 26px 0;" />
+
+                <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Special information <span style="color: #8A8071; font-weight: 400;">(anything unique about the location we should know) — optional</span></label>
+                <textarea rows="4" placeholder="Site access, electrical panel location, foundation or pad, delivery date, anything an installer should know before quoting…" value="{{ notesVal }}" onChange="{{ notesOn }}" style="width: 100%; font-family: inherit; font-size: 16px; line-height: 1.5; color: #272019; background: #FCF8F1; border: 1px solid {{ notesBd }}; border-radius: 11px; padding: 13px 14px; resize: vertical;"></textarea>
+                <span style="display: {{ notesErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ notesMsg }}</span>
+
+                <hr style="border: none; border-top: 1px solid #E4D8C5; margin: 26px 0;" />
+
+                <div style="font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8A8071;">Verify your location</div>
+                <p style="font-size: 14.5px; color: #6B6253; margin: 8px 0 14px;">Only installers who service this area will see your project.</p>
+                <div style="display: grid; grid-template-columns: 1.4fr .6fr; gap: 12px;">
+                  <div>
+                    <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">City<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+                    <input placeholder="Ketchum" value="{{ cityVal }}" onChange="{{ cityOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ cityBd }}; border-radius: 11px; padding: 13px 14px;" />
+                    <span style="display: {{ cityErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ cityMsg }}</span>
+                  </div>
+                  <div>
+                    <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">ZIP code<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+                    <input inputmode="numeric" maxlength="5" placeholder="83340" value="{{ pzipVal }}" onChange="{{ pzipOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ pzipBd }}; border-radius: 11px; padding: 13px 14px;" />
+                    <span style="display: {{ pzipErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ pzipMsg }}</span>
+                  </div>
+                </div>
+                <label style="display: flex; align-items: flex-start; gap: 10px; margin-top: 16px; font-size: 14.5px; color: #272019; cursor: pointer;">
+                  <input type="checkbox" checked="{{ confirmVal }}" onChange="{{ confirmOn }}" style="width: 18px; height: 18px; margin-top: 3px; accent-color: #8A5424; flex: none;" />
+                  <span>I confirm this city and ZIP code are correct for the install site.</span>
+                </label>
+                <span style="display: {{ confirmErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ confirmMsg }}</span>
+
+                <div style="display: flex; gap: 12px; margin-top: 28px;">
+                  <button type="button" onClick="{{ backToAccount }}" style="font-family: inherit; font-size: 16px; font-weight: 600; cursor: pointer; border-radius: 11px; border: 1px solid #D8C8AF; padding: 15px 24px; background: transparent; color: #272019;" style-hover="background: #F4ECE0;">Back</button>
+                  <button type="button" onClick="{{ submitProject }}" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 9px; font-family: inherit; font-size: 17px; font-weight: 600; cursor: pointer; border-radius: 11px; border: 1px solid transparent; padding: 15px 28px; background: #8A5424; color: #fff;" style-hover="background: #6F421A;">
+                    Post project &amp; request proposals
+                    <svg viewBox="0 0 20 20" fill="none" style="width: 17px; height: 17px;"><path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                  </button>
+                </div>
+              </div>
+
+              <div style="display: grid; gap: 16px;">
+                <div style="background: #F4ECE0; border: 1px solid #D8C8AF; border-radius: 22px; padding: 24px;">
+                  <div style="font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8A5424;">What happens next</div>
+                  <div style="display: grid; gap: 14px; margin-top: 16px;">
+                    <div style="display: flex; gap: 12px; align-items: flex-start;">
+                      <span style="width: 26px; height: 26px; border-radius: 8px; background: #EFE0CC; color: #8A5424; display: grid; place-items: center; flex: none; font-size: 13px; font-weight: 800;">1</span>
+                      <div><b style="font-weight: 700; font-size: 15px;">Your project goes live</b><p style="color: #6B6253; font-size: 14px; margin: 2px 0 0;">Visible only to verified installers in your ZIP.</p></div>
+                    </div>
+                    <div style="display: flex; gap: 12px; align-items: flex-start;">
+                      <span style="width: 26px; height: 26px; border-radius: 8px; background: #EFE0CC; color: #8A5424; display: grid; place-items: center; flex: none; font-size: 13px; font-weight: 800;">2</span>
+                      <div><b style="font-weight: 700; font-size: 15px;">Proposals arrive by email</b><p style="color: #6B6253; font-size: 14px; margin: 2px 0 0;">Fixed prices and start dates, usually within 48 hours.</p></div>
+                    </div>
+                    <div style="display: flex; gap: 12px; align-items: flex-start;">
+                      <span style="width: 26px; height: 26px; border-radius: 8px; background: #EFE0CC; color: #8A5424; display: grid; place-items: center; flex: none; font-size: 13px; font-weight: 800;">3</span>
+                      <div><b style="font-weight: 700; font-size: 15px;">You choose, or decline all</b><p style="color: #6B6253; font-size: 14px; margin: 2px 0 0;">No obligation and no fee, whatever you decide.</p></div>
+                    </div>
+                  </div>
+                </div>
+                <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 22px;">
+                  <div style="font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8A8071;">Listing as</div>
+                  <div style="font-size: 17px; font-weight: 700; margin-top: 8px;">{{ acctName }}</div>
+                  <div style="font-size: 14.5px; color: #6B6253;">{{ emailVal }}</div>
+                  <div style="font-size: 14.5px; color: #6B6253;">{{ phoneVal }}</div>
+                  <p style="font-size: 12.5px; color: #8A8071; margin: 14px 0 0;">We only use your email information to send proposals.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isThanks }}">
+        <div style="animation: fade .25s ease;">
+          <div style="max-width: 1000px; margin: 0 auto;">
+            <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 24px; padding: 44px; box-shadow: 0 10px 30px -12px rgba(42,34,25,.22), 0 2px 6px rgba(42,34,25,.06); text-align: center;">
+              <div style="width: 70px; height: 70px; border-radius: 50%; background: #E9F1EA; border: 1px solid #CFE3D3; display: grid; place-items: center; margin: 0 auto 20px; color: #3E7A4E;"><svg viewBox="0 0 24 24" fill="none" style="width: 34px; height: 34px;"><path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+              <h1 style="font-size: clamp(30px, 4vw, 44px); margin: 0; letter-spacing: -.03em; line-height: 1.05; font-weight: 700;">Thank you — your project is live.</h1>
+              <p style="font-size: 19px; color: #6B6253; margin: 16px auto 0; max-width: 34em;">A contractor proposal will be along soon. Verified installers near {{ cityVal }} {{ pzipVal }} are being notified now, and proposals typically land in your inbox within 48 hours.</p>
+              <div style="display: inline-flex; align-items: center; gap: 9px; margin-top: 22px; font-size: 14px; font-weight: 600; color: #3E7A4E; background: #E9F1EA; border: 1px solid #CFE3D3; padding: 8px 15px; border-radius: 999px;">
+                <svg viewBox="0 0 16 16" fill="none" style="width: 14px; height: 14px;"><path d="M3 8.5l3.2 3.2L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                Project {{ projectId }} · proposals will be emailed to {{ emailVal }}
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1.35fr .85fr; gap: 24px; margin-top: 24px; align-items: start;">
+              <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px;">
+                <div style="font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8A5424;">Project process</div>
+                <h2 style="font-size: 24px; margin: 10px 0 0; letter-spacing: -.025em; line-height: 1.1; font-weight: 700;">Where your project stands</h2>
+                <div style="margin-top: 24px; display: grid; gap: 4px;">
+                  <sc-for list="{{ stages }}" as="st" hint-placeholder-count="5">
+                    <div style="display: grid; grid-template-columns: 34px 1fr; gap: 16px;">
+                      <div style="display: flex; flex-direction: column; align-items: center;">
+                        <span style="width: 26px; height: 26px; border-radius: 50%; flex: none; display: grid; place-items: center; background: {{ st.dotBg }}; border: 2px solid {{ st.dotBd }}; color: {{ st.dotFg }}; font-size: 12px; font-weight: 800;">{{ st.mark }}</span>
+                        <span style="width: 2px; flex: 1; min-height: 26px; background: {{ st.line }}; display: {{ st.lineDisplay }};"></span>
+                      </div>
+                      <div style="padding-bottom: 22px;">
+                        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                          <b style="font-size: 16.5px; font-weight: 700; color: {{ st.titleFg }};">{{ st.title }}</b>
+                          <span style="font-size: 11.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: {{ st.pillFg }}; background: {{ st.pillBg }}; border: 1px solid {{ st.pillBd }}; padding: 3px 9px; border-radius: 999px;">{{ st.status }}</span>
+                        </div>
+                        <p style="color: #6B6253; font-size: 14.5px; margin: 5px 0 0; max-width: 46ch;">{{ st.body }}</p>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+
+              <div style="display: grid; gap: 16px;">
+                <div style="background: #F4ECE0; border: 1px solid #D8C8AF; border-radius: 22px; padding: 24px;">
+                  <div style="font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8A8071;">Your listing</div>
+                  <div style="font-size: 19px; font-weight: 700; margin-top: 10px; letter-spacing: -.02em;">{{ summaryTitle }}</div>
+                  <div style="display: grid; gap: 9px; margin-top: 16px; font-size: 14.5px;">
+                    <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Type</span><b style="font-weight: 600; text-align: right;">{{ typeVal }}</b></div>
+                    <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Model</span><b style="font-weight: 600; text-align: right;">{{ makeVal }} {{ modelVal }}</b></div>
+                    <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Electrician</span><b style="font-weight: 600; text-align: right;">{{ elecSummary }}</b></div>
+                    <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Power</span><b style="font-weight: 600; text-align: right;">{{ powerVal }}</b></div>
+                    <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Size</span><b style="font-weight: 600; text-align: right;">{{ sizeLine }}</b></div>
+                    <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Install date</span><b style="font-weight: 600; text-align: right;">{{ dateVal }}</b></div>
+                    <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Location</span><b style="font-weight: 600; text-align: right;">{{ cityVal }}, {{ pzipVal }}</b></div>
+                  </div>
+                  <p style="font-size: 14px; color: #6B6253; margin: 16px 0 0; padding-top: 14px; border-top: 1px solid #D8C8AF;">{{ notesSummary }}</p>
+                </div>
+                <div style="background: #2A2219; color: #F4ECE0; border-radius: 22px; padding: 24px;">
+                  <div style="font-size: 16.5px; font-weight: 700; color: #FCF8F1;">Need to change something?</div>
+                  <p style="font-size: 14.5px; color: #C9BCA7; margin: 8px 0 18px;">You can edit specs or add photos any time before you accept a proposal.</p>
+                  <button type="button" onClick="{{ goDash }}" style="width: 100%; font-family: inherit; font-size: 15.5px; font-weight: 600; cursor: pointer; border-radius: 11px; border: 1px solid transparent; padding: 13px 20px; background: #CDA468; color: #2A2219;" style-hover="background: #DCB77C;">View my proposals</button>
+                  <button type="button" onClick="{{ editProject }}" style="width: 100%; margin-top: 10px; font-family: inherit; font-size: 15.5px; font-weight: 600; cursor: pointer; border-radius: 11px; border: 1px solid #4E4030; padding: 13px 20px; background: transparent; color: #F4ECE0;" style-hover="background: #352B20;">Edit project details</button>
+                  <a href="saunainstall%20-%20Landing.dc.html" style="display: block; text-align: center; margin-top: 12px; font-size: 14px; color: #CDA468; font-weight: 600;">Back to saunainstall.com</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+    </div>
+  </main>
+
+  <footer style="background: #221B14; color: #B6A88F; padding: 40px 0;">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 0 28px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-size: 13.5px; color: #8A7C64;">
+      <span>© 2026 saunainstall. Free for homeowners — no fees, no commission.</span>
+      <div style="display: flex; gap: 22px;">
+        <a href="saunainstall%20-%20Landing.dc.html#faq" style="color: #C2B49B;" style-hover="color: #FCF8F1;">FAQ</a>
+        <a href="saunainstall%20-%20Contractor.dc.html" style="color: #C2B49B;" style-hover="color: #FCF8F1;">For contractors</a>
+        <a href="saunainstall%20-%20Landing.dc.html" style="color: #C2B49B;" style-hover="color: #FCF8F1;">Privacy</a>
+      </div>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;startStep&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;1 · Account&quot;,&quot;options&quot;:[&quot;1 · Account&quot;,&quot;2 · Project details&quot;,&quot;3 · Thank you&quot;,&quot;4 · Log in&quot;,&quot;5 · My proposals&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Preview&quot;}}">
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    const map = { "1 · Account": 0, "2 · Project details": 1, "3 · Thank you": 2, "4 · Log in": 3, "5 · My proposals": 4 };
+    this.state = {
+      step: map[props.startStep] ?? 0,
+      first: "", last: "", email: "", phone: "", zip: "",
+      date: "", type: "", make: "", model: "", power: "", elec: false, w: "", l: "", h: "", seats: "4-person",
+      notes: "", city: "", pzip: "", confirm: false,
+      loginEmail: "", loginPass: "", hiredId: null, completedId: null, declined: [],
+      err: {}
+    };
+  }
+
+  componentDidMount() {
+    if (typeof window !== "undefined" && window.location.hash === "#login") this.setState({ step: 3 });
+  }
+
+  PROPOSALS = [
+    { id: "c1", company: "Northwood Sauna Co.", meta: "Ketchum, ID · 4.9 ★ (38 sauna installs) · sent 2 days ago", amount: 2450, start: "Sep 12", rating: "Licensed & insured", note: "Two-person crew, one day on site. Includes pad leveling, assembly, heater wiring to your existing 240V subpanel, and haul-away of packaging." },
+    { id: "c2", company: "Cedar & Stone Builders", meta: "Hailey, ID · 4.8 ★ (21 sauna installs) · sent 2 days ago", amount: 2890, start: "Sep 8", rating: "Licensed & insured", note: "Earliest start date available. Includes a licensed electrician on site for the dedicated circuit, plus a cedar bench upgrade at no extra cost." },
+    { id: "c3", company: "High Desert Wellness Installs", meta: "Twin Falls, ID · 4.7 ★ (54 sauna installs) · sent yesterday", amount: 2150, start: "Sep 22", rating: "Licensed & insured", note: "Lowest bid. Assembly and placement only — electrical to be handled by your own electrician. Two-week lead time on scheduling." },
+    { id: "c4", company: "Alpine Heat Works", meta: "Sun Valley, ID · 5.0 ★ (12 sauna installs) · sent 6 hours ago", amount: 3100, start: "Sep 5", rating: "Licensed & insured", note: "Full turnkey: gravel pad regrade, assembly, 240V circuit run from the garage, heater commissioning, and a first-season tune-up visit included." }
+  ];
+
+  PSTATUS = {
+    New: { fg: "#8A5424", bg: "#EFE0CC", bd: "#E0CBA8" },
+    Hired: { fg: "#3E7A4E", bg: "#E9F1EA", bd: "#CFE3D3" },
+    Completed: { fg: "#3E7A4E", bg: "#E9F1EA", bd: "#CFE3D3" },
+    Declined: { fg: "#8A8071", bg: "#F1EBE4", bd: "#E4D8C5" },
+    "Not selected": { fg: "#8A8071", bg: "#F1EBE4", bd: "#E4D8C5" }
+  };
+
+  money(n) { return "$" + n.toLocaleString("en-US"); }
+
+  submitLogin = () => {
+    const s = this.state, err = {};
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(s.loginEmail.trim())) err.loginEmail = "Enter a valid email address.";
+    if (s.loginPass.length < 6) err.loginPass = "Enter your password.";
+    if (Object.keys(err).length) { this.setState({ err }); return; }
+    this.setState(st => ({
+      err: {}, step: 4, loginPass: "",
+      first: st.first || "Jordan", last: st.last || "Avery",
+      email: st.email || st.loginEmail
+    }));
+    window.scrollTo(0, 0);
+  };
+
+  statusOf(id) {
+    const s = this.state;
+    if (s.completedId === id) return "Completed";
+    if (s.hiredId === id) return "Hired";
+    if (s.hiredId) return "Not selected";
+    if (s.declined.indexOf(id) !== -1) return "Declined";
+    return "New";
+  }
+
+  dashVals() {
+    const s = this.state;
+    const live = this.PROPOSALS.filter(p => s.declined.indexOf(p.id) === -1);
+    const proposals = this.PROPOSALS.map(p => {
+      const st = this.statusOf(p.id), c = this.PSTATUS[st];
+      return {
+        company: p.company, meta: p.meta, note: p.note, status: st,
+        amount: this.money(p.amount), start: p.start, rating: p.rating,
+        pillFg: c.fg, pillBg: c.bg, pillBd: c.bd,
+        acceptDisplay: st === "New" ? "inline-flex" : "none",
+        declineDisplay: st === "New" ? "inline-flex" : "none",
+        completeDisplay: st === "Hired" ? "inline-flex" : "none",
+        doneDisplay: st === "Completed" ? "inline-flex" : "none",
+        accept: () => this.setState({ hiredId: p.id }),
+        decline: () => this.setState(prev => ({ declined: prev.declined.concat([p.id]) })),
+        complete: () => this.setState({ completedId: p.id })
+      };
+    });
+    const amounts = live.map(p => p.amount);
+    const low = amounts.length ? Math.min.apply(null, amounts) : 0;
+    const avg = amounts.length ? Math.round(amounts.reduce((a, b) => a + b, 0) / amounts.length) : 0;
+    const hired = this.PROPOSALS.filter(p => p.id === s.hiredId)[0];
+    const current = s.completedId ? 4 : s.hiredId ? 3 : 2;
+    const defs = [
+      ["Project posted", "Live to verified installers in your ZIP."],
+      ["Proposals arriving", "Fixed prices and start dates by email."],
+      ["Compare proposals", "Review price, dates, and reviews side by side."],
+      ["Installer hired", "Schedule the install directly with them."],
+      ["Install complete", "Mark it completed to release the ACH payment."]
+    ];
+    return {
+      proposals,
+      proposalCount: this.PROPOSALS.length,
+      dashHeading: s.completedId ? "Your sauna install is complete." : hired ? hired.company + " is installing your sauna." : live.length + " proposals to review.",
+      stats: [
+        { label: "Proposals", value: live.length, sub: "from verified installers", fg: "#272019" },
+        { label: "Lowest bid", value: this.money(low), sub: "all-in fixed price", fg: "#3E7A4E" },
+        { label: "Average bid", value: this.money(avg), sub: "across your proposals", fg: "#272019" },
+        { label: "Status", value: s.completedId ? "Done" : hired ? "Hired" : "Open", sub: s.completedId ? "payment released" : hired ? "install scheduled" : "accepting proposals", fg: "#8A5424" }
+      ],
+      dashStages: defs.map((d, i) => {
+        const done = i < current, active = i === current;
+        return {
+          title: d[0], body: d[1],
+          mark: done ? "✓" : "",
+          dotBg: done ? "#8A5424" : "#FFFDF9",
+          dotBd: done || active ? "#8A5424" : "#E4D8C5",
+          line: i < current ? "#8A5424" : "#E4D8C5",
+          lineDisplay: i === defs.length - 1 ? "none" : "block",
+          titleFg: done || active ? "#272019" : "#8A8071"
+        };
+      }),
+      dashTitle: (s.type || "Barrel sauna") + " install",
+      dashType: s.type || "Barrel sauna",
+      dashModel: ((s.make || "Finnmark") + " · " + (s.model || "7 ft Panoramic Barrel")),
+      dashPower: s.power || "240V 50A dedicated circuit",
+      dashSize: (s.w && s.l && s.h) ? s.w + " × " + s.l + " × " + s.h + " · " + s.seats : "7 ft × 8 ft × 7 ft · 4-person",
+      dashDate: s.date || "Sep 15, 2026",
+      dashLoc: (s.city || "Ketchum") + ", " + (s.pzip || "83340")
+    };
+  }
+
+  MODELS = {
+    "Barrel sauna": ["6 ft Classic Barrel", "7 ft Panoramic Barrel", "8 ft Barrel with porch", "Other / not listed"],
+    "Outdoor cabin sauna": ["Cube 2-person", "Cabin 4-person", "Cabin 6-person + changing room", "Other / not listed"],
+    "Indoor sauna room": ["Indoor kit 2-person", "Indoor kit 4-person", "Custom-built room", "Other / not listed"],
+    "Infrared cabin": ["1-person infrared", "2-person infrared", "3–4 person infrared", "Other / not listed"],
+    "Wood-fired sauna": ["Wood-fired barrel", "Wood-fired cabin", "Mobile / tent sauna", "Other / not listed"],
+    "Steam room": ["Prefab steam shower", "Custom tiled steam room", "Other / not listed"],
+    "Sauna + cold plunge package": ["Sauna + plunge package", "Plunge added to existing sauna", "Other / not listed"],
+    "Not sure yet": ["Not sure yet — need advice"]
+  };
+
+  set(k, v) {
+    this.setState(s => {
+      const err = { ...s.err };
+      delete err[k];
+      return { [k]: v, err };
+    });
+  }
+
+  digits(v) { return v.replace(/\D/g, "").slice(0, 5); }
+
+  submitAccount = () => {
+    const s = this.state, err = {};
+    if (!s.first.trim()) err.first = "Enter your first name.";
+    if (!s.last.trim()) err.last = "Enter your last name.";
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(s.email.trim())) err.email = "Enter a valid email address.";
+    if (s.phone.replace(/\D/g, "").length < 10) err.phone = "Enter a 10-digit phone number.";
+    if (!/^\d{5}$/.test(s.zip.trim())) err.zip = "Enter a valid 5-digit ZIP.";
+    if (Object.keys(err).length) { this.setState({ err }); return; }
+    this.setState({ err: {}, step: 1, pzip: s.pzip || s.zip });
+    window.scrollTo(0, 0);
+  };
+
+  submitProject = () => {
+    const s = this.state, err = {};
+    if (!s.type) err.type = "Choose a sauna type.";
+    if (!s.make) err.make = "Choose a make.";
+    if (!s.model) err.model = "Choose a model.";
+    if (!s.power) err.power = "Choose an electrical power option.";
+    if (!s.w.trim() || !s.l.trim() || !s.h.trim()) err.size = "Add width, length, and height.";
+    if (!s.date) err.date = "Choose your ideal install date.";
+    if (!s.city.trim()) err.city = "Enter your city.";
+    if (!/^\d{5}$/.test(s.pzip.trim())) err.pzip = "Enter a valid 5-digit ZIP.";
+    if (!s.confirm) err.confirm = "Please confirm your city and ZIP.";
+    if (Object.keys(err).length) { this.setState({ err }); return; }
+    this.setState({ err: {}, step: 2 });
+    window.scrollTo(0, 0);
+  };
+
+  renderVals() {
+    const s = this.state, e = s.err;
+    const out = {};
+    ["first", "last", "email", "phone", "zip", "date", "type", "make", "model", "power", "w", "l", "h", "notes", "city", "pzip", "loginEmail", "loginPass"].forEach(k => {
+      out[k + "Val"] = s[k];
+      out[k + "On"] = ev => this.set(k, (k === "zip" || k === "pzip") ? this.digits(ev.target.value) : ev.target.value);
+      out[k + "Bd"] = e[k] ? "#C0492F" : "#D8C8AF";
+      out[k + "Err"] = e[k] ? "block" : "none";
+      out[k + "Msg"] = e[k] || "";
+    });
+
+    const railDefs = [["1", "Create account"], ["2", "Project details"], ["3", "Proposals"]];
+    const rail = railDefs.map(([num, label], i) => {
+      const done = i < s.step, active = i === s.step;
+      return {
+        num: done ? "✓" : num, label,
+        flex: i === railDefs.length - 1 ? "none" : "1",
+        bg: done ? "#8A5424" : active ? "#EFE0CC" : "#FCF8F1",
+        fg: done ? "#FFFDF9" : active ? "#8A5424" : "#A89C88",
+        bd: done ? "#8A5424" : active ? "#D8C8AF" : "#E4D8C5",
+        labelFg: done || active ? "#272019" : "#A89C88",
+        line: i < s.step ? "#8A5424" : "#E4D8C5",
+        lineDisplay: i === railDefs.length - 1 ? "none" : "block"
+      };
+    });
+
+    const stageDefs = [
+      ["Project posted", "Your specs and site details are live to verified installers near you.", 0],
+      ["Proposals arriving", "Installers review your project and send fixed-price proposals by email.", 1],
+      ["Compare proposals", "Price, start date, portfolio, and reviews side by side in your inbox.", 2],
+      ["Hire your installer", "Accept the proposal you trust. Schedule directly with the contractor.", 3],
+      ["Install complete", "Mark the project completed once you're happy with the finished sauna.", 4]
+    ];
+    const current = 1;
+    const stages = stageDefs.map(([title, body, i]) => {
+      const done = i < current, active = i === current;
+      return {
+        title, body,
+        mark: done ? "✓" : "",
+        dotBg: done ? "#8A5424" : active ? "#FFFDF9" : "#FFFDF9",
+        dotBd: done ? "#8A5424" : active ? "#8A5424" : "#E4D8C5",
+        dotFg: "#FFFDF9",
+        line: i < current ? "#8A5424" : "#E4D8C5",
+        lineDisplay: i === stageDefs.length - 1 ? "none" : "block",
+        titleFg: done || active ? "#272019" : "#8A8071",
+        status: done ? "Done" : active ? "In progress" : "Up next",
+        pillFg: done ? "#3E7A4E" : active ? "#8A5424" : "#8A8071",
+        pillBg: done ? "#E9F1EA" : active ? "#EFE0CC" : "#F4ECE0",
+        pillBd: done ? "#CFE3D3" : active ? "#E0CBA8" : "#E4D8C5"
+      };
+    });
+
+    const name = (s.first + " " + s.last).trim();
+    const sizeLine = (s.w && s.l && s.h) ? s.w + " × " + s.l + " × " + s.h + " · " + s.seats : s.seats;
+
+    return {
+      ...out,
+      isAccount: s.step === 0,
+      isProject: s.step === 1,
+      isThanks: s.step === 2,
+      isLogin: s.step === 3,
+      isDash: s.step === 4,
+      railDisplay: s.step > 2 ? "none" : "flex",
+      openLogin: () => { this.setState({ step: 3, err: {} }); window.scrollTo(0, 0); },
+      goAccount: () => { this.setState({ step: 0, err: {} }); window.scrollTo(0, 0); },
+      goDash: () => { this.setState({ step: 4, err: {} }); window.scrollTo(0, 0); },
+      submitLogin: this.submitLogin,
+      loginKeyDown: ev => { if (ev.key === "Enter") { ev.preventDefault(); this.submitLogin(); } },
+      loginBtnDisplay: s.step === 4 ? "none" : "inline-flex",
+      myPropsDisplay: (s.step === 2 || s.step === 4) ? "inline-flex" : "none",
+      ...this.dashVals(),
+      rail, stages,
+      acctName: name || "your account",
+      acctDisplay: (s.step > 0 && s.step !== 3 && name) ? "inline" : "none",
+      seatsVal: s.seats,
+      elecVal: s.elec,
+      elecOn: ev => this.set("elec", ev.target.checked),
+      elecSummary: s.elec ? "Yes — electrician needed" : "Not needed",
+      seatsOn: ev => this.set("seats", ev.target.value),
+      confirmVal: s.confirm,
+      confirmOn: ev => this.set("confirm", ev.target.checked),
+      confirmErr: e.confirm ? "block" : "none",
+      confirmMsg: e.confirm || "",
+      sizeErr: e.size ? "block" : "none",
+      sizeMsg: e.size || "",
+      typeOptions: [{ v: "", label: "All saunas — choose a type" }].concat(Object.keys(this.MODELS).map(k => ({ v: k, label: k }))),
+      modelOptions: [{ v: "", label: s.type ? "Choose a model" : "Choose a sauna type first" }].concat((this.MODELS[s.type] || []).map(m => ({ v: m, label: m }))),
+      typeOn: ev => this.setState(st => { const err = { ...st.err }; delete err.type; delete err.model; return { type: ev.target.value, model: "", err }; }),
+      submitAccount: this.submitAccount,
+      submitProject: this.submitProject,
+      backToAccount: () => this.setState({ step: 0 }),
+      editProject: () => { this.setState({ step: 1 }); window.scrollTo(0, 0); },
+      projectId: "#SI-" + (s.pzip || "83340") + "-4172",
+      summaryTitle: (s.type || "Sauna install") + " install",
+      sizeLine,
+      notesSummary: s.notes.trim() ? s.notes.trim() : "No special notes added — installers will ask if they need more detail."
+    };
+  }
+}
+</script>
+</body>
+</html>
