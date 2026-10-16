@@ -7,6 +7,7 @@ A static marketing + flow prototype for saunainstall.com, a marketplace connecti
 - `index.html` — homepage (served at `/`)
 - `list-project.html` — sauna owner flow (served at `/list-project`): account sign-up → list project → thank-you → owner login (`#login`) → owner dashboard with proposals
 - `contractors.html` — contractor flow (served at `/contractors`): pricing ($24.99/mo, first month free, unlimited bids) → sign-up → find projects by zip/city → payment (card + ACH) → bid on project → contractor login (`#login`) → dashboard
+- `images/` — site photos. Must be deployed; the homepage "What we install" cards load from `/images/`.
 - `vercel.json` — enables clean URLs (`/contractors` instead of `/contractors.html`)
 - `design-source/` — the editable design files these pages were compiled from. Reference only; do NOT deploy this folder.
 

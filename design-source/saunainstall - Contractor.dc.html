@@ -17,6 +17,37 @@
   body { margin: 0; background: #FCF8F1; color: #272019; font-family: "Hanken Grotesk", system-ui, sans-serif; font-size: 17px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
   a { color: inherit; text-decoration: none; }
   a:hover { color: #8A5424; }
+  summary::-webkit-details-marker { display: none; }
+  @media (max-width: 900px) {
+    [data-m~="stack"] { grid-template-columns: minmax(0,1fr) !important; gap: 22px !important; }
+    [data-m~="g2"] { grid-template-columns: repeat(2, minmax(0,1fr)) !important; }
+    [data-m~="unstick"] { position: static !important; }
+  }
+  @media (max-width: 760px) {
+    body { padding-bottom: 80px; }
+    [data-m~="hide"] { display: none !important; }
+    [data-m~="bar"] { display: grid !important; }
+    [data-m~="mshow"] { display: block !important; }
+    [data-m~="wrap"] { padding-left: 18px !important; padding-right: 18px !important; }
+    [data-m~="hero"] { padding: 28px 0 44px !important; }
+    [data-m~="main"] { padding: 24px 0 48px !important; }
+    [data-m~="sec"] { padding-top: 56px !important; padding-bottom: 56px !important; }
+    [data-m~="secb"] { padding-bottom: 56px !important; }
+    [data-m~="gap"] { margin-top: 28px !important; }
+    [data-m~="pad"] { padding: 24px 20px !important; border-radius: 20px !important; }
+    [data-m~="pad2"] { padding: 20px !important; }
+    [data-m~="short"] { aspect-ratio: 4/3 !important; }
+    [data-m~="fl"] { left: 12px !important; bottom: 14px !important; }
+    [data-m~="fr"] { right: 12px !important; top: 14px !important; }
+    [data-m~="foot"] { grid-template-columns: 1fr 1fr !important; gap: 28px !important; }
+    [data-m~="foot"] > :first-child { grid-column: 1 / -1; }
+    [data-m~="swipe"] { display: flex !important; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px !important; margin-left: -18px; margin-right: -18px; padding: 0 18px 4px; scroll-padding: 0 18px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    [data-m~="swipe"]::-webkit-scrollbar { display: none; }
+    [data-m~="swipe"] > * { flex: 0 0 84%; scroll-snap-align: start; }
+  }
+  @media (max-width: 560px) {
+    [data-m~="fields"], [data-m~="one"] { grid-template-columns: minmax(0,1fr) !important; }
+  }
   @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 </style>
 <template id="__bundler_thumbnail" data-bg-color="#2A2219">
@@ -31,26 +62,33 @@
 <div style="background: #FCF8F1; color: #272019; font-family: 'Hanken Grotesk', system-ui, sans-serif; font-size: 17px; line-height: 1.55; min-height: 100vh; display: flex; flex-direction: column;">
 
   <header style="position: sticky; top: 0; z-index: 50; background: rgba(252,248,241,.82); backdrop-filter: blur(12px) saturate(1.2); border-bottom: 1px solid #E4D8C5;">
-    <div style="max-width: 1180px; margin: 0 auto; padding: 11px 28px; display: flex; align-items: center; justify-content: space-between; min-height: 70px; gap: 18px; flex-wrap: wrap; row-gap: 9px;">
+    <div data-m="wrap" style="max-width: 1180px; margin: 0 auto; padding: 11px 28px; display: flex; align-items: center; justify-content: space-between; min-height: 70px; gap: 18px; flex-wrap: wrap; row-gap: 9px;">
       <a href="saunainstall%20-%20Landing.dc.html" style="display: flex; align-items: center; gap: 11px; font-weight: 800; font-size: 20px; letter-spacing: -.03em;">
         <span style="width: 32px; height: 32px; border-radius: 9px; background: #8A5424; display: grid; place-items: center; box-shadow: 0 1px 2px rgba(42,34,25,.06); flex: none;"><i style="width: 13px; height: 13px; border: 2px solid #F4ECE0; transform: rotate(45deg); border-radius: 2px; display: block;"></i></span>
         <b style="font-weight: 800;">sauna<span style="color: #8A5424;">install</span></b>
       </a>
-      <nav style="display: flex; align-items: center; gap: 22px; flex-wrap: nowrap; margin-left: auto;">
+      <nav data-m="hide" style="display: flex; align-items: center; gap: 22px; flex-wrap: nowrap; margin-left: auto;">
         <a href="saunainstall%20-%20Landing.dc.html#how" style="font-size: 15.5px; font-weight: 500; color: #6B6253; white-space: nowrap;" style-hover="color: #272019;">How it works</a>
         <a href="saunainstall%20-%20Homeowner.dc.html" style="font-size: 15.5px; font-weight: 500; color: #6B6253; white-space: nowrap;" style-hover="color: #272019;">List your sauna project</a>
         <a href="saunainstall%20-%20Contractor.dc.html" style="font-size: 15.5px; font-weight: 600; color: #272019; white-space: nowrap;" style-hover="color: #8A5424;">For contractors</a>
       </nav>
-      <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; row-gap: 4px; justify-content: flex-end; flex: none;">
+      <div data-m="hide" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; row-gap: 4px; justify-content: flex-end; flex: none;">
         <a href="saunainstall%20-%20Homeowner.dc.html#login" style="font-family: inherit; font-size: 15.5px; font-weight: 600; color: #272019; background: none; border: 1px solid #D8C8AF; border-radius: 11px; padding: 9px 16px; white-space: nowrap; cursor: pointer;" style-hover="background: #F4ECE0; color: #8A5424;">Sauna owner log in</a>
         <button type="button" onClick="{{ openLogin }}" style="display: {{ loginBtnDisplay }}; font-family: inherit; font-size: 15.5px; font-weight: 600; color: #272019; background: none; border: 1px solid #D8C8AF; border-radius: 11px; padding: 9px 16px; white-space: nowrap; cursor: pointer;" style-hover="background: #F4ECE0; color: #8A5424;">Contractor log in</button>
         <button type="button" onClick="{{ goDashboard }}" style="display: {{ myBidsDisplay }}; font-family: inherit; font-size: 15.5px; font-weight: 600; color: #272019; background: none; border: 1px solid #D8C8AF; border-radius: 11px; padding: 9px 16px; white-space: nowrap; cursor: pointer;" style-hover="background: #F4ECE0; color: #8A5424;">My bids</button>
       </div>
+      <details data-m="mshow" style="display: none; position: relative; margin-left: auto;">
+        <summary style="list-style: none; display: flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 600; color: #272019; border: 1px solid #D8C8AF; border-radius: 11px; padding: 0 14px; min-height: 44px; cursor: pointer; white-space: nowrap;">Log in<svg viewBox="0 0 20 20" fill="none" style="width: 14px; height: 14px; color: #8A5424;"><path d="M5 7.5l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></summary>
+        <div style="position: absolute; top: calc(100% + 10px); right: 0; width: 224px; background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 14px; box-shadow: 0 20px 44px -16px rgba(42,34,25,.4); padding: 7px; display: grid; gap: 2px; z-index: 70;">
+          <a href="saunainstall%20-%20Homeowner.dc.html#login" style="padding: 13px 14px; border-radius: 10px; font-size: 15px; font-weight: 600; color: #272019; display: block;" style-hover="background: #F4ECE0; color: #8A5424;">Sauna owner log in</a>
+          <a href="saunainstall%20-%20Contractor.dc.html#login" style="padding: 13px 14px; border-radius: 10px; font-size: 15px; font-weight: 600; color: #272019; display: block;" style-hover="background: #F4ECE0; color: #8A5424;">Contractor log in</a>
+        </div>
+      </details>
     </div>
   </header>
 
-  <main style="flex: 1; padding: 46px 0 90px;">
-    <div style="max-width: 1180px; margin: 0 auto; padding: 0 28px;">
+  <main data-m="main" style="flex: 1; padding: 46px 0 90px;">
+    <div data-m="wrap" style="max-width: 1180px; margin: 0 auto; padding: 0 28px;">
 
       <div style="max-width: 860px; margin: 0 auto 44px; display: {{ railDisplay }}; align-items: center;">
         <sc-for list="{{ rail }}" as="r" hint-placeholder-count="4">
@@ -70,7 +108,7 @@
           <h1 style="font-size: clamp(28px, 3.8vw, 38px); margin: 16px 0 0; letter-spacing: -.03em; line-height: 1.05; font-weight: 700;">Welcome back, Contractors.</h1>
           <p style="font-size: 17.5px; color: #6B6253; margin: 12px 0 0;">Log in to go straight to your bids dashboard.</p>
 
-          <div style="margin-top: 26px; background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px; box-shadow: 0 10px 30px -12px rgba(42,34,25,.22), 0 2px 6px rgba(42,34,25,.06);">
+          <div data-m="pad2" style="margin-top: 26px; background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px; box-shadow: 0 10px 30px -12px rgba(42,34,25,.22), 0 2px 6px rgba(42,34,25,.06);">
             <div>
               <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Email<span style="color: #C0492F; font-weight: 700;"> *</span></label>
               <input type="email" placeholder="you@company.com" value="{{ loginEmailVal }}" onChange="{{ loginEmailOn }}" onKeyDown="{{ loginKeyDown }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ loginEmailBd }}; border-radius: 11px; padding: 13px 14px;" />
@@ -93,7 +131,7 @@
 
       <sc-if value="{{ isSignup }}" hint-placeholder-val="{{ true }}">
         <div style="animation: fade .25s ease;">
-          <div style="background: #2A2219; color: #F4ECE0; border-radius: 28px; padding: 46px 44px; display: grid; grid-template-columns: 1.2fr .8fr; gap: 40px; align-items: center; box-shadow: 0 18px 44px -20px rgba(42,34,25,.45);">
+          <div data-m="stack pad" style="background: #2A2219; color: #F4ECE0; border-radius: 28px; padding: 46px 44px; display: grid; grid-template-columns: 1.2fr .8fr; gap: 40px; align-items: center; box-shadow: 0 18px 44px -20px rgba(42,34,25,.45);">
             <div>
               <span style="font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #CDA468; display: inline-flex; align-items: center; gap: 9px;"><span style="width: 18px; height: 2px; background: #CDA468; border-radius: 2px;"></span>Installer membership</span>
               <h1 style="font-size: clamp(34px, 4.4vw, 52px); margin: 18px 0 0; letter-spacing: -.035em; line-height: 1.02; font-weight: 800; color: #FCF8F1;">Unlimited bids for <em style="font-family: 'Newsreader', serif; font-style: italic; font-weight: 400; color: #CDA468;">$24.99</em> a month.</h1>
@@ -106,7 +144,7 @@
               </div>
             </div>
 
-            <div style="background: #FCF8F1; color: #272019; border-radius: 22px; padding: 30px; box-shadow: 0 14px 34px -16px rgba(0,0,0,.5);">
+            <div data-m="pad2" style="background: #FCF8F1; color: #272019; border-radius: 22px; padding: 30px; box-shadow: 0 14px 34px -16px rgba(0,0,0,.5);">
               <span style="display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #3E7A4E; background: #E9F1EA; border: 1px solid #CFE3D3; padding: 5px 12px; border-radius: 999px;">First month free</span>
               <div style="display: flex; align-items: baseline; gap: 8px; margin-top: 18px;">
                 <span style="font-size: 52px; font-weight: 800; letter-spacing: -.04em; line-height: 1;">$24.99</span>
@@ -130,8 +168,8 @@
             <h2 style="font-size: clamp(26px, 3.2vw, 36px); margin: 16px 0 0; letter-spacing: -.03em; line-height: 1.05; font-weight: 700;">Tell us about your business.</h2>
             <p style="font-size: 17.5px; color: #6B6253; margin: 12px 0 0;">Takes about a minute. Your first month is free — a card is only processed before your first bid.</p>
 
-            <div style="margin-top: 28px; background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px; box-shadow: 0 10px 30px -12px rgba(42,34,25,.22), 0 2px 6px rgba(42,34,25,.06);">
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div data-m="pad2" style="margin-top: 28px; background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px; box-shadow: 0 10px 30px -12px rgba(42,34,25,.22), 0 2px 6px rgba(42,34,25,.06);">
+              <div data-m="fields" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
                 <div>
                   <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">First name<span style="color: #C0492F; font-weight: 700;"> *</span></label>
                   <input placeholder="Sam" value="{{ firstVal }}" onChange="{{ firstOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ firstBd }}; border-radius: 11px; padding: 13px 14px;" />
@@ -143,7 +181,7 @@
                   <span style="display: {{ lastErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ lastMsg }}</span>
                 </div>
               </div>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px;">
+              <div data-m="fields" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px;">
                 <div>
                   <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Phone number<span style="color: #C0492F; font-weight: 700;"> *</span></label>
                   <input inputmode="tel" placeholder="(208) 555-0142" value="{{ phoneVal }}" onChange="{{ phoneOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ phoneBd }}; border-radius: 11px; padding: 13px 14px;" />
@@ -163,7 +201,7 @@
                 <input placeholder="118 Warm Springs Rd" value="{{ addrVal }}" onChange="{{ addrOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ addrBd }}; border-radius: 11px; padding: 13px 14px;" />
                 <span style="display: {{ addrErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ addrMsg }}</span>
               </div>
-              <div style="display: grid; grid-template-columns: 1.3fr .5fr .6fr; gap: 12px; margin-top: 14px;">
+              <div data-m="fields" style="display: grid; grid-template-columns: 1.3fr .5fr .6fr; gap: 12px; margin-top: 14px;">
                 <div>
                   <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">City<span style="color: #C0492F; font-weight: 700;"> *</span></label>
                   <input placeholder="Ketchum" value="{{ cityVal }}" onChange="{{ cityOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ cityBd }}; border-radius: 11px; padding: 13px 14px;" />
@@ -209,8 +247,8 @@
             </div>
           </div>
 
-          <div style="display: grid; grid-template-columns: .68fr 1.32fr; gap: 24px; margin-top: 28px; align-items: start;">
-            <div style="position: sticky; top: 96px; display: grid; gap: 16px;">
+          <div data-m="stack" style="display: grid; grid-template-columns: .68fr 1.32fr; gap: 24px; margin-top: 28px; align-items: start;">
+            <div data-m="unstick" style="position: sticky; top: 96px; display: grid; gap: 16px;">
               <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 24px;">
                 <div style="font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8A8071;">Service areas</div>
                 <p style="font-size: 14px; color: #6B6253; margin: 8px 0 14px;">Add every ZIP code or city you cover to see the full picture.</p>
@@ -282,7 +320,7 @@
           <h1 style="font-size: clamp(28px, 3.6vw, 40px); margin: 16px 0 0; letter-spacing: -.03em; line-height: 1.05; font-weight: 700;">Add your card to unlock unlimited bids.</h1>
           <p style="font-size: 18px; color: #6B6253; margin: 14px 0 0; max-width: 44em;">Your first month is free, then $24.99 a month for unlimited bids. Your card is processed once for membership. ACH details are where we send your payout after the homeowner marks the project completed.</p>
 
-          <div style="margin-top: 28px; background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px; box-shadow: 0 1px 2px rgba(42,34,25,.06);">
+          <div data-m="pad2" style="margin-top: 28px; background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px; box-shadow: 0 1px 2px rgba(42,34,25,.06);">
             <div style="display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
               <div style="font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8A8071;">Credit card — $24.99/mo after your free month</div>
               <span style="display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 600; color: #6B6253;">
@@ -300,7 +338,7 @@
               <input inputmode="numeric" placeholder="4242 4242 4242 4242" value="{{ ccNumVal }}" onChange="{{ ccNumOn }}" style="width: 100%; font-family: inherit; font-size: 16px; letter-spacing: .04em; color: #272019; background: #FCF8F1; border: 1px solid {{ ccNumBd }}; border-radius: 11px; padding: 13px 14px;" />
               <span style="display: {{ ccNumErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ ccNumMsg }}</span>
             </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 14px;">
+            <div data-m="fields" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 14px;">
               <div>
                 <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Expiry</label>
                 <input placeholder="09 / 29" value="{{ ccExpVal }}" onChange="{{ ccExpOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ ccExpBd }}; border-radius: 11px; padding: 13px 14px;" />
@@ -322,7 +360,7 @@
 
             <div style="font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8A8071;">ACH payout details</div>
             <p style="font-size: 14.5px; color: #6B6253; margin: 8px 0 0;">Paid out when a project is marked <b style="font-weight: 700;">completed</b> in your project viewport.</p>
-            <div style="display: grid; grid-template-columns: 1.2fr .8fr; gap: 12px; margin-top: 16px;">
+            <div data-m="fields" style="display: grid; grid-template-columns: 1.2fr .8fr; gap: 12px; margin-top: 16px;">
               <div>
                 <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Account holder</label>
                 <input placeholder="Northwood Sauna Co." value="{{ achNameVal }}" onChange="{{ achNameOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ achNameBd }}; border-radius: 11px; padding: 13px 14px;" />
@@ -337,7 +375,7 @@
                 </select>
               </div>
             </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px;">
+            <div data-m="fields" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px;">
               <div>
                 <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Routing number</label>
                 <input inputmode="numeric" maxlength="9" placeholder="123456789" value="{{ achRouteVal }}" onChange="{{ achRouteOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ achRouteBd }}; border-radius: 11px; padding: 13px 14px;" />
@@ -369,8 +407,8 @@
             <svg viewBox="0 0 20 20" fill="none" style="width: 15px; height: 15px;"><path d="M16 10H4M9 5l-5 5 5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
             All projects
           </button>
-          <div style="display: grid; grid-template-columns: 1.25fr .95fr; gap: 24px; align-items: start;">
-            <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px;">
+          <div data-m="stack" style="display: grid; grid-template-columns: 1.25fr .95fr; gap: 24px; align-items: start;">
+            <div data-m="pad2" style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px;">
               <span style="font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #8A5424;">Project review</span>
               <h1 style="font-size: clamp(26px, 3.2vw, 34px); margin: 12px 0 0; letter-spacing: -.03em; line-height: 1.1; font-weight: 700;">{{ activeTitle }}</h1>
               <div style="font-size: 14.5px; color: #8A8071; margin-top: 8px;">{{ activeMeta }}</div>
@@ -394,7 +432,7 @@
               </div>
             </div>
 
-            <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px; box-shadow: 0 10px 30px -12px rgba(42,34,25,.22), 0 2px 6px rgba(42,34,25,.06);">
+            <div data-m="pad2" style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px; box-shadow: 0 10px 30px -12px rgba(42,34,25,.22), 0 2px 6px rgba(42,34,25,.06);">
               <h2 style="font-size: 23px; margin: 0; letter-spacing: -.025em; line-height: 1.1; font-weight: 700;">Your proposal</h2>
               <p style="font-size: 15px; color: #6B6253; margin: 8px 0 0;">Sent straight to the homeowner's inbox.</p>
               <div style="margin-top: 22px;">
@@ -426,13 +464,13 @@
 
       <sc-if value="{{ isSent }}">
         <div style="animation: fade .25s ease; max-width: 900px; margin: 0 auto;">
-          <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 24px; padding: 44px; text-align: center; box-shadow: 0 10px 30px -12px rgba(42,34,25,.22), 0 2px 6px rgba(42,34,25,.06);">
+          <div data-m="pad" style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 24px; padding: 44px; text-align: center; box-shadow: 0 10px 30px -12px rgba(42,34,25,.22), 0 2px 6px rgba(42,34,25,.06);">
             <div style="width: 70px; height: 70px; border-radius: 50%; background: #E9F1EA; border: 1px solid #CFE3D3; display: grid; place-items: center; margin: 0 auto 20px; color: #3E7A4E;"><svg viewBox="0 0 24 24" fill="none" style="width: 34px; height: 34px;"><path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
             <h1 style="font-size: clamp(28px, 3.8vw, 40px); margin: 0; letter-spacing: -.03em; line-height: 1.05; font-weight: 700;">Proposal sent.</h1>
             <p style="font-size: 18px; color: #6B6253; margin: 14px auto 0; max-width: 34em;">{{ sentSummary }}</p>
           </div>
 
-          <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px; margin-top: 20px;">
+          <div data-m="pad2" style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px; margin-top: 20px;">
             <div style="font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8A5424;">Bid process</div>
             <h2 style="font-size: 24px; margin: 10px 0 0; letter-spacing: -.025em; line-height: 1.1; font-weight: 700;">What happens from here</h2>
             <div style="margin-top: 24px; display: grid; gap: 4px;">
@@ -474,7 +512,7 @@
             </button>
           </div>
 
-          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 30px;">
+          <div data-m="g2" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 30px;">
             <sc-for list="{{ stats }}" as="k" hint-placeholder-count="4">
               <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 18px; padding: 22px 24px; box-shadow: 0 1px 2px rgba(42,34,25,.06);">
                 <div style="font-size: 12.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8A8071;">{{ k.label }}</div>
@@ -484,14 +522,14 @@
             </sc-for>
           </div>
 
-          <div style="display: grid; grid-template-columns: 1.45fr .55fr; gap: 24px; margin-top: 24px; align-items: start;">
+          <div data-m="stack" style="display: grid; grid-template-columns: 1.45fr .55fr; gap: 24px; margin-top: 24px; align-items: start;">
             <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 8px 26px 26px;">
               <div style="display: flex; align-items: center; gap: 10px; padding: 20px 0 14px; border-bottom: 1px solid #E4D8C5;">
                 <h2 style="font-size: 21px; margin: 0; letter-spacing: -.025em; font-weight: 700;">Bid activity</h2>
                 <span style="font-size: 12.5px; font-weight: 700; color: #8A5424; background: #EFE0CC; border: 1px solid #E0CBA8; padding: 3px 10px; border-radius: 999px;">{{ bidCount }} total</span>
               </div>
               <sc-for list="{{ bids }}" as="b" hint-placeholder-count="4">
-                <div style="display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; padding: 20px 0; border-bottom: 1px solid #F0E6D6;">
+                <div data-m="fields" style="display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; padding: 20px 0; border-bottom: 1px solid #F0E6D6;">
                   <div style="min-width: 0;">
                     <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                       <b style="font-size: 17px; font-weight: 700; letter-spacing: -.01em;">{{ b.title }}</b>
@@ -544,7 +582,7 @@
   </main>
 
   <footer style="background: #221B14; color: #B6A88F; padding: 40px 0;">
-    <div style="max-width: 1180px; margin: 0 auto; padding: 0 28px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-size: 13.5px; color: #8A7C64;">
+    <div data-m="wrap" style="max-width: 1180px; margin: 0 auto; padding: 0 28px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-size: 13.5px; color: #8A7C64;">
       <span>© 2026 saunainstall. Unlimited bids for verified installers.</span>
       <div style="display: flex; gap: 22px;">
         <a href="saunainstall%20-%20Landing.dc.html#faq" style="color: #C2B49B;" style-hover="color: #FCF8F1;">FAQ</a>
@@ -553,6 +591,19 @@
       </div>
     </div>
   </footer>
+
+  <div data-m="bar" style="display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; background: rgba(255,253,249,.97); backdrop-filter: blur(12px); border-top: 1px solid #E4D8C5; box-shadow: 0 -8px 24px -14px rgba(42,34,25,.3); padding: 7px 10px calc(7px + env(safe-area-inset-bottom)); grid-template-columns: 1fr 1fr 1fr 1.8fr; gap: 4px; align-items: center;">
+    <a href="saunainstall%20-%20Landing.dc.html#how" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; min-height: 50px; font-size: 11.5px; font-weight: 600; color: #6B6253; cursor: pointer; text-align: center;"><svg viewBox="0 0 24 24" fill="none" style="width: 22px; height: 22px; color: #8A5424;"><path d="M9 6h11M9 12h11M9 18h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="4.5" cy="6" r="1.3" fill="currentColor"></circle><circle cx="4.5" cy="12" r="1.3" fill="currentColor"></circle><circle cx="4.5" cy="18" r="1.3" fill="currentColor"></circle></svg>How it works</a>
+    <a href="saunainstall%20-%20Contractor.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; min-height: 50px; font-size: 11.5px; font-weight: 600; color: #6B6253; cursor: pointer; text-align: center;"><svg viewBox="0 0 24 24" fill="none" style="width: 22px; height: 22px; color: #8A5424;"><rect x="3" y="7.5" width="18" height="12" rx="2.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></rect><path d="M9 7.5V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1.5M3 13h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>Contractors</a>
+    <details style="position: relative;">
+      <summary style="list-style: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; min-height: 50px; font-size: 11.5px; font-weight: 600; color: #6B6253; cursor: pointer; text-align: center;"><svg viewBox="0 0 24 24" fill="none" style="width: 22px; height: 22px; color: #8A5424;"><circle cx="12" cy="8.5" r="3.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></circle><path d="M4.5 20c1.2-3.6 4-5.5 7.5-5.5s6.3 1.9 7.5 5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>Log in</summary>
+      <div style="position: absolute; bottom: calc(100% + 14px); left: 50%; transform: translateX(-50%); width: 224px; background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 14px; box-shadow: 0 20px 44px -16px rgba(42,34,25,.4); padding: 7px; display: grid; gap: 2px;">
+        <a href="saunainstall%20-%20Homeowner.dc.html#login" style="padding: 13px 14px; border-radius: 10px; font-size: 15px; font-weight: 600; color: #272019; display: block;" style-hover="background: #F4ECE0; color: #8A5424;">Sauna owner log in</a>
+        <a href="saunainstall%20-%20Contractor.dc.html#login" style="padding: 13px 14px; border-radius: 10px; font-size: 15px; font-weight: 600; color: #272019; display: block;" style-hover="background: #F4ECE0; color: #8A5424;">Contractor log in</a>
+      </div>
+    </details>
+    <a href="saunainstall%20-%20Homeowner.dc.html" style="display: flex; align-items: center; justify-content: center; gap: 7px; min-height: 50px; border-radius: 12px; background: #8A5424; color: #FFFFFF; font-size: 14.5px; font-weight: 700; line-height: 1.15; padding: 0 10px; text-align: center;" style-hover="background: #6F421A; color: #FFFFFF;"><svg viewBox="0 0 20 20" fill="none" style="width: 16px; height: 16px; flex: none;"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path></svg>List your project</a>
+  </div>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;startStep&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;1 · Sign up&quot;,&quot;options&quot;:[&quot;1 · Sign up&quot;,&quot;2 · Browse projects&quot;,&quot;3 · Payment&quot;,&quot;4 · Bid on project&quot;,&quot;5 · Proposal sent&quot;,&quot;6 · My bids dashboard&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Preview&quot;},&quot;requireCardBeforeBid&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Behavior&quot;}}">

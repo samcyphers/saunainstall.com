@@ -17,6 +17,37 @@
   body { margin: 0; background: #FCF8F1; color: #272019; font-family: "Hanken Grotesk", system-ui, sans-serif; font-size: 17px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
   a { color: inherit; text-decoration: none; }
   a:hover { color: #8A5424; }
+  summary::-webkit-details-marker { display: none; }
+  @media (max-width: 900px) {
+    [data-m~="stack"] { grid-template-columns: minmax(0,1fr) !important; gap: 22px !important; }
+    [data-m~="g2"] { grid-template-columns: repeat(2, minmax(0,1fr)) !important; }
+    [data-m~="unstick"] { position: static !important; }
+  }
+  @media (max-width: 760px) {
+    body { padding-bottom: 80px; }
+    [data-m~="hide"] { display: none !important; }
+    [data-m~="bar"] { display: grid !important; }
+    [data-m~="mshow"] { display: block !important; }
+    [data-m~="wrap"] { padding-left: 18px !important; padding-right: 18px !important; }
+    [data-m~="hero"] { padding: 28px 0 44px !important; }
+    [data-m~="main"] { padding: 24px 0 48px !important; }
+    [data-m~="sec"] { padding-top: 56px !important; padding-bottom: 56px !important; }
+    [data-m~="secb"] { padding-bottom: 56px !important; }
+    [data-m~="gap"] { margin-top: 28px !important; }
+    [data-m~="pad"] { padding: 24px 20px !important; border-radius: 20px !important; }
+    [data-m~="pad2"] { padding: 20px !important; }
+    [data-m~="short"] { aspect-ratio: 4/3 !important; }
+    [data-m~="fl"] { left: 12px !important; bottom: 14px !important; }
+    [data-m~="fr"] { right: 12px !important; top: 14px !important; }
+    [data-m~="foot"] { grid-template-columns: 1fr 1fr !important; gap: 28px !important; }
+    [data-m~="foot"] > :first-child { grid-column: 1 / -1; }
+    [data-m~="swipe"] { display: flex !important; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px !important; margin-left: -18px; margin-right: -18px; padding: 0 18px 4px; scroll-padding: 0 18px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    [data-m~="swipe"]::-webkit-scrollbar { display: none; }
+    [data-m~="swipe"] > * { flex: 0 0 84%; scroll-snap-align: start; }
+  }
+  @media (max-width: 560px) {
+    [data-m~="fields"], [data-m~="one"] { grid-template-columns: minmax(0,1fr) !important; }
+  }
   @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 </style>
 <template id="__bundler_thumbnail" data-bg-color="#8A5424">
@@ -31,26 +62,33 @@
 <div style="background: #FCF8F1; color: #272019; font-family: 'Hanken Grotesk', system-ui, sans-serif; font-size: 17px; line-height: 1.55; min-height: 100vh; display: flex; flex-direction: column;">
 
   <header style="position: sticky; top: 0; z-index: 50; background: rgba(252,248,241,.82); backdrop-filter: blur(12px) saturate(1.2); border-bottom: 1px solid #E4D8C5;">
-    <div style="max-width: 1180px; margin: 0 auto; padding: 11px 28px; display: flex; align-items: center; justify-content: space-between; min-height: 70px; gap: 18px; flex-wrap: wrap; row-gap: 9px;">
+    <div data-m="wrap" style="max-width: 1180px; margin: 0 auto; padding: 11px 28px; display: flex; align-items: center; justify-content: space-between; min-height: 70px; gap: 18px; flex-wrap: wrap; row-gap: 9px;">
       <a href="saunainstall%20-%20Landing.dc.html" style="display: flex; align-items: center; gap: 11px; font-weight: 800; font-size: 20px; letter-spacing: -.03em;">
         <span style="width: 32px; height: 32px; border-radius: 9px; background: #8A5424; display: grid; place-items: center; box-shadow: 0 1px 2px rgba(42,34,25,.06); flex: none;"><i style="width: 13px; height: 13px; border: 2px solid #F4ECE0; transform: rotate(45deg); border-radius: 2px; display: block;"></i></span>
         <b style="font-weight: 800;">sauna<span style="color: #8A5424;">install</span></b>
       </a>
-      <nav style="display: flex; align-items: center; gap: 22px; flex-wrap: nowrap; margin-left: auto;">
+      <nav data-m="hide" style="display: flex; align-items: center; gap: 22px; flex-wrap: nowrap; margin-left: auto;">
         <a href="saunainstall%20-%20Landing.dc.html#how" style="font-size: 15.5px; font-weight: 500; color: #6B6253; white-space: nowrap;" style-hover="color: #272019;">How it works</a>
         <a href="saunainstall%20-%20Homeowner.dc.html" style="font-size: 15.5px; font-weight: 600; color: #272019; white-space: nowrap;" style-hover="color: #8A5424;">List your sauna project</a>
         <a href="saunainstall%20-%20Contractor.dc.html" style="font-size: 15.5px; font-weight: 500; color: #6B6253; white-space: nowrap;" style-hover="color: #272019;">For contractors</a>
       </nav>
-      <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; row-gap: 4px; justify-content: flex-end; flex: none;">
+      <div data-m="hide" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; row-gap: 4px; justify-content: flex-end; flex: none;">
         <button type="button" onClick="{{ openLogin }}" style="display: {{ loginBtnDisplay }}; font-family: inherit; font-size: 15.5px; font-weight: 600; color: #272019; background: none; border: 1px solid #D8C8AF; border-radius: 11px; padding: 9px 16px; white-space: nowrap; cursor: pointer;" style-hover="background: #F4ECE0; color: #8A5424;">Sauna owner log in</button>
         <button type="button" onClick="{{ goDash }}" style="display: {{ myPropsDisplay }}; font-family: inherit; font-size: 15.5px; font-weight: 600; color: #272019; background: none; border: 1px solid #D8C8AF; border-radius: 11px; padding: 9px 16px; white-space: nowrap; cursor: pointer;" style-hover="background: #F4ECE0; color: #8A5424;">My proposals</button>
         <a href="saunainstall%20-%20Contractor.dc.html#login" style="font-family: inherit; font-size: 15.5px; font-weight: 600; color: #272019; background: none; border: 1px solid #D8C8AF; border-radius: 11px; padding: 9px 16px; white-space: nowrap; cursor: pointer;" style-hover="background: #F4ECE0; color: #8A5424;">Contractor log in</a>
       </div>
+      <details data-m="mshow" style="display: none; position: relative; margin-left: auto;">
+        <summary style="list-style: none; display: flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 600; color: #272019; border: 1px solid #D8C8AF; border-radius: 11px; padding: 0 14px; min-height: 44px; cursor: pointer; white-space: nowrap;">Log in<svg viewBox="0 0 20 20" fill="none" style="width: 14px; height: 14px; color: #8A5424;"><path d="M5 7.5l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></summary>
+        <div style="position: absolute; top: calc(100% + 10px); right: 0; width: 224px; background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 14px; box-shadow: 0 20px 44px -16px rgba(42,34,25,.4); padding: 7px; display: grid; gap: 2px; z-index: 70;">
+          <a href="saunainstall%20-%20Homeowner.dc.html#login" style="padding: 13px 14px; border-radius: 10px; font-size: 15px; font-weight: 600; color: #272019; display: block;" style-hover="background: #F4ECE0; color: #8A5424;">Sauna owner log in</a>
+          <a href="saunainstall%20-%20Contractor.dc.html#login" style="padding: 13px 14px; border-radius: 10px; font-size: 15px; font-weight: 600; color: #272019; display: block;" style-hover="background: #F4ECE0; color: #8A5424;">Contractor log in</a>
+        </div>
+      </details>
     </div>
   </header>
 
-  <main style="flex: 1; padding: 46px 0 90px;">
-    <div style="max-width: 1180px; margin: 0 auto; padding: 0 28px;">
+  <main data-m="main" style="flex: 1; padding: 46px 0 90px;">
+    <div data-m="wrap" style="max-width: 1180px; margin: 0 auto; padding: 0 28px;">
 
       <div style="max-width: 760px; margin: 0 auto 44px; display: {{ railDisplay }}; align-items: center;">
         <sc-for list="{{ rail }}" as="r" hint-placeholder-count="3">
@@ -70,7 +108,7 @@
           <h1 style="font-size: clamp(28px, 3.8vw, 38px); margin: 16px 0 0; letter-spacing: -.03em; line-height: 1.05; font-weight: 700;">Welcome back, Sauna Owner.</h1>
           <p style="font-size: 17.5px; color: #6B6253; margin: 12px 0 0;">Log in to review the proposals installers have sent for your project.</p>
 
-          <div style="margin-top: 26px; background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px; box-shadow: 0 10px 30px -12px rgba(42,34,25,.22), 0 2px 6px rgba(42,34,25,.06);">
+          <div data-m="pad2" style="margin-top: 26px; background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px; box-shadow: 0 10px 30px -12px rgba(42,34,25,.22), 0 2px 6px rgba(42,34,25,.06);">
             <div>
               <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Email<span style="color: #C0492F; font-weight: 700;"> *</span></label>
               <input type="email" placeholder="you@email.com" value="{{ loginEmailVal }}" onChange="{{ loginEmailOn }}" onKeyDown="{{ loginKeyDown }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ loginEmailBd }}; border-radius: 11px; padding: 13px 14px;" />
@@ -105,7 +143,7 @@
             </button>
           </div>
 
-          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 30px;">
+          <div data-m="g2" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 30px;">
             <sc-for list="{{ stats }}" as="k" hint-placeholder-count="4">
               <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 18px; padding: 22px 24px; box-shadow: 0 1px 2px rgba(42,34,25,.06);">
                 <div style="font-size: 12.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8A8071;">{{ k.label }}</div>
@@ -115,14 +153,14 @@
             </sc-for>
           </div>
 
-          <div style="display: grid; grid-template-columns: 1.45fr .55fr; gap: 24px; margin-top: 24px; align-items: start;">
+          <div data-m="stack" style="display: grid; grid-template-columns: 1.45fr .55fr; gap: 24px; margin-top: 24px; align-items: start;">
             <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 8px 26px 26px;">
               <div style="display: flex; align-items: center; gap: 10px; padding: 20px 0 14px; border-bottom: 1px solid #E4D8C5; flex-wrap: wrap;">
                 <h2 style="font-size: 21px; margin: 0; letter-spacing: -.025em; font-weight: 700;">Proposals received</h2>
                 <span style="font-size: 12.5px; font-weight: 700; color: #8A5424; background: #EFE0CC; border: 1px solid #E0CBA8; padding: 3px 10px; border-radius: 999px;">{{ proposalCount }} total</span>
               </div>
               <sc-for list="{{ proposals }}" as="p" hint-placeholder-count="4">
-                <div style="display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: start; padding: 22px 0; border-bottom: 1px solid #F0E6D6;">
+                <div data-m="fields" style="display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: start; padding: 22px 0; border-bottom: 1px solid #F0E6D6;">
                   <div style="min-width: 0;">
                     <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                       <b style="font-size: 17.5px; font-weight: 700; letter-spacing: -.01em;">{{ p.company }}</b>
@@ -138,6 +176,7 @@
                         <svg viewBox="0 0 16 16" fill="none" style="width: 14px; height: 14px;"><path d="M3 8.5l3.2 3.2L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
                         Completed · payment released by ACH
                       </span>
+                      <span style="display: {{ p.doneDisplay }}; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: #8A5424;">· Your review: <span style="color: #C98A2B; letter-spacing: 1px;">{{ p.reviewStars }}</span></span>
                     </div>
                   </div>
                   <div style="text-align: right; flex: none;">
@@ -156,10 +195,10 @@
                 <div style="font-size: 19px; font-weight: 700; margin-top: 10px; letter-spacing: -.02em;">{{ dashTitle }}</div>
                 <div style="display: grid; gap: 9px; margin-top: 16px; font-size: 14.5px;">
                   <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Type</span><b style="font-weight: 600; text-align: right;">{{ dashType }}</b></div>
-                  <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Make &amp; model</span><b style="font-weight: 600; text-align: right;">{{ dashModel }}</b></div>
+                  <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Brand &amp; model</span><b style="font-weight: 600; text-align: right;">{{ dashModel }}</b></div>
                   <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Power</span><b style="font-weight: 600; text-align: right;">{{ dashPower }}</b></div>
                   <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Electrician</span><b style="font-weight: 600; text-align: right;">{{ elecSummary }}</b></div>
-                  <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Size</span><b style="font-weight: 600; text-align: right;">{{ dashSize }}</b></div>
+                  <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Capacity</span><b style="font-weight: 600; text-align: right;">{{ dashSize }}</b></div>
                   <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Install date</span><b style="font-weight: 600; text-align: right;">{{ dashDate }}</b></div>
                   <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Location</span><b style="font-weight: 600; text-align: right;">{{ dashLoc }}</b></div>
                 </div>
@@ -194,14 +233,62 @@
         </div>
       </sc-if>
 
+      <sc-if value="{{ isPay }}">
+        <div style="max-width: 720px; margin: 10px auto 0; animation: fade .25s ease;">
+          <button type="button" onClick="{{ goDash }}" style="display: inline-flex; align-items: center; gap: 7px; font-family: inherit; font-size: 14.5px; font-weight: 600; color: #8A5424; background: none; border: none; padding: 0; cursor: pointer;">
+            <svg viewBox="0 0 20 20" fill="none" style="width: 15px; height: 15px;"><path d="M16 10H4M9 5l-5 5 5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            Back to my proposals
+          </button>
+          <span style="margin-top: 22px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #8A5424; display: flex; align-items: center; gap: 9px;"><span style="width: 18px; height: 2px; background: #8A5424; border-radius: 2px;"></span>Final step</span>
+          <h1 style="font-size: clamp(28px, 3.8vw, 40px); margin: 14px 0 0; letter-spacing: -.03em; line-height: 1.05; font-weight: 700;">Review your installer and release payment.</h1>
+          <p style="font-size: 17.5px; color: #6B6253; margin: 12px 0 0; text-wrap: pretty;">A star rating is required to complete the project. Your review is posted to the installer's profile and helps other sauna owners choose.</p>
+
+          <div data-m="pad2" style="margin-top: 26px; background: #F4ECE0; border: 1px solid #D8C8AF; border-radius: 22px; padding: 24px 28px;">
+            <div style="font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8A8071;">Payment summary</div>
+            <div style="display: grid; gap: 10px; margin-top: 14px; font-size: 15px;">
+              <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Installer</span><b style="font-weight: 600; text-align: right;">{{ payCompany }}</b></div>
+              <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Project</span><b style="font-weight: 600; text-align: right;">{{ dashTitle }} · {{ projectId }}</b></div>
+              <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Paid by</span><b style="font-weight: 600; text-align: right;">ACH transfer to installer's bank</b></div>
+              <div style="display: flex; justify-content: space-between; gap: 14px; padding-top: 12px; margin-top: 2px; border-top: 1px solid #D8C8AF; align-items: baseline;"><span style="color: #272019; font-weight: 600;">Fixed-price total</span><b style="font-size: 24px; font-weight: 800; letter-spacing: -.02em;">{{ payAmount }}</b></div>
+            </div>
+          </div>
+
+          <div data-m="pad2" style="margin-top: 16px; background: #FFFDF9; border: 1px solid {{ ratingCardBd }}; border-radius: 22px; padding: 28px; box-shadow: 0 10px 30px -12px rgba(42,34,25,.22), 0 2px 6px rgba(42,34,25,.06);">
+            <label style="display: block; font-size: 15px; font-weight: 700; color: #272019;">Rate {{ payCompany }}<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+            <div style="display: flex; align-items: center; gap: 16px; margin-top: 14px; flex-wrap: wrap;">
+              <div onMouseLeave="{{ starLeave }}" style="display: flex; gap: 6px;">
+                <sc-for list="{{ stars }}" as="star" hint-placeholder-count="5">
+                  <button type="button" aria-label="{{ star.aria }}" onClick="{{ star.pick }}" onMouseEnter="{{ star.hover }}" style="width: 48px; height: 48px; display: grid; place-items: center; background: none; border: none; padding: 0; cursor: pointer; color: {{ star.fg }};">
+                    <svg viewBox="0 0 24 24" style="width: 40px; height: 40px;"><path d="M12 2.6l2.85 5.9 6.45.88-4.7 4.5 1.16 6.42L12 17.2l-5.76 3.1 1.16-6.42-4.7-4.5 6.45-.88z" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linejoin="round"></path></svg>
+                  </button>
+                </sc-for>
+              </div>
+              <span style="font-size: 15px; font-weight: 600; color: {{ ratingLabelFg }};">{{ ratingLabel }}</span>
+            </div>
+            <span style="display: {{ ratingErr }}; color: #C0492F; font-size: 13px; margin-top: 8px; font-weight: 600;">Please choose a star rating to complete the project.</span>
+
+            <div style="margin-top: 22px;">
+              <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Written review <span style="color: #8A8071; font-weight: 500;">(optional)</span></label>
+              <textarea rows="4" placeholder="How was the install? Timing, communication, clean-up, how the sauna runs." value="{{ reviewVal }}" onChange="{{ reviewOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid #E4D8C5; border-radius: 11px; padding: 13px 14px; resize: vertical;"></textarea>
+            </div>
+
+            <button type="button" onClick="{{ submitPay }}" style="width: 100%; margin-top: 22px; display: inline-flex; align-items: center; justify-content: center; gap: 9px; font-family: inherit; font-size: 17px; font-weight: 600; cursor: pointer; border-radius: 11px; border: 1px solid transparent; padding: 16px 28px; background: {{ payBtnBg }}; color: #fff;">
+              Submit review &amp; release {{ payAmount }}
+              <svg viewBox="0 0 20 20" fill="none" style="width: 17px; height: 17px;"><path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </button>
+            <p style="font-size: 13px; color: #8A8071; margin: 14px 0 0; text-align: center;">Payment is sent only after your review is submitted. Only mark complete once you're happy with the finished sauna.</p>
+          </div>
+        </div>
+      </sc-if>
+
       <sc-if value="{{ isAccount }}" hint-placeholder-val="{{ true }}">
         <div style="max-width: 620px; margin: 0 auto; animation: fade .25s ease;">
           <span style="font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #8A5424; display: inline-flex; align-items: center; gap: 9px;"><span style="width: 18px; height: 2px; background: #8A5424; border-radius: 2px;"></span>Homeowner account</span>
           <h1 style="font-size: clamp(30px, 4vw, 42px); margin: 16px 0 0; letter-spacing: -.03em; line-height: 1.05; font-weight: 700;">Create your account to list a project.</h1>
           <p style="font-size: 18px; color: #6B6253; margin: 14px 0 0;">Your account is where proposals from installers arrive. Free for homeowners, always.</p>
 
-          <div style="margin-top: 30px; background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px; box-shadow: 0 10px 30px -12px rgba(42,34,25,.22), 0 2px 6px rgba(42,34,25,.06);">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div data-m="pad2" style="margin-top: 30px; background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px; box-shadow: 0 10px 30px -12px rgba(42,34,25,.22), 0 2px 6px rgba(42,34,25,.06);">
+            <div data-m="fields" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
               <div>
                 <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">First name<span style="color: #C0492F; font-weight: 700;"> *</span></label>
                 <input placeholder="Jordan" value="{{ firstVal }}" onChange="{{ firstOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ firstBd }}; border-radius: 11px; padding: 13px 14px;" />
@@ -224,7 +311,7 @@
               <span style="display: {{ emailErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ emailMsg }}</span>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1.2fr .8fr; gap: 14px; margin-top: 16px;">
+            <div data-m="fields" style="display: grid; grid-template-columns: 1.2fr .8fr; gap: 14px; margin-top: 16px;">
               <div>
                 <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Phone number<span style="color: #C0492F; font-weight: 700;"> *</span></label>
                 <input inputmode="tel" placeholder="(208) 555-0142" value="{{ phoneVal }}" onChange="{{ phoneOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ phoneBd }}; border-radius: 11px; padding: 13px 14px;" />
@@ -253,8 +340,8 @@
             <h1 style="font-size: clamp(28px, 3.6vw, 40px); margin: 16px 0 0; letter-spacing: -.03em; line-height: 1.05; font-weight: 700;">List your sauna project.</h1>
             <p style="font-size: 18px; color: #6B6253; margin: 14px 0 0; max-width: 46em;">Installers in your area see this listing and send proposals. The more specific the specs, the tighter the pricing.</p>
 
-            <div style="display: grid; grid-template-columns: 1.5fr .8fr; gap: 24px; margin-top: 30px; align-items: start;">
-              <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px; box-shadow: 0 1px 2px rgba(42,34,25,.06);">
+            <div data-m="stack" style="display: grid; grid-template-columns: 1.5fr .8fr; gap: 24px; margin-top: 30px; align-items: start;">
+              <div data-m="pad2" style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px; box-shadow: 0 1px 2px rgba(42,34,25,.06);">
                 <div style="max-width: 300px;">
                   <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Install date<span style="color: #C0492F; font-weight: 700;"> *</span></label>
                   <input type="date" value="{{ dateVal }}" onChange="{{ dateOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ dateBd }}; border-radius: 11px; padding: 13px 14px; cursor: pointer;" />
@@ -264,25 +351,13 @@
 
                 <hr style="border: none; border-top: 1px solid #E4D8C5; margin: 26px 0;" />
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                <div data-m="fields" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
                   <div>
-                    <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Sauna type<span style="color: #C0492F; font-weight: 700;"> *</span></label>
-                    <select value="{{ typeVal }}" onChange="{{ typeOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ typeBd }}; border-radius: 11px; padding: 13px 34px 13px 14px; appearance: none; cursor: pointer;">
-                      <sc-for list="{{ typeOptions }}" as="o" hint-placeholder-count="8">
+                    <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Sauna brand<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+                    <select value="{{ makeVal }}" onChange="{{ makeOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ makeBd }}; border-radius: 11px; padding: 13px 34px 13px 14px; appearance: none; cursor: pointer;">
+                      <sc-for list="{{ brandOptions }}" as="o" hint-placeholder-count="4">
                         <option value="{{ o.v }}">{{ o.label }}</option>
                       </sc-for>
-                    </select>
-                    <span style="display: {{ typeErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ typeMsg }}</span>
-                  </div>
-                  <div>
-                    <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Make<span style="color: #C0492F; font-weight: 700;"> *</span></label>
-                    <select value="{{ makeVal }}" onChange="{{ makeOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ makeBd }}; border-radius: 11px; padding: 13px 34px 13px 14px; appearance: none; cursor: pointer;">
-                      <option value="">Choose a make</option>
-                      <option value="Golden Designs">Golden Designs</option>
-                      <option value="Finnmark">Finnmark</option>
-                      <option value="SunRay">SunRay</option>
-                      <option value="Maxxus">Maxxus</option>
-                      <option value="Dynamic">Dynamic</option>
                     </select>
                     <span style="display: {{ makeErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ makeMsg }}</span>
                   </div>
@@ -296,15 +371,29 @@
                     <span style="display: {{ modelErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ modelMsg }}</span>
                   </div>
                   <div>
-                    <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Electrical power<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+                    <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Sauna type<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+                    <select value="{{ typeVal }}" onChange="{{ typeOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ typeBd }}; border-radius: 11px; padding: 13px 34px 13px 14px; appearance: none; cursor: pointer;">
+                      <sc-for list="{{ typeOptions }}" as="o" hint-placeholder-count="4">
+                        <option value="{{ o.v }}">{{ o.label }}</option>
+                      </sc-for>
+                    </select>
+                    <span style="display: {{ typeErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ typeMsg }}</span>
+                  </div>
+                  <div>
+                    <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Capacity<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+                    <select value="{{ seatsVal }}" onChange="{{ seatsOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ seatsBd }}; border-radius: 11px; padding: 13px 34px 13px 14px; appearance: none; cursor: pointer;">
+                      <sc-for list="{{ capOptions }}" as="o" hint-placeholder-count="4">
+                        <option value="{{ o.v }}">{{ o.label }}</option>
+                      </sc-for>
+                    </select>
+                    <span style="display: {{ seatsErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ seatsMsg }}</span>
+                  </div>
+                  <div>
+                    <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Electrical power <span style="font-weight: 400; color: #6B5F52;">(optional)</span></label>
                     <select value="{{ powerVal }}" onChange="{{ powerOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ powerBd }}; border-radius: 11px; padding: 13px 34px 13px 14px; appearance: none; cursor: pointer;">
-                      <option value="">Choose power requirement</option>
-                      <option value="120V standard outlet">120V standard outlet</option>
-                      <option value="120V dedicated 20A circuit">120V dedicated 20A circuit</option>
-                      <option value="240V single phase">240V single phase</option>
-                      <option value="240V 50A dedicated circuit">240V 50A dedicated circuit</option>
-                      <option value="Wood-fired — no power needed">Wood-fired — no power needed</option>
-                      <option value="Not sure — need installer advice">Not sure — need installer advice</option>
+                      <sc-for list="{{ powerOptions }}" as="o" hint-placeholder-count="4">
+                        <option value="{{ o.v }}">{{ o.label }}</option>
+                      </sc-for>
                     </select>
                     <span style="display: {{ powerErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ powerMsg }}</span>
                   </div>
@@ -319,34 +408,6 @@
 
                 <hr style="border: none; border-top: 1px solid #E4D8C5; margin: 26px 0;" />
 
-                <div style="font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8A8071;">Size specs</div>
-                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 14px;">
-                  <div>
-                    <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Width<span style="color: #C0492F; font-weight: 700;"> *</span></label>
-                    <input placeholder="7 ft" value="{{ wVal }}" onChange="{{ wOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ wBd }}; border-radius: 11px; padding: 13px 14px;" />
-                  </div>
-                  <div>
-                    <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Length<span style="color: #C0492F; font-weight: 700;"> *</span></label>
-                    <input placeholder="8 ft" value="{{ lVal }}" onChange="{{ lOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ lBd }}; border-radius: 11px; padding: 13px 14px;" />
-                  </div>
-                  <div>
-                    <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Height<span style="color: #C0492F; font-weight: 700;"> *</span></label>
-                    <input placeholder="7 ft" value="{{ hVal }}" onChange="{{ hOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ hBd }}; border-radius: 11px; padding: 13px 14px;" />
-                  </div>
-                  <div>
-                    <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Capacity<span style="color: #C0492F; font-weight: 700;"> *</span></label>
-                    <select value="{{ seatsVal }}" onChange="{{ seatsOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid #D8C8AF; border-radius: 11px; padding: 13px 28px 13px 14px; appearance: none; cursor: pointer;">
-                      <option value="2-person">2-person</option>
-                      <option value="4-person">4-person</option>
-                      <option value="6-person">6-person</option>
-                      <option value="8-person or larger">8+ person</option>
-                    </select>
-                  </div>
-                </div>
-                <span style="display: {{ sizeErr }}; color: #C0492F; font-size: 12.5px; margin-top: 8px; font-weight: 600;">{{ sizeMsg }}</span>
-                <p style="font-size: 13px; color: #8A8071; margin: 10px 0 0;">Rough dimensions are fine — the installer confirms on site.</p>
-
-                <hr style="border: none; border-top: 1px solid #E4D8C5; margin: 26px 0;" />
 
                 <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Special information <span style="color: #8A8071; font-weight: 400;">(anything unique about the location we should know) — optional</span></label>
                 <textarea rows="4" placeholder="Site access, electrical panel location, foundation or pad, delivery date, anything an installer should know before quoting…" value="{{ notesVal }}" onChange="{{ notesOn }}" style="width: 100%; font-family: inherit; font-size: 16px; line-height: 1.5; color: #272019; background: #FCF8F1; border: 1px solid {{ notesBd }}; border-radius: 11px; padding: 13px 14px; resize: vertical;"></textarea>
@@ -356,7 +417,7 @@
 
                 <div style="font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8A8071;">Verify your location</div>
                 <p style="font-size: 14.5px; color: #6B6253; margin: 8px 0 14px;">Only installers who service this area will see your project.</p>
-                <div style="display: grid; grid-template-columns: 1.4fr .6fr; gap: 12px;">
+                <div data-m="fields" style="display: grid; grid-template-columns: 1.4fr .6fr; gap: 12px;">
                   <div>
                     <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">City<span style="color: #C0492F; font-weight: 700;"> *</span></label>
                     <input placeholder="Ketchum" value="{{ cityVal }}" onChange="{{ cityOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ cityBd }}; border-radius: 11px; padding: 13px 14px;" />
@@ -417,7 +478,7 @@
       <sc-if value="{{ isThanks }}">
         <div style="animation: fade .25s ease;">
           <div style="max-width: 1000px; margin: 0 auto;">
-            <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 24px; padding: 44px; box-shadow: 0 10px 30px -12px rgba(42,34,25,.22), 0 2px 6px rgba(42,34,25,.06); text-align: center;">
+            <div data-m="pad" style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 24px; padding: 44px; box-shadow: 0 10px 30px -12px rgba(42,34,25,.22), 0 2px 6px rgba(42,34,25,.06); text-align: center;">
               <div style="width: 70px; height: 70px; border-radius: 50%; background: #E9F1EA; border: 1px solid #CFE3D3; display: grid; place-items: center; margin: 0 auto 20px; color: #3E7A4E;"><svg viewBox="0 0 24 24" fill="none" style="width: 34px; height: 34px;"><path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
               <h1 style="font-size: clamp(30px, 4vw, 44px); margin: 0; letter-spacing: -.03em; line-height: 1.05; font-weight: 700;">Thank you — your project is live.</h1>
               <p style="font-size: 19px; color: #6B6253; margin: 16px auto 0; max-width: 34em;">A contractor proposal will be along soon. Verified installers near {{ cityVal }} {{ pzipVal }} are being notified now, and proposals typically land in your inbox within 48 hours.</p>
@@ -427,8 +488,8 @@
               </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1.35fr .85fr; gap: 24px; margin-top: 24px; align-items: start;">
-              <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px;">
+            <div data-m="stack" style="display: grid; grid-template-columns: 1.35fr .85fr; gap: 24px; margin-top: 24px; align-items: start;">
+              <div data-m="pad2" style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px;">
                 <div style="font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8A5424;">Project process</div>
                 <h2 style="font-size: 24px; margin: 10px 0 0; letter-spacing: -.025em; line-height: 1.1; font-weight: 700;">Where your project stands</h2>
                 <div style="margin-top: 24px; display: grid; gap: 4px;">
@@ -456,10 +517,10 @@
                   <div style="font-size: 19px; font-weight: 700; margin-top: 10px; letter-spacing: -.02em;">{{ summaryTitle }}</div>
                   <div style="display: grid; gap: 9px; margin-top: 16px; font-size: 14.5px;">
                     <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Type</span><b style="font-weight: 600; text-align: right;">{{ typeVal }}</b></div>
-                    <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Model</span><b style="font-weight: 600; text-align: right;">{{ makeVal }} {{ modelVal }}</b></div>
+                    <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Model</span><b style="font-weight: 600; text-align: right;">{{ modelVal }}</b></div>
                     <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Electrician</span><b style="font-weight: 600; text-align: right;">{{ elecSummary }}</b></div>
                     <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Power</span><b style="font-weight: 600; text-align: right;">{{ powerVal }}</b></div>
-                    <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Size</span><b style="font-weight: 600; text-align: right;">{{ sizeLine }}</b></div>
+                    <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Capacity</span><b style="font-weight: 600; text-align: right;">{{ sizeLine }}</b></div>
                     <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Install date</span><b style="font-weight: 600; text-align: right;">{{ dateVal }}</b></div>
                     <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Location</span><b style="font-weight: 600; text-align: right;">{{ cityVal }}, {{ pzipVal }}</b></div>
                   </div>
@@ -482,7 +543,7 @@
   </main>
 
   <footer style="background: #221B14; color: #B6A88F; padding: 40px 0;">
-    <div style="max-width: 1180px; margin: 0 auto; padding: 0 28px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-size: 13.5px; color: #8A7C64;">
+    <div data-m="wrap" style="max-width: 1180px; margin: 0 auto; padding: 0 28px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-size: 13.5px; color: #8A7C64;">
       <span>© 2026 saunainstall. Free for homeowners — no fees, no commission.</span>
       <div style="display: flex; gap: 22px;">
         <a href="saunainstall%20-%20Landing.dc.html#faq" style="color: #C2B49B;" style-hover="color: #FCF8F1;">FAQ</a>
@@ -491,25 +552,43 @@
       </div>
     </div>
   </footer>
+
+  <div data-m="bar" style="display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; background: rgba(255,253,249,.97); backdrop-filter: blur(12px); border-top: 1px solid #E4D8C5; box-shadow: 0 -8px 24px -14px rgba(42,34,25,.3); padding: 7px 10px calc(7px + env(safe-area-inset-bottom)); grid-template-columns: 1fr 1fr 1fr 1.8fr; gap: 4px; align-items: center;">
+    <a href="saunainstall%20-%20Landing.dc.html#how" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; min-height: 50px; font-size: 11.5px; font-weight: 600; color: #6B6253; cursor: pointer; text-align: center;"><svg viewBox="0 0 24 24" fill="none" style="width: 22px; height: 22px; color: #8A5424;"><path d="M9 6h11M9 12h11M9 18h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="4.5" cy="6" r="1.3" fill="currentColor"></circle><circle cx="4.5" cy="12" r="1.3" fill="currentColor"></circle><circle cx="4.5" cy="18" r="1.3" fill="currentColor"></circle></svg>How it works</a>
+    <a href="saunainstall%20-%20Contractor.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; min-height: 50px; font-size: 11.5px; font-weight: 600; color: #6B6253; cursor: pointer; text-align: center;"><svg viewBox="0 0 24 24" fill="none" style="width: 22px; height: 22px; color: #8A5424;"><rect x="3" y="7.5" width="18" height="12" rx="2.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></rect><path d="M9 7.5V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1.5M3 13h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>Contractors</a>
+    <details style="position: relative;">
+      <summary style="list-style: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; min-height: 50px; font-size: 11.5px; font-weight: 600; color: #6B6253; cursor: pointer; text-align: center;"><svg viewBox="0 0 24 24" fill="none" style="width: 22px; height: 22px; color: #8A5424;"><circle cx="12" cy="8.5" r="3.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></circle><path d="M4.5 20c1.2-3.6 4-5.5 7.5-5.5s6.3 1.9 7.5 5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>Log in</summary>
+      <div style="position: absolute; bottom: calc(100% + 14px); left: 50%; transform: translateX(-50%); width: 224px; background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 14px; box-shadow: 0 20px 44px -16px rgba(42,34,25,.4); padding: 7px; display: grid; gap: 2px;">
+        <a href="saunainstall%20-%20Homeowner.dc.html#login" style="padding: 13px 14px; border-radius: 10px; font-size: 15px; font-weight: 600; color: #272019; display: block;" style-hover="background: #F4ECE0; color: #8A5424;">Sauna owner log in</a>
+        <a href="saunainstall%20-%20Contractor.dc.html#login" style="padding: 13px 14px; border-radius: 10px; font-size: 15px; font-weight: 600; color: #272019; display: block;" style-hover="background: #F4ECE0; color: #8A5424;">Contractor log in</a>
+      </div>
+    </details>
+    <a href="saunainstall%20-%20Homeowner.dc.html" style="display: flex; align-items: center; justify-content: center; gap: 7px; min-height: 50px; border-radius: 12px; background: #8A5424; color: #FFFFFF; font-size: 14.5px; font-weight: 700; line-height: 1.15; padding: 0 10px; text-align: center;" style-hover="background: #6F421A; color: #FFFFFF;"><svg viewBox="0 0 20 20" fill="none" style="width: 16px; height: 16px; flex: none;"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path></svg>List your project</a>
+  </div>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;startStep&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;1 · Account&quot;,&quot;options&quot;:[&quot;1 · Account&quot;,&quot;2 · Project details&quot;,&quot;3 · Thank you&quot;,&quot;4 · Log in&quot;,&quot;5 · My proposals&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Preview&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;startStep&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;1 · Account&quot;,&quot;options&quot;:[&quot;1 · Account&quot;,&quot;2 · Project details&quot;,&quot;3 · Thank you&quot;,&quot;4 · Log in&quot;,&quot;5 · My proposals&quot;,&quot;6 · Review &amp; pay&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Preview&quot;}}">
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    const map = { "1 · Account": 0, "2 · Project details": 1, "3 · Thank you": 2, "4 · Log in": 3, "5 · My proposals": 4 };
+    const map = { "1 · Account": 0, "2 · Project details": 1, "3 · Thank you": 2, "4 · Log in": 3, "5 · My proposals": 4, "6 · Review & pay": 5 };
     this.state = {
       step: map[props.startStep] ?? 0,
       first: "", last: "", email: "", phone: "", zip: "",
-      date: "", type: "", make: "", model: "", power: "", elec: false, w: "", l: "", h: "", seats: "4-person",
+      date: "", type: "", make: "", model: "", power: "", elec: false, seats: "",
       notes: "", city: "", pzip: "", confirm: false,
-      loginEmail: "", loginPass: "", hiredId: null, completedId: null, declined: [],
+      loginEmail: "", loginPass: "", hiredId: map[props.startStep] === 5 ? "c1" : null, completedId: null, declined: [],
+      rating: 0, hoverRating: 0, reviewText: "", savedRating: 0,
       err: {}
     };
   }
 
   componentDidMount() {
     if (typeof window !== "undefined" && window.location.hash === "#login") this.setState({ step: 3 });
+    fetch(this.CATALOG_URL, { cache: "no-store" })
+      .then(res => res.ok ? res.text() : Promise.reject(res.status))
+      .then(text => { const rows = this.parseCsv(text); if (rows.length) this.setState({ catalog: rows }); })
+      .catch(() => {});
   }
 
   PROPOSALS = [
@@ -551,6 +630,38 @@ class Component extends DCLogic {
     return "New";
   }
 
+  submitPay = () => {
+    if (!this.state.rating) { this.setState({ err: { rating: true } }); return; }
+    this.setState(st => ({ err: {}, completedId: st.hiredId, savedRating: st.rating, step: 4 }));
+    window.scrollTo(0, 0);
+  };
+
+  payVals() {
+    const s = this.state, hired = this.PROPOSALS.filter(p => p.id === s.hiredId)[0] || this.PROPOSALS[0];
+    const shown = s.hoverRating || s.rating;
+    const labels = ["Tap a star to rate", "Poor", "Fair", "Good", "Great", "Excellent"];
+    return {
+      isPay: s.step === 5,
+      payCompany: hired.company,
+      payAmount: this.money(hired.amount),
+      stars: [1, 2, 3, 4, 5].map(n => ({
+        aria: n + " star" + (n > 1 ? "s" : ""),
+        fg: n <= shown ? "#C98A2B" : "#E4D8C5",
+        pick: () => this.setState(st => ({ rating: n, err: Object.assign({}, st.err, { rating: false }) })),
+        hover: () => this.setState({ hoverRating: n })
+      })),
+      starLeave: () => this.setState({ hoverRating: 0 }),
+      ratingLabel: shown ? shown + " of 5 · " + labels[shown] : labels[0],
+      ratingLabelFg: shown ? "#272019" : "#8A8071",
+      ratingErr: s.err.rating ? "block" : "none",
+      ratingCardBd: s.err.rating ? "#C0492F" : "#E4D8C5",
+      reviewVal: s.reviewText,
+      reviewOn: ev => this.setState({ reviewText: ev.target.value }),
+      payBtnBg: s.rating ? "#8A5424" : "#B89A7C",
+      submitPay: this.submitPay
+    };
+  }
+
   dashVals() {
     const s = this.state;
     const live = this.PROPOSALS.filter(p => s.declined.indexOf(p.id) === -1);
@@ -566,7 +677,8 @@ class Component extends DCLogic {
         doneDisplay: st === "Completed" ? "inline-flex" : "none",
         accept: () => this.setState({ hiredId: p.id }),
         decline: () => this.setState(prev => ({ declined: prev.declined.concat([p.id]) })),
-        complete: () => this.setState({ completedId: p.id })
+        reviewStars: "★★★★★".slice(0, s.savedRating) + "☆☆☆☆☆".slice(0, 5 - s.savedRating),
+        complete: () => { this.setState({ step: 5, rating: 0, hoverRating: 0, reviewText: "", err: {} }); window.scrollTo(0, 0); }
       };
     });
     const amounts = live.map(p => p.amount);
@@ -579,7 +691,7 @@ class Component extends DCLogic {
       ["Proposals arriving", "Fixed prices and start dates by email."],
       ["Compare proposals", "Review price, dates, and reviews side by side."],
       ["Installer hired", "Schedule the install directly with them."],
-      ["Install complete", "Mark it completed to release the ACH payment."]
+      ["Review & pay", "Rate your installer to release the ACH payment."]
     ];
     return {
       proposals,
@@ -603,26 +715,74 @@ class Component extends DCLogic {
           titleFg: done || active ? "#272019" : "#8A8071"
         };
       }),
-      dashTitle: (s.type || "Barrel sauna") + " install",
-      dashType: s.type || "Barrel sauna",
-      dashModel: ((s.make || "Finnmark") + " · " + (s.model || "7 ft Panoramic Barrel")),
+      dashTitle: (s.type || "Traditional Sauna") + " install",
+      dashType: s.type || "Traditional Sauna",
+      dashModel: s.model || "Golden Designs Arosa 4-Person Barrel Sauna",
       dashPower: s.power || "240V 50A dedicated circuit",
-      dashSize: (s.w && s.l && s.h) ? s.w + " × " + s.l + " × " + s.h + " · " + s.seats : "7 ft × 8 ft × 7 ft · 4-person",
+      dashSize: s.seats || "4-person",
       dashDate: s.date || "Sep 15, 2026",
       dashLoc: (s.city || "Ketchum") + ", " + (s.pzip || "83340")
     };
   }
 
-  MODELS = {
-    "Barrel sauna": ["6 ft Classic Barrel", "7 ft Panoramic Barrel", "8 ft Barrel with porch", "Other / not listed"],
-    "Outdoor cabin sauna": ["Cube 2-person", "Cabin 4-person", "Cabin 6-person + changing room", "Other / not listed"],
-    "Indoor sauna room": ["Indoor kit 2-person", "Indoor kit 4-person", "Custom-built room", "Other / not listed"],
-    "Infrared cabin": ["1-person infrared", "2-person infrared", "3–4 person infrared", "Other / not listed"],
-    "Wood-fired sauna": ["Wood-fired barrel", "Wood-fired cabin", "Mobile / tent sauna", "Other / not listed"],
-    "Steam room": ["Prefab steam shower", "Custom tiled steam room", "Other / not listed"],
-    "Sauna + cold plunge package": ["Sauna + plunge package", "Plunge added to existing sauna", "Other / not listed"],
-    "Not sure yet": ["Not sure yet — need advice"]
-  };
+  // Source: "Claude version-svs-sauna-catalog" sheet. One row per model: Brand|Model|Sauna Type|Capacity
+  CATALOG_SRC = "Auroom|Auroom Baia Cabin Traditional Indoor Sauna|Traditional Sauna|\nAuroom|Auroom Cala Wood 2-Person Indoor Traditional Sauna|Traditional Sauna|2\nAuroom|Auroom Cala Glass Mini Traditional 1-Person Sauna|Traditional Sauna|1\nAuroom|Auroom Cala Glass 2 Person Traditional Indoor Sauna|Traditional Sauna|2\nAuroom|Auroom Cala Glass 4 Person Traditional Indoor Sauna|Traditional Sauna|4\nAuroom|Auroom Vulcana Indoor Traditional Cabin Sauna|Traditional Sauna|\nAuroom|Mira L 5-Person Outdoor Traditional Luxury Sauna|Traditional Sauna|5\nAuroom|Auroom Mira S 2-Person Outdoor Traditional Luxury Sauna|Traditional Sauna|2\nAuroom|Arti Outdoor Traditional Luxury Sauna|Traditional Sauna|\nAuroom|Auroom Natura Outdoor Traditional Luxury Sauna|Traditional Sauna|\nDundalk Leisurecraft|Dundalk Leisurecraft Harmony 4-Person Barrel Sauna|Traditional Sauna|4\nDundalk Leisurecraft|Canadian Timber Serenity 4-Person Barrel Sauna|Traditional Sauna|4\nDundalk Leisurecraft|Dundalk Serenity MP 4-Person Traditional Outdoor Barrel Sauna|Traditional Sauna|4\nDundalk Leisurecraft|Dundalk Leisurecraft Tranquility 6-Person Barrel Sauna|Traditional Sauna|6\nDundalk Leisurecraft|Dundalk Leisurecraft Luna 4-Person Outdoor Sauna|Traditional Sauna|4\nDundalk Leisurecraft|Dundalk Leisurecraft Granby 3-Person Outdoor Cabin Sauna|Traditional Sauna|3\nDundalk Leisurecraft|Dundalk Leisurecraft MiniPod 4-Person Outdoor Sauna|Traditional Sauna|4\nDundalk Leisurecraft|Dundalk Leisurecraft Georgian 6-Person Outdoor Cabin Sauna|Traditional Sauna|6\nDundalk Leisurecraft|Dundalk Leisurecraft Georgian 6-Person Cabin Sauna With Change Room|Traditional Sauna|6\nDynamic Saunas|Dynamic Avila 1-Person Low EMF Far Infrared Sauna|Infrared Sauna|1\nDynamic Saunas|Dynamic Avila Elite 1-Person Ultra Low EMF Far Infrared Sauna|Infrared Sauna|1\nDynamic Saunas|Dynamic Barcelona 1-Person Low EMF Far Infrared Sauna|Infrared Sauna|1\nDynamic Saunas|Dynamic Saunas Barcelona Elite 1-Person Ultra Low EMF Far Infrared Sauna|Infrared Sauna|1\nDynamic Saunas|Dynamic Saunas Gracia 1-Person Low EMF Far Infrared Sauna|Infrared Sauna|1\nDynamic Saunas|Dynamic Saunas Gracia Elite 1-2 Person FAR Infrared Sauna|Infrared Sauna|2\nDynamic Saunas|Dynamic Saunas Gracia 1-Person Near Zero EMF Full Spectrum Infrared Sauna|Infrared Sauna|1\nDynamic Saunas|Dynamic Martin 1-Person Near Zero Full Spectrum Infrared Sauna|Infrared Sauna|1\nDynamic Saunas|Dynamic Santorini 1-Person Near Zero Full Spectrum Infrared Sauna|Infrared Sauna|1\nDynamic Saunas|Dynamic Veneto 1-Person Low EMF Far Infrared Sauna|Infrared Sauna|1\nDynamic Saunas|Dynamic Veneto Elite 1-Person Ultra Low EMF Far Infrared Sauna|Infrared Sauna|1\nDynamic Saunas|Dynamic Vero 1 Person Ultra Low EMF FAR Infrared Sauna|Infrared Sauna|1\nDynamic Saunas|Dynamic Sicily 1 Person Ultra Low EMF Far Infrared Sauna|Infrared Sauna|1\nDynamic Saunas|Dynamic Cordoba 2-Person Low EMF Far Infrared Sauna|Infrared Sauna|2\nDynamic Saunas|Dynamic Cordoba Elite 2-Person Ultra Low EMF Far Infrared Sauna|Infrared Sauna|2\nDynamic Saunas|Dynamic Cordoba 2-Person Near Zero EMF Full Spectrum Infrared Sauna|Infrared Sauna|2\nDynamic Saunas|Dynamic Heming 2-Person Far Infrared Corner Sauna|Infrared Sauna|2\nDynamic Saunas|Dynamic Heming Elite 2-Person Far Infrared Corner Sauna|Infrared Sauna|2\nDynamic Saunas|Dynamic Llumeneres 2-Person Near Zero EMF Full Spectrum Infrared Sauna|Infrared Sauna|2\nDynamic Saunas|Dynamic Lucca 2-Person Low EMF Far Infrared Sauna|Infrared Sauna|2\nDynamic Saunas|Dynamic Lucca Elite 2-Person Low EMF Far Infrared Sauna|Infrared Sauna|2\nDynamic Saunas|Dynamic San Marino 2-Person Low EMF Far Infrared Sauna|Infrared Sauna|2\nDynamic Saunas|Dynamic San Marino Elite 2-Person Ultra Low EMF Far Infrared Sauna|Infrared Sauna|2\nDynamic Saunas|Dynamic Santiago 2-Person Low EMF Far Infrared Sauna|Infrared Sauna|2\nDynamic Saunas|Dynamic Santiago 2-Person Full Spectrum Near Zero EMF Infrared Sauna|Infrared Sauna|2\nDynamic Saunas|Dynamic Serena 2-Person Low EMF Far Infrared Sauna|Infrared Sauna|2\nDynamic Saunas|Dynamic Serena Elite 2-Person Low EMF Far Infrared Sauna|Infrared Sauna|2\nDynamic Saunas|Dynamic Serena 2-Person Full Spectrum Near Zero EMF Infrared Sauna|Infrared Sauna|2\nDynamic Saunas|Dynamic Venice 2-Person Low EMF Far Infrared Sauna|Infrared Sauna|2\nDynamic Saunas|Dynamic Venice Elite 2-Person Ultra Low EMF Far Infrared Sauna|Infrared Sauna|2\nDynamic Saunas|Dynamic Versailles 2-Person Low EMF Far Infrared Sauna|Infrared Sauna|2\nDynamic Saunas|Dynamic Versailles Elite 2 Person Ultra Low EMF Infrared Sauna|Infrared Sauna|2\nDynamic Saunas|Dynamic Vittoria 2-Person Low EMF Far Infrared Sauna|Infrared Sauna|2\nDynamic Saunas|Dynamic Vittoria Elite 2-Person Ultra Low EMF Far Infrared Sauna|Infrared Sauna|2\nDynamic Saunas|Dynamic Bellagio 3-Person Low EMF Far Infrared Sauna|Infrared Sauna|3\nDynamic Saunas|Dynamic Bergamo 3-Person Low EMF Far Infrared Sauna|Infrared Sauna|3\nDynamic Saunas|Dynamic Bergamo Elite 3-Person Low EMF Far Infrared Sauna|Infrared Sauna|3\nDynamic Saunas|Dynamic Lugano 3-Person Low EMF Far Infrared Sauna|Infrared Sauna|3\nDynamic Saunas|Dynamic Lugano Elite 3-Person Low EMF Far Infrared Sauna|Infrared Sauna|3\nDynamic Saunas|Dynamic Lugano 3-Person Near Zero Full Spectrum Infrared Sauna|Infrared Sauna|3\nDynamic Saunas|Dynamic Toscana 3-Person Low EMF Far Infrared Sauna|Infrared Sauna|3\nDynamic Saunas|Dynamic Toscana Elite 3-Person Low EMF Far Infrared Sauna|Infrared Sauna|3\nDynamic Saunas|Dynamic Vila Grande 4 Person Full Spectrum Near Zero Far Infrared Sauna|Infrared Sauna|4\nDynamic Saunas|Dynamic Monaco 6-Person Ultra Low EMF Far Infrared Sauna|Infrared Sauna|6\nFinnmark Designs|Finnmark Designs FD-1 Full Spectrum Infrared Sauna|Infrared Sauna|\nFinnmark Designs|Finnmark Designs FD-2 Full Spectrum Infrared Sauna|Infrared Sauna|\nFinnmark Designs|Finnmark FD-3 4-Person Full Spectrum Infrared Sauna|Infrared Sauna|4\nFinnmark Designs|Finnmark FD-4 Trinity 2-Person Hybrid Sauna|Infrared Sauna|2\nFinnmark Designs|Finnmark FD-5 Trinity XL 4-Person Hybrid Sauna|Infrared Sauna|4\nFinnmark Designs|Finnmark FD-6 Cedar 4-Person Infrared Barrel Sauna|Infrared Sauna|4\nFinnmark Designs|Finnmark FD-7 Thermo-Aspen 4-Person Infrared Outdoor Barrel Sauna|Infrared Sauna|4\nGolden Designs|Golden Designs Reserve 1-Person Near Zero EMF Full Spectrum Infrared Sauna, GDI-8010-03|Infrared Sauna|1\nGolden Designs|Golden Designs Reserve 2-Person Full Spectrum Infrared Sauna GDI-8020-03|Infrared Sauna|2\nGolden Designs|Golden Designs Reserve 3-Person Near Zero EMF Full Spectrum Infrared Sauna|Infrared Sauna|3\nGolden Designs|Golden Designs Reserve 3-Person Full Spectrum Infrared Corner Sauna, GDI-8035-03|Infrared Sauna|3\nGolden Designs|Golden Designs Reserve 3-Person Near Zero EMF Full Spectrum Infrared Sauna with Himalayan Salt Bar|Infrared Sauna|3\nGolden Designs|Golden Designs Reserve 4-Person Full Spectrum Infrared Sauna, GDI-8040-03|Infrared Sauna|4\nGolden Designs|Golden Designs Reserve 6-Person Near Zero EMF Full Spectrum Infrared Sauna, GDI-8260-01|Infrared Sauna|6\nGolden Designs|Golden Designs Monaco Elite 6-Person Near Zero EMF Far Infrared Sauna|Infrared Sauna|6\nGolden Designs|Golden Designs Catalonia Elite 8-Person Ultra Low EMF Infrared Sauna|Infrared Sauna|8\nGolden Designs|Golden Designs Catolonia 8 Person Full Spectrum Near Zero EMF IR Sauna|Infrared Sauna|8\nGolden Designs|Golden Designs Hanko 2-Person Traditional Sauna|Traditional Sauna|2\nGolden Designs|Golden Designs Sundsvall 2-Person Indoor Traditional Sauna|Traditional Sauna|2\nGolden Designs|Golden Designs Copenhagen 3-Person Traditional Indoor Sauna|Traditional Sauna|3\nGolden Designs|Golden Designs Forssa 3-Person Indoor Traditional Steam Sauna|Traditional Sauna|3\nGolden Designs|Golden Designs Andermatt Edition 3-Person Traditional Steam Sauna|Traditional Sauna|3\nGolden Designs|Golden Designs Engelberg Edition 6-Person Traditional Steam Sauna|Traditional Sauna|6\nGolden Designs|Golden Designs Kuusamo 6-Person Traditional Sauna|Traditional Sauna|6\nGolden Designs|Golden Designs Osla 6-Person Traditional Sauna|Traditional Sauna|6\nGolden Designs|Golden Designs Narvik 2-Person Traditional Outdoor Sauna|Traditional Sauna|2\nGolden Designs|Golden Designs Drammen 3-Person Traditional Outdoor Sauna|Traditional Sauna|3\nGolden Designs|Golden Designs Bergen 6-Person Traditional Outdoor Sauna|Traditional Sauna|6\nGolden Designs|Golden Designs Kaarina 6-Person Traditional Outdoor Sauna|Traditional Sauna|6\nGolden Designs|Golden Designs Arlberg 3-Person Traditional Outdoor Sauna|Traditional Sauna|3\nGolden Designs|Golden Designs Arlberg 3-Person Traditional Flat Roof Outdoor Sauna|Traditional Sauna|3\nGolden Designs|Golden Designs Vorarlberg 5-Person Traditional Outdoor Sauna|Traditional Sauna|5\nGolden Designs|Golden Designs Vorarlberg 5-Person Traditional Flat Roof Outdoor Sauna|Traditional Sauna|5\nGolden Designs|Golden Designs St. Moritz 2-Person Barrel Sauna|Traditional Sauna|2\nGolden Designs|Golden Designs Arosa 4-Person Barrel Sauna|Traditional Sauna|4\nGolden Designs|Golden Designs Zurich 4-Person Barrel Sauna|Traditional Sauna|4\nGolden Designs|Golden Designs Klosters 6-Person Cedar Barrel Sauna|Traditional Sauna|6\nGolden Designs|Golden Designs Nora 2-Person Outdoor Hybrid Sauna|Hybrid Sauna|2\nGolden Designs|Golden Designs Visby 3-Person Outdoor Hybrid Sauna|Hybrid Sauna|3\nGolden Designs|Golden Designs Loviisa 3-Person Hybrid Outdoor Sauna|Hybrid Sauna|3\nGolden Designs|Golden Designs Loviisa 3-Person Black Barn Hybrid Outdoor Sauna|Hybrid Sauna|3\nGolden Designs|Golden Designs Soria 3-Person Hybrid Indoor Sauna|Hybrid Sauna|3\nGolden Designs|Golden Designs Carinthia 3-Person Hybrid Outdoor Sauna|Traditional Sauna|3\nGolden Designs|Golden Designs Gargellen 5-Person Hybrid Outdoor Sauna|Hybrid Sauna|5\nGolden Designs|Golden Designs Gargellen 5 Person Hybrid Flat Roof Outdoor Sauna|Hybrid Sauna|5\nGolden Designs|Golden Designs Karlstad 6-Person Full Spectrum Hybrid Outdoor Sauna|Hybrid Sauna|6\nGolden Designs|Golden Designs Kaskinen 6-Person Hybrid Outdoor Sauna|Hybrid Sauna|6\nGolden Designs|Golden Designs Kaskinen 6-Person, 2-Tone Barn Hybrid Outdoor Sauna|Hybrid Sauna|6\nGolden Designs|Golden Designs Kaskinen 6-Person Black Barn Hybrid Outdoor Sauna|Hybrid Sauna|6\nIglucraft|Iglucraft Single Iglusauna|Traditional Sauna|\nIglucraft|Iglucraft Single Iglusauna - Wood Fired|Traditional Sauna|\nMaxxus Sauna|Maxxus Seattle 2-Person Low EMF Far Infrared Sauna|Infrared Sauna|2\nMaxxus Sauna|Maxxus Saunas Seattle Elite 2-Person Near Zero EMF Far Infrared Sauna|Infrared Sauna|2\nMaxxus Sauna|Maxxus Saunas Bellevue 3-Person Low EMF Far Infrared Sauna|Infrared Sauna|3\nMaxxus Sauna|Maxxus Saunas 2-Person Low EMF Far Infrared Sauna|Infrared Sauna|2\nMaxxus Sauna|Maxxus Saunas Near Zero EMF 2-Person Far Infrared Sauna MX-K206-01-ZF|Infrared Sauna|2\nMaxxus Sauna|Maxxus Saunas 2-Person Cedar Near Zero EMF Far Infrared Sauna (Discontinued)|Infrared Sauna|2\nMaxxus Sauna|Maxxus 3-Person Low EMF Far Infrared Sauna|Infrared Sauna|3\nMaxxus Sauna|Maxxus Saunas 3-Person Low EMF Cedar Far Infrared Sauna|Infrared Sauna|3\nMaxxus Sauna|Maxxus Saunas 3-Person Near Zero EMF Far Infrared Sauna MX-K306-01-ZF|Infrared Sauna|3\nMaxxus Sauna|Maxxus Saunas 3-Person Near Zero EMF Far Infrared Sauna - Canadian Red Cedar (MX-K306-01-ZF CED)|Infrared Sauna|3\nMaxxus Sauna|Maxxus Saunas 3-Person Corner Low EMF Far Infrared Sauna|Infrared Sauna|3\nMaxxus Sauna|Maxxus Saunas 3-Person Low EMF Far Infrared Corner Sauna|Infrared Sauna|3\nMaxxus Sauna|Maxxus Saunas 3-Person Corner Near Zero EMF Far Infrared Sauna MX-K356-01-ZF|Infrared Sauna|3\nMaxxus Sauna|Maxxus Saunas 3-Person Corner Near Zero EMF Far Infrared Sauna|Infrared Sauna|3\nMaxxus Sauna|Maxxus Saunas 4-Person Low EMF Far Infrared Sauna|Infrared Sauna|4\nMaxxus Sauna|Maxxus Saunas 4-Person Red Cedar Far Infrared Sauna|Infrared Sauna|4\nMaxxus Sauna|Maxxus Saunas 4-Person Near Zero EMF Far Infrared Sauna MX-K406-01-ZF|Infrared Sauna|4\nMaxxus Sauna|Maxxus Saunas 4-Person Cedar Near Zero EMF Far Infrared Sauna, MX-K406-01-ZF CED|Infrared Sauna|4\nMaxxus Sauna|Maxxus Saunas 2-Person Full Spectrum Near Zero EMF Infrared Sauna MX-M206-01-FS CED|Infrared Sauna|2\nMaxxus Sauna|Maxxus Saunas 3-Person Full Spectrum Near Zero EMF Infrared Sauna MX-M306-01-FS CED|Infrared Sauna|3\nMaxxus Sauna|Maxxus Saunas 3-Person Red Cedar Corner Full Spectrum Infrared Sauna MX-M356-01-FS CED|Infrared Sauna|3\nMaxxus Sauna|Maxxus Saunas S-Line 2-Person Full Spectrum Infrared Sauna|Infrared Sauna|2\nMaxxus Sauna|Maxxus Saunas S-Line 3 Person Full Spectrum Infrared Sauna|Infrared Sauna|3\nSaunaLife|SaunaLife E6 2-Person Barrel Sauna|Traditional Sauna|2\nSaunaLife|SaunaLife E6W 2-Person Barrel Sauna|Traditional Sauna|2\nSaunaLife|SaunaLife E7 4-Person Barrel Sauna|Traditional Sauna|4\nSaunaLife|SaunaLife E7W 4-Person Barrel Sauna|Traditional Sauna|4\nSaunaLife|SaunaLife E7G 4-Person Barrel Sauna|Traditional Sauna|4\nSaunaLife|SaunaLife E8 6-Person Barrel Sauna|Traditional Sauna|6\nSaunaLife|SaunaLife E8W 6-Person Barrel Sauna|Traditional Sauna|6\nSaunaLife|SaunaLife E8G 6-Person Barrel Sauna|Traditional Sauna|6\nSaunaLife|SaunaLife Model X2 2 Person Indoor Traditional Sauna|Traditional Sauna|2\nSaunaLife|SaunaLife G2 4-Person Traditional Outdoor Sauna|Traditional Sauna|4\nSaunaLife|SaunaLife G3 6-Person Outdoor Traditional Sauna|Traditional Sauna|6\nSaunaLife|SaunaLife G6 5-Person Traditional Outdoor Sauna|Traditional Sauna|5\nSaunaLife|SaunaLife G11 8-Person Outdoor Sauna|Traditional Sauna|8\nSaunaLife|SaunaLife GL4 4-Person Luxury Outdoor Traditional Sauna|Traditional Sauna|4\nSaunaLife|SaunaLife GL6 6-Person Luxury Outdoor Traditional Sauna|Traditional Sauna|6\nSaunaLife|SaunaLife CL3G 2-Person Outdoor Cube Sauna|Traditional Sauna|2\nSaunaLife|SaunaLife CL4G 3-Person Outdoor Cube Sauna|Traditional Sauna|3\nSaunaLife|SaunaLife CL5G 4-Person Outdoor Traditional Sauna|Traditional Sauna|4\nSaunaLife|SaunaLife CL7G 6-Person Outdoor Cube Sauna|Traditional Sauna|6\nSaunaLife|SaunaLife CL12GCP 8-Person Outdoor Sauna|Traditional Sauna|8\nSaunum|Saunum Classic Mini 3 Person Outdoor Sauna|Traditional Sauna|3\nSaunum|Saunum AirCube 3 Outdoor Cabin Sauna|Traditional Sauna|\nSaunum|AirCube Space Outdoor Cabin Sauna|Traditional Sauna|\nSaunum|AirCube Double Outdoor Luxury Sauna|Traditional Sauna|\nSun Home Saunas|Sun Home Luminar 2 Person Outdoor Infrared Sauna|Infrared Sauna|2\nSun Home Saunas|Luminar 5 Person Outdoor Infrared Sauna|Infrared Sauna|5\nSun Valley Saunas|Baldy Barrel Sauna|Traditional Sauna|\nSunRay Saunas|SunRay Sedona 1-Person Far Infrared Sauna|Infrared Sauna|1\nSunRay Saunas|SunRay Sierra 2-Person Far Infrared Sauna|Infrared Sauna|2\nSunRay Saunas|SunRay Cordova 2-Person Far Infrared Sauna (Discontinued)|Infrared Sauna|2\nSunRay Saunas|SunRay Evansport 2-Person Far Infrared Sauna HL200K2|Infrared Sauna|2\nSunRay Saunas|SunRay Savannah 3-Person Indoor Far Infrared Cedar Sauna|Infrared Sauna|3\nSunRay Saunas|SunRay Aspen 3-Person Infrared Sauna 300K2|Infrared Sauna|3\nSunRay Saunas|SunRay Sequoia 4-Person Cedar Infrared Sauna HL400K|Infrared Sauna|4\nSunRay Saunas|SunRay Roslyn 4-Person Indoor Infrared Sauna|Infrared Sauna|4\nSunRay Saunas|SunRay Bristol Bay 4-Person Infrared Sauna|Infrared Sauna|4\nSunRay Saunas|SunRay Burlington 2-Person Outdoor Far Infrared Sauna|Infrared Sauna|2\nSunRay Saunas|SunRay Logan 2 Person Outdoor Infrared Sauna 200D6|Infrared Sauna|2\nSunRay Saunas|SunRay Grandby 3-Person Outdoor Far Infrared Sauna|Infrared Sauna|3\nSunRay Saunas|SunRay Cayenne 4-Person Outdoor Infrared Sauna 400D3|Infrared Sauna|4\nSunRay Saunas|SunRay Pacific 4 Person Infrared Outdoor Sauna 400D6|Infrared Sauna|4\nSunRay Saunas|SunRay Baldwin 2-Person Traditional Sauna|Traditional Sauna|2\nSunRay Saunas|SunRay Rockledge 2-Person Luxury Traditional Sauna 200LX|Traditional Sauna|2\nSunRay Saunas|SunRay Southport 3-Person Indoor Traditional Sauna|Traditional Sauna|3\nSunRay Saunas|SunRay Hampton 3-Person Traditional Indoor Sauna|Traditional Sauna|3\nSunRay Saunas|SunRay Westlake 3-Person Luxury Traditional Sauna 300LX|Traditional Sauna|3\nSunRay Saunas|SunRay Tiburon 4-Person Traditional Sauna|Traditional Sauna|4\nSunRay Saunas|SunRay Charleston 4-Person Traditional Indoor Sauna|Traditional Sauna|4\nSunRay Saunas|SunRay Eagle 2-Person Outdoor Traditional Sauna|Traditional Sauna|2\nSunRay Saunas|SunRay Bristow 2 Person Traditional Outdoor Sauna|Traditional Sauna|2\nSunRay Saunas|SunRay Freeport 3-Person Outdoor Traditional Sauna|Traditional Sauna|3\nSunRay Saunas|SunRay Waverly 3-Person Outdoor Traditional Sauna|Traditional Sauna|3\nSweat Kingdom|The Sweat Barrel (2-6 Person)|Traditional Sauna|6\nSweat Kingdom|The Sweat Pod Traditional Outdoor Sauna (2 or 4 Person)|Traditional Sauna|2\nSweat Kingdom|The Sweat Pod - Blackout Edition|Traditional Sauna|\nSweat Kingdom|The Sweat Cabin (4-6 Person)|Traditional Sauna|6\nSweat Kingdom|The Sweat Cabin - Blackout Edition|Traditional Sauna|";
+  CATALOG = this.CATALOG_SRC.split("\n").map(l => { const [brand, model, t, cap] = l.split("|"); return { brand, model, type: t, cap: cap ? cap + "-person" : "" }; });
+  OTHER = "Other / not listed";
+  // Live catalog: "Sauna Product Database" published sheet. Columns matched by header name (Brand, Model, Type, Capacity, Electrical). Falls back to CATALOG above if unreachable.
+  CATALOG_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT9a4U8SDLXOq9MQtO9VgrUm2pwub9x3GqNnI74CcyIGeviTAz_aOOGaxSf71P7Zg/pub?output=csv";
+  POWER_FALLBACK = ["120V standard outlet", "120V dedicated 20A circuit", "240V single phase", "240V 50A dedicated circuit", "Wood-fired — no power needed"];
+  POWER_UNSURE = "Not sure — need installer advice";
+
+  parseCsv(text) {
+    const rows = []; let row = [], cell = "", q = false;
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      if (q) { if (ch === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += ch; }
+      else if (ch === '"') q = true;
+      else if (ch === ",") { row.push(cell); cell = ""; }
+      else if (ch === "\n" || ch === "\r") { if (ch === "\r" && text[i + 1] === "\n") i++; row.push(cell); rows.push(row); row = []; cell = ""; }
+      else cell += ch;
+    }
+    if (cell || row.length) { row.push(cell); rows.push(row); }
+    const hi = rows.findIndex(r => r.some(h => /brand/i.test(h)) && r.some(h => /model/i.test(h)));
+    if (hi < 0) return [];
+    const head = rows[hi].map(h => h.trim().toLowerCase());
+    const col = re => head.findIndex(h => re.test(h));
+    const iB = col(/brand|make|manufacturer/), iM = col(/model|product/), iT = col(/type/), iC = col(/capacity|person|seat/), iE = col(/electric|volt|power|amp/);
+    const get = (r, i) => (i >= 0 && r[i] ? r[i] : "").replace(/\s+/g, " ").trim();
+    return rows.slice(hi + 1).map(r => {
+      const n = parseInt(get(r, iC), 10);
+      const power = get(r, iE).split(/\s*[;|]\s*/).filter(Boolean);
+      return { brand: get(r, iB), model: get(r, iM), type: get(r, iT) || "Not sure", cap: n ? n + "-person" : "", power };
+    }).filter(c => c.brand && c.model);
+  }
+
+  catalogVals() {
+    const s = this.state, cat = s.catalog || this.CATALOG;
+    const brands = [...new Set(cat.map(c => c.brand))].sort();
+    const models = cat.filter(c => c.brand === s.make).map(c => c.model);
+    const opt = v => ({ v, label: v });
+    const clear = (st, keys) => { const err = { ...st.err }; keys.forEach(k => delete err[k]); return err; };
+    return {
+      brandOptions: [{ v: "", label: "Choose a brand" }].concat(brands.map(opt), [opt(this.OTHER)]),
+      modelOptions: [{ v: "", label: s.make ? "Choose a model" : "Choose a brand first" }].concat(models.map(opt), s.make ? [opt(this.OTHER)] : []),
+      typeOptions: [{ v: "", label: "Choose a sauna type" }].concat([...new Set(cat.map(c => c.type))].sort().concat(["Not sure"]).map(opt)),
+      powerOptions: (() => {
+        const sel = cat.find(c => c.model === s.model);
+        const all = [...new Set(cat.flatMap(c => c.power || []))].sort();
+        const list = sel && sel.power && sel.power.length ? sel.power : (all.length ? all : this.POWER_FALLBACK);
+        const extra = s.power && !list.includes(s.power) && s.power !== this.POWER_UNSURE ? [s.power] : [];
+        return [{ v: "", label: "Choose power requirement" }].concat(list.concat(extra, [this.POWER_UNSURE]).map(opt));
+      })(),
+      capOptions: [{ v: "", label: "Choose capacity" }].concat(["1-person", "2-person", "3-person", "4-person", "5-person", "6-person", "8-person"].map(opt), [{ v: "8+ person", label: "More than 8" }]),
+      makeOn: ev => { const v = ev.target.value; this.setState(st => ({ make: v, model: v === this.OTHER ? this.OTHER : "", err: clear(st, ["make", "model"]) })); },
+      modelOn: ev => {
+        const v = ev.target.value, row = cat.find(c => c.model === v);
+        this.setState(st => ({ model: v, type: row ? row.type : st.type, seats: row && row.cap ? row.cap : st.seats, power: row && row.power && row.power.length === 1 ? row.power[0] : (row && row.power && row.power.length ? "" : st.power), err: clear(st, row ? ["model", "type", row.cap ? "seats" : "model"] : ["model"]) }));
+      }
+    };
+  }
 
   set(k, v) {
     this.setState(s => {
@@ -648,11 +808,10 @@ class Component extends DCLogic {
 
   submitProject = () => {
     const s = this.state, err = {};
-    if (!s.type) err.type = "Choose a sauna type.";
-    if (!s.make) err.make = "Choose a make.";
+    if (!s.make) err.make = "Choose a sauna brand.";
     if (!s.model) err.model = "Choose a model.";
-    if (!s.power) err.power = "Choose an electrical power option.";
-    if (!s.w.trim() || !s.l.trim() || !s.h.trim()) err.size = "Add width, length, and height.";
+    if (!s.type) err.type = "Choose a sauna type.";
+    if (!s.seats) err.seats = "Choose a capacity.";
     if (!s.date) err.date = "Choose your ideal install date.";
     if (!s.city.trim()) err.city = "Enter your city.";
     if (!/^\d{5}$/.test(s.pzip.trim())) err.pzip = "Enter a valid 5-digit ZIP.";
@@ -665,7 +824,7 @@ class Component extends DCLogic {
   renderVals() {
     const s = this.state, e = s.err;
     const out = {};
-    ["first", "last", "email", "phone", "zip", "date", "type", "make", "model", "power", "w", "l", "h", "notes", "city", "pzip", "loginEmail", "loginPass"].forEach(k => {
+    ["first", "last", "email", "phone", "zip", "date", "type", "make", "model", "seats", "power", "notes", "city", "pzip", "loginEmail", "loginPass"].forEach(k => {
       out[k + "Val"] = s[k];
       out[k + "On"] = ev => this.set(k, (k === "zip" || k === "pzip") ? this.digits(ev.target.value) : ev.target.value);
       out[k + "Bd"] = e[k] ? "#C0492F" : "#D8C8AF";
@@ -715,7 +874,7 @@ class Component extends DCLogic {
     });
 
     const name = (s.first + " " + s.last).trim();
-    const sizeLine = (s.w && s.l && s.h) ? s.w + " × " + s.l + " × " + s.h + " · " + s.seats : s.seats;
+    const sizeLine = s.seats;
 
     return {
       ...out,
@@ -730,26 +889,21 @@ class Component extends DCLogic {
       goDash: () => { this.setState({ step: 4, err: {} }); window.scrollTo(0, 0); },
       submitLogin: this.submitLogin,
       loginKeyDown: ev => { if (ev.key === "Enter") { ev.preventDefault(); this.submitLogin(); } },
-      loginBtnDisplay: s.step === 4 ? "none" : "inline-flex",
-      myPropsDisplay: (s.step === 2 || s.step === 4) ? "inline-flex" : "none",
+      loginBtnDisplay: s.step >= 4 ? "none" : "inline-flex",
+      myPropsDisplay: (s.step === 2 || s.step >= 4) ? "inline-flex" : "none",
       ...this.dashVals(),
+      ...this.payVals(),
       rail, stages,
       acctName: name || "your account",
       acctDisplay: (s.step > 0 && s.step !== 3 && name) ? "inline" : "none",
-      seatsVal: s.seats,
       elecVal: s.elec,
       elecOn: ev => this.set("elec", ev.target.checked),
       elecSummary: s.elec ? "Yes — electrician needed" : "Not needed",
-      seatsOn: ev => this.set("seats", ev.target.value),
       confirmVal: s.confirm,
       confirmOn: ev => this.set("confirm", ev.target.checked),
       confirmErr: e.confirm ? "block" : "none",
       confirmMsg: e.confirm || "",
-      sizeErr: e.size ? "block" : "none",
-      sizeMsg: e.size || "",
-      typeOptions: [{ v: "", label: "All saunas — choose a type" }].concat(Object.keys(this.MODELS).map(k => ({ v: k, label: k }))),
-      modelOptions: [{ v: "", label: s.type ? "Choose a model" : "Choose a sauna type first" }].concat((this.MODELS[s.type] || []).map(m => ({ v: m, label: m }))),
-      typeOn: ev => this.setState(st => { const err = { ...st.err }; delete err.type; delete err.model; return { type: ev.target.value, model: "", err }; }),
+      ...this.catalogVals(),
       submitAccount: this.submitAccount,
       submitProject: this.submitProject,
       backToAccount: () => this.setState({ step: 0 }),
