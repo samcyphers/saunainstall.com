@@ -49,6 +49,22 @@
     [data-m~="fields"], [data-m~="one"] { grid-template-columns: minmax(0,1fr) !important; }
   }
   @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  /* fee comparison + boxed step 1 */
+  @media (max-width: 760px) {
+    [data-m~="feepad"] { padding: 16px !important; }
+    [data-m~="feehead"] { grid-template-columns: minmax(0,1fr) !important; gap: 12px !important; }
+    [data-m~="feerow"] { grid-template-columns: minmax(0,1fr) auto !important; gap: 4px 16px !important; }
+    [data-m~="feerow"] [data-m~="feebar"] { grid-column: 1 / -1; grid-row: 2; height: 14px !important; }
+    [data-m~="feeval"] { font-size: 24px !important; }
+    [data-m~="feesec"] { padding-top: 36px !important; padding-bottom: 4px !important; }
+    [data-m~="feecta"] { width: 100%; justify-content: center; }
+    [data-m~="s1"] { grid-template-columns: minmax(0,1fr) !important; gap: 18px !important; padding: 22px 14px 14px !important; border-radius: 20px !important; margin-top: 20px !important; }
+    [data-m~="s1left"] { padding: 0 8px; gap: 10px !important; }
+    [data-m~="s1card"] { padding: 16px 14px !important; border-radius: 16px !important; }
+    [data-m~="pair"] { grid-template-columns: repeat(2, minmax(0,1fr)) !important; gap: 10px !important; }
+    [data-m~="csz"] { grid-template-columns: 1.2fr .6fr .8fr !important; gap: 10px !important; }
+  }
 </style>
 <template id="__bundler_thumbnail" data-bg-color="#2A2219">
   <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
@@ -135,12 +151,12 @@
             <div>
               <span style="font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #CDA468; display: inline-flex; align-items: center; gap: 9px;"><span style="width: 18px; height: 2px; background: #CDA468; border-radius: 2px;"></span>Installer membership</span>
               <h1 style="font-size: clamp(34px, 4.4vw, 52px); margin: 18px 0 0; letter-spacing: -.035em; line-height: 1.02; font-weight: 800; color: #FCF8F1;">Unlimited bids for <em style="font-family: 'Newsreader', serif; font-style: italic; font-weight: 400; color: #CDA468;">$24.99</em> a month.</h1>
-              <p style="font-size: 19px; color: #C9BCA7; margin: 16px 0 0; max-width: 34em;">One flat membership, unlimited bids — no connects, no per-lead charges. Homeowners in your service area post sauna installs every day.</p>
+              <p data-m="hide" style="font-size: 19px; color: #C9BCA7; margin: 16px 0 0; max-width: 34em;">One flat membership, unlimited bids — no connects, no per-lead charges. Homeowners in your service area post sauna installs every day.</p>
               <div style="display: grid; gap: 12px; margin-top: 26px; font-size: 15.5px; color: #E7DCC9;">
                 <div style="display: flex; gap: 11px; align-items: flex-start;"><svg viewBox="0 0 20 20" fill="none" style="width: 19px; height: 19px; color: #7FC592; flex: none; margin-top: 3px;"><path d="M4 10.5l3.5 3.5L16 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg><span><b style="font-weight: 700; color: #FCF8F1;">Unlimited bids</b> in every ZIP code and city you serve</span></div>
                 <div style="display: flex; gap: 11px; align-items: flex-start;"><svg viewBox="0 0 20 20" fill="none" style="width: 19px; height: 19px; color: #7FC592; flex: none; margin-top: 3px;"><path d="M4 10.5l3.5 3.5L16 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>Full specs, make, model, and site notes before you quote</span></div>
-                <div style="display: flex; gap: 11px; align-items: flex-start;"><svg viewBox="0 0 20 20" fill="none" style="width: 19px; height: 19px; color: #7FC592; flex: none; margin-top: 3px;"><path d="M4 10.5l3.5 3.5L16 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>ACH payout as soon as the homeowner marks the job completed</span></div>
-                <div style="display: flex; gap: 11px; align-items: flex-start;"><svg viewBox="0 0 20 20" fill="none" style="width: 19px; height: 19px; color: #7FC592; flex: none; margin-top: 3px;"><path d="M4 10.5l3.5 3.5L16 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>Cancel any time — no contract, no commission on your work</span></div>
+                <div data-m="hide" style="display: flex; gap: 11px; align-items: flex-start;"><svg viewBox="0 0 20 20" fill="none" style="width: 19px; height: 19px; color: #7FC592; flex: none; margin-top: 3px;"><path d="M4 10.5l3.5 3.5L16 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>ACH payout as soon as the homeowner marks the job completed</span></div>
+                <div data-m="hide" style="display: flex; gap: 11px; align-items: flex-start;"><svg viewBox="0 0 20 20" fill="none" style="width: 19px; height: 19px; color: #7FC592; flex: none; margin-top: 3px;"><path d="M4 10.5l3.5 3.5L16 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>Cancel any time — no contract, no commission on your work</span></div>
               </div>
             </div>
 
@@ -163,13 +179,76 @@
             </div>
           </div>
 
-          <div id="signup-form" style="max-width: 760px; margin: 72px auto 0; scroll-margin-top: 96px;">
-            <span style="font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #8A5424; display: inline-flex; align-items: center; gap: 9px;"><span style="width: 18px; height: 2px; background: #8A5424; border-radius: 2px;"></span>Step 1 · Create your account</span>
-            <h2 style="font-size: clamp(26px, 3.2vw, 36px); margin: 16px 0 0; letter-spacing: -.03em; line-height: 1.05; font-weight: 700;">Tell us about your business.</h2>
-            <p style="font-size: 17.5px; color: #6B6253; margin: 12px 0 0;">Takes about a minute. Your first month is free — a card is only processed before your first bid.</p>
+          <div data-m="feesec" style="padding: 56px 0 8px;">
+            <div style="display: flex; flex-direction: column; gap: 28px;">
+              <div data-m="feehead" style="display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 32px; align-items: end;">
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                  <span style="font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #8A5424; display: inline-flex; align-items: center; gap: 9px;"><span style="width: 18px; height: 2px; background: #8A5424; border-radius: 2px;"></span>What it costs you</span>
+                  <h2 style="margin: 0; font-size: clamp(30px, 3.6vw, 44px); line-height: 1.08; letter-spacing: -.03em; font-weight: 700; text-wrap: balance;">Others charge per lead. <em style="font-family: 'Newsreader', serif; font-style: italic; font-weight: 400; color: #8A5424;">We charge one flat fee.</em></h2>
+                </div>
+                <p data-m="hide" style="margin: 0; font-size: 17px; color: #6B6253;">Bid on every sauna project you want for $24.99 a month. Nothing extra when you don't win the job.</p>
+              </div>
 
-            <div data-m="pad2" style="margin-top: 28px; background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px; box-shadow: 0 10px 30px -12px rgba(42,34,25,.22), 0 2px 6px rgba(42,34,25,.06);">
-              <div data-m="fields" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <div data-m="feepad" style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 20px; padding: 24px 28px; box-shadow: 0 10px 30px -12px rgba(42,34,25,.18), 0 2px 6px rgba(42,34,25,.05); display: flex; flex-direction: column; gap: 20px; min-width: 0;">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px 20px; flex-wrap: wrap;">
+                  <div style="display: flex; flex-direction: column; gap: 2px;">
+                    <span style="font-size: 18px; font-weight: 700; letter-spacing: -.015em;">Monthly cost of bidding on {{ feeN }} projects</span>
+                    <span style="font-size: 13px; color: #6B6253;">At the high end of reported lead prices</span>
+                  </div>
+                  <div role="group" aria-label="Projects per month" style="display: flex; gap: 8px;">
+                    <sc-for list="{{ feeChips }}" as="c" hint-placeholder-count="3">
+                      <button type="button" aria-pressed="{{ c.pressed }}" onClick="{{ c.pick }}" style="cursor: pointer; font-family: inherit; min-height: 44px; min-width: 56px; padding: 0 16px; border-radius: 12px; font-size: 15px; font-weight: 600; color: {{ c.fg }}; background: {{ c.bg }}; border: 1px solid {{ c.bd }};">{{ c.label }}</button>
+                    </sc-for>
+                  </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                  <sc-for list="{{ feeRows }}" as="r" hint-placeholder-count="3">
+                    <div data-m="feerow" style="display: grid; grid-template-columns: 160px minmax(0, 1fr) 150px; gap: 20px; align-items: center;">
+                      <div style="display: flex; flex-direction: column; min-width: 0;">
+                        <span style="font-size: 18px; font-weight: 800; letter-spacing: -.02em; color: {{ r.nameColor }};">{{ r.name }}</span>
+                        <span style="font-size: 13px; color: #6B6253; line-height: 1.35;">{{ r.sub }}</span>
+                      </div>
+                      <div data-m="feebar" role="img" aria-label="{{ r.aria }}" style="position: relative; height: 40px; min-width: 0;">
+                        <div style="height: 100%; border-radius: 10px; background: {{ r.barColor }}; min-width: 10px; width: {{ r.width }};"></div>
+                      </div>
+                      <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                        <span data-m="feeval" style="font-size: 28px; font-weight: 800; letter-spacing: -.03em; line-height: 1.1; color: {{ r.valColor }}; font-variant-numeric: tabular-nums;">{{ r.value }}</span>
+                        <span style="font-size: 14px; font-weight: 700; color: {{ r.noteColor }};">{{ r.note }}</span>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap; background: #F4ECE0; border-radius: 14px; padding: 14px 18px;">
+                  <span style="font-size: 17px; font-weight: 700; letter-spacing: -.01em;">{{ feeSave }}</span>
+                  <span data-m="hide" style="font-size: 14px; color: #6B6253;">$24.99 a month, flat. First month free.</span>
+                </div>
+              </div>
+
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 14px 24px; flex-wrap: wrap;">
+                <div data-m="hide" style="display: flex; align-items: center; gap: 10px 22px; flex-wrap: wrap; font-size: 15px; font-weight: 600;">
+                  <span style="display: inline-flex; align-items: center; gap: 8px;"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true" style="width: 18px; height: 18px; color: #3E7A4E; flex: none;"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>No per-lead fees</span>
+                  <span style="display: inline-flex; align-items: center; gap: 8px;"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true" style="width: 18px; height: 18px; color: #3E7A4E; flex: none;"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>Unlimited bids</span>
+                  <span style="display: inline-flex; align-items: center; gap: 8px;"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true" style="width: 18px; height: 18px; color: #3E7A4E; flex: none;"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>No commission on your work</span>
+                </div>
+                <a data-m="feecta" href="#signup-form" style="display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 24px; border-radius: 14px; background: #E8B23A; color: #272019; font-size: 16px; font-weight: 700;" style-hover="background: #DBA32B; color: #272019;">Start my free month<svg viewBox="0 0 20 20" fill="none" aria-hidden="true" style="width: 16px; height: 16px;"><path d="M10 4v12M5 11l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
+              </div>
+
+              <details style="font-size: 12.5px; line-height: 1.55; color: #6B6253; max-width: 62em;">
+                <summary style="cursor: pointer; font-weight: 600;">Where these numbers come from</summary>
+                <p style="margin: 6px 0 0;">Angi (formerly Angie's List) and Thumbtack do not publish fixed rate cards. This chart uses the high end of typical per-lead prices reported by third-party sources and Angi's lead FAQ, reviewed October 2026: $60 on Thumbtack and $85 on Angi, across home services. Reported prices run from $35 to $60 on Thumbtack and $15 to $85 on Angi, and vary by trade, job size and location. Projects per month is an example volume.</p>
+              </details>
+            </div>
+          </div>
+
+          <div id="signup-form" data-m="s1" style="margin: 32px 0 0; scroll-margin-top: 96px; background: #2A2219; color: #F4ECE0; border-radius: 28px; padding: 56px; display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 48px; align-items: center; box-shadow: 0 18px 44px -20px rgba(42,34,25,.45);">
+            <div data-m="s1left" style="display: flex; flex-direction: column; gap: 18px; min-width: 0;"><span style="font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #CDA468; display: inline-flex; align-items: center; gap: 9px;"><span style="width: 18px; height: 2px; background: #CDA468; border-radius: 2px;"></span>Step 1 · Create your account</span>
+            <h2 style="font-size: clamp(30px, 3.6vw, 44px); margin: 0; letter-spacing: -.03em; line-height: 1.08; font-weight: 700; color: #FCF8F1;">Tell us about <em style="font-family: 'Newsreader', serif; font-style: italic; font-weight: 400; color: #CDA468;">your business.</em></h2>
+            <p data-m="hide" style="font-size: 17.5px; color: rgba(252,248,241,.72); margin: 0;">Takes about a minute. Your first month is free — a card is only processed before your first bid.</p><div data-m="hide" style="display: flex; flex-direction: column; gap: 16px; margin-top: 14px; padding-top: 24px; border-top: 1px solid rgba(252,248,241,.16);"><div style="display: flex; gap: 14px; align-items: flex-start;"><span style="flex: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; background: #CDA468; color: #2A2219; border: 1.5px solid #CDA468;">1</span><div><div style="font-weight: 700; color: #FCF8F1; font-size: 16px;">Create your account</div><div style="font-size: 14px; color: rgba(252,248,241,.62);">Takes about a minute. First month free.</div></div></div><div style="display: flex; gap: 14px; align-items: flex-start;"><span style="flex: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; background: transparent; color: #CDA468; border: 1.5px solid #CDA468;">2</span><div><div style="font-weight: 700; color: #FCF8F1; font-size: 16px;">Browse sauna projects</div><div style="font-size: 14px; color: rgba(252,248,241,.62);">Filter by ZIP or city, see full specs.</div></div></div><div style="display: flex; gap: 14px; align-items: flex-start;"><span style="flex: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; background: transparent; color: #CDA468; border: 1.5px solid #CDA468;">3</span><div><div style="font-weight: 700; color: #FCF8F1; font-size: 16px;">Bid and get paid</div><div style="font-size: 14px; color: rgba(252,248,241,.62);">Unlimited bids. ACH payout when the job is marked completed.</div></div></div></div><div data-m="mshow" style="display: none; font-size: 13px; color: rgba(252,248,241,.7);"><div style="display: flex; gap: 6px 8px; align-items: center; flex-wrap: wrap;"><span style="display: inline-flex; align-items: center; gap: 6px;"><b style="width: 20px; height: 20px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; background: #CDA468; color: #2A2219; border: 1.5px solid #CDA468;">1</b>Sign up</span><span style="opacity: .4;">›</span><span style="display: inline-flex; align-items: center; gap: 6px;"><b style="width: 20px; height: 20px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; background: transparent; color: #CDA468; border: 1.5px solid #CDA468;">2</b>Browse projects</span><span style="opacity: .4;">›</span><span style="display: inline-flex; align-items: center; gap: 6px;"><b style="width: 20px; height: 20px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; background: transparent; color: #CDA468; border: 1.5px solid #CDA468;">3</b>Bid and get paid</span></div></div></div>
+
+            <div data-m="pad2 s1card" style="margin: 0; background: #FFFDF9; color: #272019; border: 1px solid #E4D8C5; border-radius: 22px; padding: 30px; box-shadow: 0 10px 30px -12px rgba(42,34,25,.22), 0 2px 6px rgba(42,34,25,.06);">
+              <div data-m="fields pair" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
                 <div>
                   <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">First name<span style="color: #C0492F; font-weight: 700;"> *</span></label>
                   <input placeholder="Sam" value="{{ firstVal }}" onChange="{{ firstOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ firstBd }}; border-radius: 11px; padding: 13px 14px;" />
@@ -194,14 +273,14 @@
                 </div>
               </div>
 
-              <hr style="border: none; border-top: 1px solid #E4D8C5; margin: 26px 0;" />
+              <hr style="border: none; border-top: 1px solid #E4D8C5; margin: 22px 0;" />
               <div style="font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8A8071;">Business address</div>
               <div style="margin-top: 14px;">
                 <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Street address<span style="color: #C0492F; font-weight: 700;"> *</span></label>
                 <input placeholder="118 Warm Springs Rd" value="{{ addrVal }}" onChange="{{ addrOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ addrBd }}; border-radius: 11px; padding: 13px 14px;" />
                 <span style="display: {{ addrErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ addrMsg }}</span>
               </div>
-              <div data-m="fields" style="display: grid; grid-template-columns: 1.3fr .5fr .6fr; gap: 12px; margin-top: 14px;">
+              <div data-m="fields csz" style="display: grid; grid-template-columns: 1.3fr .5fr .6fr; gap: 12px; margin-top: 14px;">
                 <div>
                   <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">City<span style="color: #C0492F; font-weight: 700;"> *</span></label>
                   <input placeholder="Ketchum" value="{{ cityVal }}" onChange="{{ cityOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ cityBd }}; border-radius: 11px; padding: 13px 14px;" />
@@ -627,7 +706,8 @@ class Component extends DCLogic {
         { title: "6-person outdoor cabin with changing room", meta: "Hailey, ID 83333 · sent 6 weeks ago", amount: 3900, start: "Jul 22", status: "Paid", note: "Paid by ACH on Aug 4." },
         { title: "Custom tiled steam room retrofit", meta: "Twin Falls, ID 83301 · sent 4 weeks ago", amount: 6800, start: "Aug 20", status: "Declined", note: "Homeowner chose another installer." }
       ],
-      err: {}
+      err: {},
+      fee: 10
     };
   }
 
@@ -858,8 +938,26 @@ class Component extends DCLogic {
     const a = this.PROJECTS.filter(p => p.id === s.activeId)[0] || this.PROJECTS[0];
     const name = (s.first + " " + s.last).trim();
 
+    const feeN = s.fee || 10, FEE_US = 24.99;
+    const feeFmt = v => "$" + Math.round(v).toLocaleString("en-US");
+    const feeT = 60 * feeN, feeA = 85 * feeN;
+    const feePct = v => (v / feeA * 100).toFixed(2) + "%";
+    const feeMult = v => Math.round(v / FEE_US) + "× more";
+    const feeRows = [
+      { name: "saunainstall", sub: "Flat fee, unlimited bids", width: feePct(FEE_US), barColor: "#8A5424", value: "$24.99", note: "First month free", nameColor: "#8A5424", valColor: "#8A5424", noteColor: "#3E7A4E", aria: "saunainstall costs $24.99 per month" },
+      { name: "Thumbtack", sub: "Up to $60 per lead", width: feePct(feeT), barColor: "#A89A83", value: feeFmt(feeT), note: feeMult(feeT), nameColor: "#272019", valColor: "#272019", noteColor: "#6B6253", aria: "Thumbtack costs up to " + feeFmt(feeT) + " per month" },
+      { name: "Angi", sub: "Up to $85 per lead", width: feePct(feeA), barColor: "#A89A83", value: feeFmt(feeA), note: feeMult(feeA), nameColor: "#272019", valColor: "#272019", noteColor: "#6B6253", aria: "Angi costs up to " + feeFmt(feeA) + " per month" }
+    ];
+    const feeChips = [5, 10, 20].map(v => ({
+      label: String(v), pressed: feeN === v ? "true" : "false",
+      fg: feeN === v ? "#ffffff" : "#272019", bg: feeN === v ? "#8A5424" : "#FFFDF9", bd: feeN === v ? "#8A5424" : "#D8C8AF",
+      pick: () => this.setState({ fee: v })
+    }));
+    const feeSave = "Keep " + feeFmt(feeT - FEE_US) + " to " + feeFmt(feeA - FEE_US) + " a month in your pocket.";
+
     return {
       ...out,
+      feeN, feeRows, feeChips, feeSave,
       isSignup: s.step === 0,
       isLogin: s.step === 6,
       isBrowse: s.step === 1,
