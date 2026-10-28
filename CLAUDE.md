@@ -21,8 +21,8 @@ The three root `.html` files are self-contained bundles (fonts, scripts, markup 
    - Exclude `design-source/` from deploys — see `.vercelignore`.
 4. Domain: in the Vercel dashboard → Project → Settings → Domains, add `saunainstall.com` and `www.saunainstall.com`, then add the DNS records Vercel shows at the domain registrar.
 
-## Publishing (GitHub + Vercel, optional)
-If the user prefers Git-based deploys: initialize git here, push to the GitHub repo `saunainstall.com`, and import that repo in Vercel. Every push then redeploys automatically.
+## Publishing (GitHub + Vercel, active)
+The GitHub repo `samcyphers/saunainstall.com` is connected to Vercel. Every push to `main` redeploys production automatically; other branches get preview deployments. Claude commits and pushes updated files, so no manual upload or `vercel --prod` is needed.
 
 ## Updating the site
 The user will download a new version of the three `.html` files from the design tool. To update:
