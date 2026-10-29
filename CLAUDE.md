@@ -8,6 +8,7 @@ A static marketing + flow prototype for saunainstall.com, a marketplace connecti
 - `list-project.html` — sauna owner flow (served at `/list-project`): account sign-up → list project → thank-you → owner login (`#login`) → owner dashboard with proposals
 - `contractors.html` — contractor flow (served at `/contractors`): pricing ($24.99/mo, first month free, unlimited bids) → sign-up → find projects by zip/city → payment (card + ACH) → bid on project → contractor login (`#login`) → dashboard
 - `privacy.html`, `terms.html` — Privacy Policy and Terms of Service for Sauna Install LLC (served at `/privacy` and `/terms`). Plain static pages (not design-tool bundles); keep in sync with the Google Docs drafts in the saunainstall-site Drive folder.
+- `support.html` — customer support page (served at `/support`); its URL is the customer support URL given to Stripe.
 - `images/` — site photos. Must be deployed; the homepage "What we install" cards load from `/images/`.
 - `vercel.json` — enables clean URLs (`/contractors` instead of `/contractors.html`)
 - `design-source/` — the editable design files these pages were compiled from. Reference only; do NOT deploy this folder.
