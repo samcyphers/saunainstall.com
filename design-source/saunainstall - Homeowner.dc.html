@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="/js/si.js"></script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -174,7 +175,7 @@
                       <button type="button" onClick="{{ p.complete }}" style="display: {{ p.completeDisplay }}; align-items: center; gap: 8px; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer; border-radius: 11px; border: 1px solid #CFE3D3; padding: 11px 20px; background: #E9F1EA; color: #3E7A4E;" style-hover="background: #DDEBE0;">Mark project completed</button>
                       <span style="display: {{ p.doneDisplay }}; align-items: center; gap: 7px; font-size: 14px; font-weight: 600; color: #3E7A4E;">
                         <svg viewBox="0 0 16 16" fill="none" style="width: 14px; height: 14px;"><path d="M3 8.5l3.2 3.2L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-                        Completed · payment released by ACH
+                        Completed · installer paid directly
                       </span>
                       <span style="display: {{ p.doneDisplay }}; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: #8A5424;">· Your review: <span style="color: #C98A2B; letter-spacing: 1px;">{{ p.reviewStars }}</span></span>
                     </div>
@@ -186,7 +187,7 @@
                   </div>
                 </div>
               </sc-for>
-              <p style="font-size: 14.5px; color: #8A8071; margin: 20px 0 0;">Proposals keep arriving for about a week after a project goes live. You'll get an email each time one lands.</p>
+              <p style="font-size: 14.5px; color: #8A8071; margin: 20px 0 0;">Proposals keep arriving for about a week after a project goes live. Check back here to see new ones.</p>
             </div>
 
             <div style="display: grid; gap: 16px;">
@@ -202,7 +203,7 @@
                   <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Install date</span><b style="font-weight: 600; text-align: right;">{{ dashDate }}</b></div>
                   <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Location</span><b style="font-weight: 600; text-align: right;">{{ dashLoc }}</b></div>
                 </div>
-                <p style="font-size: 13px; color: #8A8071; margin: 16px 0 0; padding-top: 14px; border-top: 1px solid #D8C8AF;">{{ projectId }} · posted 3 days ago</p>
+                <p style="font-size: 13px; color: #8A8071; margin: 16px 0 0; padding-top: 14px; border-top: 1px solid #D8C8AF;">{{ projectId }} · posted {{ postedAgo }}</p>
               </div>
 
               <div style="background: #FFFDF9; border: 1px solid #E4D8C5; border-radius: 22px; padding: 24px;">
@@ -248,7 +249,7 @@
             <div style="display: grid; gap: 10px; margin-top: 14px; font-size: 15px;">
               <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Installer</span><b style="font-weight: 600; text-align: right;">{{ payCompany }}</b></div>
               <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Project</span><b style="font-weight: 600; text-align: right;">{{ dashTitle }} · {{ projectId }}</b></div>
-              <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Paid by</span><b style="font-weight: 600; text-align: right;">ACH transfer to installer's bank</b></div>
+              <div style="display: flex; justify-content: space-between; gap: 14px;"><span style="color: #8A8071;">Paid by</span><b style="font-weight: 600; text-align: right;">Directly to your installer</b></div>
               <div style="display: flex; justify-content: space-between; gap: 14px; padding-top: 12px; margin-top: 2px; border-top: 1px solid #D8C8AF; align-items: baseline;"><span style="color: #272019; font-weight: 600;">Fixed-price total</span><b style="font-size: 24px; font-weight: 800; letter-spacing: -.02em;">{{ payAmount }}</b></div>
             </div>
           </div>
@@ -273,10 +274,10 @@
             </div>
 
             <button type="button" onClick="{{ submitPay }}" style="width: 100%; margin-top: 22px; display: inline-flex; align-items: center; justify-content: center; gap: 9px; font-family: inherit; font-size: 17px; font-weight: 600; cursor: pointer; border-radius: 11px; border: 1px solid transparent; padding: 16px 28px; background: {{ payBtnBg }}; color: #fff;">
-              Submit review &amp; release {{ payAmount }}
+              Submit review &amp; mark complete
               <svg viewBox="0 0 20 20" fill="none" style="width: 17px; height: 17px;"><path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
             </button>
-            <p style="font-size: 13px; color: #8A8071; margin: 14px 0 0; text-align: center;">Payment is sent only after your review is submitted. Only mark complete once you're happy with the finished sauna.</p>
+            <p style="font-size: 13px; color: #8A8071; margin: 14px 0 0; text-align: center;">You pay your installer directly. Only mark complete once you're happy with the finished sauna.</p>
           </div>
         </div>
       </sc-if>
@@ -309,6 +310,14 @@
                 We only use your email information to send proposals.
               </div>
               <span style="display: {{ emailErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ emailMsg }}</span>
+            </div>
+
+            <div style="margin-top: 16px;">
+              <div>
+                  <label style="display: block; font-size: 13.5px; font-weight: 600; color: #272019; margin-bottom: 7px;">Create a password<span style="color: #C0492F; font-weight: 700;"> *</span></label>
+                  <input type="password" autocomplete="new-password" placeholder="At least 8 characters" value="{{ passVal }}" sc-camel-on-change="{{ passOn }}" style="width: 100%; font-family: inherit; font-size: 16px; color: #272019; background: #FCF8F1; border: 1px solid {{ passBd }}; border-radius: 11px; padding: 13px 14px;">
+                  <span style="display: {{ passErr }}; color: #C0492F; font-size: 12.5px; margin-top: 6px; font-weight: 600;">{{ passMsg }}</span>
+                </div>
             </div>
 
             <div data-m="fields" style="display: grid; grid-template-columns: 1.2fr .8fr; gap: 14px; margin-top: 16px;">
@@ -576,7 +585,7 @@ class Component extends DCLogic {
     const map = { "1 · Account": 0, "2 · Project details": 1, "3 · Thank you": 2, "4 · Log in": 3, "5 · My proposals": 4, "6 · Review & pay": 5 };
     this.state = {
       step: map[props.startStep] ?? 0,
-      first: "", last: "", email: "", phone: "", zip: "",
+      first: "", last: "", email: "", phone: "", zip: "", pass: "", busy: false, projectId: null, proposals: [],
       date: "", type: "", make: "", model: "", power: "", elec: false, seats: "",
       notes: "", city: "", pzip: "", confirm: false,
       loginEmail: "", loginPass: "", hiredId: map[props.startStep] === 5 ? "c1" : null, completedId: null, declined: [],
@@ -587,18 +596,47 @@ class Component extends DCLogic {
 
   componentDidMount() {
     if (typeof window !== "undefined" && window.location.hash === "#login") this.setState({ step: 3 });
+    if (typeof window !== "undefined" && window.SI) {
+      SI.session().then(sess => sess && SI.me()).then(m => {
+        if (!m || !m.profile || m.profile.role !== "owner") return;
+        this.applyMe(m);
+        return this.loadDash();
+      }).catch(() => {});
+    }
     fetch(this.CATALOG_URL, { cache: "no-store" })
       .then(res => res.ok ? res.text() : Promise.reject(res.status))
       .then(text => { const rows = this.parseCsv(text); if (rows.length) this.setState({ catalog: rows }); })
       .catch(() => {});
   }
 
-  PROPOSALS = [
-    { id: "c1", company: "Northwood Sauna Co.", meta: "Ketchum, ID · 4.9 ★ (38 sauna installs) · sent 2 days ago", amount: 2450, start: "Sep 12", rating: "Licensed & insured", note: "Two-person crew, one day on site. Includes pad leveling, assembly, heater wiring to your existing 240V subpanel, and haul-away of packaging." },
-    { id: "c2", company: "Cedar & Stone Builders", meta: "Hailey, ID · 4.8 ★ (21 sauna installs) · sent 2 days ago", amount: 2890, start: "Sep 8", rating: "Licensed & insured", note: "Earliest start date available. Includes a licensed electrician on site for the dedicated circuit, plus a cedar bench upgrade at no extra cost." },
-    { id: "c3", company: "High Desert Wellness Installs", meta: "Twin Falls, ID · 4.7 ★ (54 sauna installs) · sent yesterday", amount: 2150, start: "Sep 22", rating: "Licensed & insured", note: "Lowest bid. Assembly and placement only — electrical to be handled by your own electrician. Two-week lead time on scheduling." },
-    { id: "c4", company: "Alpine Heat Works", meta: "Sun Valley, ID · 5.0 ★ (12 sauna installs) · sent 6 hours ago", amount: 3100, start: "Sep 5", rating: "Licensed & insured", note: "Full turnkey: gravel pad regrade, assembly, 240V circuit run from the garage, heater commissioning, and a first-season tune-up visit included." }
-  ];
+  get PROPOSALS() { return this.state.proposals || []; }
+
+  applyMe(m) {
+    const p = m.profile;
+    this.setState(st => ({ first: p.first_name || st.first, last: p.last_name || st.last, email: m.email || st.email, phone: p.phone || st.phone, zip: p.zip || st.zip }));
+  }
+
+  // Load the homeowner's latest project and its proposals. Goes to the dashboard, or to project details if none yet.
+  loadDash(goTo) {
+    return SI.myProject().then(r => {
+      if (!r) { this.setState({ busy: false, step: 1, pzip: this.state.pzip || this.state.zip }); return; }
+      const p = r.project, props = r.proposals;
+      this.setState({
+        busy: false, projectId: p.id, proposals: props, postedAgo: SI.ago(p.created_at),
+        hiredId: p.awarded_bid_id, completedId: p.status === "completed" ? p.awarded_bid_id : null,
+        declined: props.filter(x => x.status === "declined").map(x => x.id),
+        savedRating: r.review ? r.review.rating : this.state.savedRating,
+        type: p.sauna_type || "", make: p.brand || "", model: p.model || "", seats: p.capacity || "", power: p.power || "",
+        elec: !!p.needs_electrician, date: p.install_date || "", notes: p.notes || "", city: p.city || "", pzip: p.zip || "",
+        step: goTo === undefined ? 4 : goTo
+      });
+    });
+  }
+
+  act(promise) {
+    this.setState({ busy: true });
+    return promise.then(() => this.loadDash(this.state.step)).catch(e => { this.setState({ busy: false }); alert(SI.friendly(e)); });
+  }
 
   PSTATUS = {
     New: { fg: "#8A5424", bg: "#EFE0CC", bd: "#E0CBA8" },
@@ -615,6 +653,20 @@ class Component extends DCLogic {
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(s.loginEmail.trim())) err.loginEmail = "Enter a valid email address.";
     if (s.loginPass.length < 6) err.loginPass = "Enter your password.";
     if (Object.keys(err).length) { this.setState({ err }); return; }
+    if (s.busy) return;
+    this.setState({ busy: true });
+    SI.signIn(s.loginEmail, s.loginPass)
+      .then(() => SI.me())
+      .then(m => {
+        if (!m || !m.profile || m.profile.role !== "owner") { SI.signOut(); throw new Error("This email belongs to a contractor account. Use the contractor login."); }
+        this.applyMe(m);
+        return this.loadDash();
+      })
+      .then(() => { this.setState({ err: {}, loginPass: "" }); window.scrollTo(0, 0); })
+      .catch(e => this.setState({ busy: false, err: { loginPass: /contractor/.test(e.message) ? e.message : SI.friendly(e) } }));
+  };
+
+  submitLoginDemo = () => {
     this.setState(st => ({
       err: {}, step: 4, loginPass: "",
       first: st.first || "Jordan", last: st.last || "Avery",
@@ -633,13 +685,20 @@ class Component extends DCLogic {
   }
 
   submitPay = () => {
-    if (!this.state.rating) { this.setState({ err: { rating: true } }); return; }
-    this.setState(st => ({ err: {}, completedId: st.hiredId, savedRating: st.rating, step: 4 }));
-    window.scrollTo(0, 0);
+    const s = this.state;
+    if (!s.rating) { this.setState({ err: { rating: true } }); return; }
+    if (s.busy) return;
+    const hired = this.PROPOSALS.filter(p => p.id === s.hiredId)[0];
+    if (!hired) return;
+    this.setState({ busy: true, err: {}, savedRating: s.rating });
+    SI.completeAndReview(s.projectId, hired.contractorId, s.rating, s.reviewText.trim())
+      .then(() => this.loadDash(4))
+      .then(() => window.scrollTo(0, 0))
+      .catch(e => { this.setState({ busy: false }); alert(SI.friendly(e)); });
   };
 
   payVals() {
-    const s = this.state, hired = this.PROPOSALS.filter(p => p.id === s.hiredId)[0] || this.PROPOSALS[0];
+    const s = this.state, hired = this.PROPOSALS.filter(p => p.id === s.hiredId)[0] || this.PROPOSALS[0] || { company: "", amount: 0 };
     const shown = s.hoverRating || s.rating;
     const labels = ["Tap a star to rate", "Poor", "Fair", "Good", "Great", "Excellent"];
     return {
@@ -677,8 +736,8 @@ class Component extends DCLogic {
         declineDisplay: st === "New" ? "inline-flex" : "none",
         completeDisplay: st === "Hired" ? "inline-flex" : "none",
         doneDisplay: st === "Completed" ? "inline-flex" : "none",
-        accept: () => this.setState({ hiredId: p.id }),
-        decline: () => this.setState(prev => ({ declined: prev.declined.concat([p.id]) })),
+        accept: () => this.act(SI.acceptBid(p.id)),
+        decline: () => this.act(SI.declineBid(p.id)),
         reviewStars: "★★★★★".slice(0, s.savedRating) + "☆☆☆☆☆".slice(0, 5 - s.savedRating),
         complete: () => { this.setState({ step: 5, rating: 0, hoverRating: 0, reviewText: "", err: {} }); window.scrollTo(0, 0); }
       };
@@ -693,17 +752,17 @@ class Component extends DCLogic {
       ["Proposals arriving", "Fixed prices and start dates by email."],
       ["Compare proposals", "Review price, dates, and reviews side by side."],
       ["Installer hired", "Schedule the install directly with them."],
-      ["Review & pay", "Rate your installer to release the ACH payment."]
+      ["Review & complete", "Rate your installer and mark the job complete."]
     ];
     return {
       proposals,
       proposalCount: this.PROPOSALS.length,
-      dashHeading: s.completedId ? "Your sauna install is complete." : hired ? hired.company + " is installing your sauna." : live.length + " proposals to review.",
+      dashHeading: s.completedId ? "Your sauna install is complete." : hired ? hired.company + " is installing your sauna." : live.length + (live.length === 1 ? " proposal to review." : " proposals to review."),
       stats: [
         { label: "Proposals", value: live.length, sub: "from verified installers", fg: "#272019" },
         { label: "Lowest bid", value: this.money(low), sub: "all-in fixed price", fg: "#3E7A4E" },
         { label: "Average bid", value: this.money(avg), sub: "across your proposals", fg: "#272019" },
-        { label: "Status", value: s.completedId ? "Done" : hired ? "Hired" : "Open", sub: s.completedId ? "payment released" : hired ? "install scheduled" : "accepting proposals", fg: "#8A5424" }
+        { label: "Status", value: s.completedId ? "Done" : hired ? "Hired" : "Open", sub: s.completedId ? "install complete" : hired ? "install scheduled" : "accepting proposals", fg: "#8A5424" }
       ],
       dashStages: defs.map((d, i) => {
         const done = i < current, active = i === current;
@@ -717,13 +776,13 @@ class Component extends DCLogic {
           titleFg: done || active ? "#272019" : "#8A8071"
         };
       }),
-      dashTitle: (s.type || "Traditional Sauna") + " install",
-      dashType: s.type || "Traditional Sauna",
-      dashModel: s.model || "Golden Designs Arosa 4-Person Barrel Sauna",
-      dashPower: s.power || "240V 50A dedicated circuit",
-      dashSize: s.seats || "4-person",
-      dashDate: s.date || "Sep 15, 2026",
-      dashLoc: (s.city || "Ketchum") + ", " + (s.pzip || "83340")
+      dashTitle: (s.type || "Sauna") + " install",
+      dashType: s.type || "Not sure",
+      dashModel: (s.model && s.model !== this.OTHER ? (s.make && s.model.indexOf(s.make) !== 0 ? s.make + " " + s.model : s.model) : (s.make && s.make !== this.OTHER ? s.make : "")) || "Not listed",
+      dashPower: s.power || "Not specified",
+      dashSize: s.seats || "Not specified",
+      dashDate: s.date ? SI.longDate(s.date) : "Flexible",
+      dashLoc: [s.city, s.pzip].filter(Boolean).join(", ")
     };
   }
 
@@ -803,9 +862,17 @@ class Component extends DCLogic {
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(s.email.trim())) err.email = "Enter a valid email address.";
     if (s.phone.replace(/\D/g, "").length < 10) err.phone = "Enter a 10-digit phone number.";
     if (!/^\d{5}$/.test(s.zip.trim())) err.zip = "Enter a valid 5-digit ZIP.";
+    if (s.pass.length < 8) err.pass = "Use at least 8 characters.";
     if (Object.keys(err).length) { this.setState({ err }); return; }
-    this.setState({ err: {}, step: 1, pzip: s.pzip || s.zip });
-    window.scrollTo(0, 0);
+    if (s.busy) return;
+    this.setState({ busy: true });
+    SI.signUp(s.email, s.pass, { role: "owner", first_name: s.first.trim(), last_name: s.last.trim(), phone: s.phone.trim(), zip: s.zip.trim() })
+      .then(r => {
+        if (r.needsConfirm) { this.setState({ busy: false, err: { email: "Check your inbox to confirm your email, then log in." } }); return; }
+        this.setState({ busy: false, err: {}, step: 1, pass: "", pzip: s.pzip || s.zip });
+        window.scrollTo(0, 0);
+      })
+      .catch(e => this.setState({ busy: false, err: { email: SI.friendly(e) } }));
   };
 
   submitProject = () => {
@@ -819,14 +886,17 @@ class Component extends DCLogic {
     if (!/^\d{5}$/.test(s.pzip.trim())) err.pzip = "Enter a valid 5-digit ZIP.";
     if (!s.confirm) err.confirm = "Please confirm your city and ZIP.";
     if (Object.keys(err).length) { this.setState({ err }); return; }
-    this.setState({ err: {}, step: 2 });
-    window.scrollTo(0, 0);
+    if (s.busy) return;
+    this.setState({ busy: true });
+    SI.createProject({ type: s.type, make: s.make, model: s.model, seats: s.seats, power: s.power, elec: s.elec, date: s.date, notes: s.notes.trim(), city: s.city.trim(), pzip: s.pzip.trim() })
+      .then(p => { this.setState({ busy: false, err: {}, step: 2, projectId: p.id }); window.scrollTo(0, 0); })
+      .catch(e => this.setState({ busy: false, err: { confirm: SI.friendly(e) } }));
   };
 
   renderVals() {
     const s = this.state, e = s.err;
     const out = {};
-    ["first", "last", "email", "phone", "zip", "date", "type", "make", "model", "seats", "power", "notes", "city", "pzip", "loginEmail", "loginPass"].forEach(k => {
+    ["first", "last", "email", "phone", "zip", "pass", "date", "type", "make", "model", "seats", "power", "notes", "city", "pzip", "loginEmail", "loginPass"].forEach(k => {
       out[k + "Val"] = s[k];
       out[k + "On"] = ev => this.set(k, (k === "zip" || k === "pzip") ? this.digits(ev.target.value) : ev.target.value);
       out[k + "Bd"] = e[k] ? "#C0492F" : "#D8C8AF";
@@ -888,7 +958,7 @@ class Component extends DCLogic {
       railDisplay: s.step > 2 ? "none" : "flex",
       openLogin: () => { this.setState({ step: 3, err: {} }); window.scrollTo(0, 0); },
       goAccount: () => { this.setState({ step: 0, err: {} }); window.scrollTo(0, 0); },
-      goDash: () => { this.setState({ step: 4, err: {} }); window.scrollTo(0, 0); },
+      goDash: () => { this.setState({ busy: true }); this.loadDash(4).then(() => window.scrollTo(0, 0)).catch(() => this.setState({ busy: false, step: 4 })); },
       submitLogin: this.submitLogin,
       loginKeyDown: ev => { if (ev.key === "Enter") { ev.preventDefault(); this.submitLogin(); } },
       loginBtnDisplay: s.step >= 4 ? "none" : "inline-flex",
@@ -910,7 +980,7 @@ class Component extends DCLogic {
       submitProject: this.submitProject,
       backToAccount: () => this.setState({ step: 0 }),
       editProject: () => { this.setState({ step: 1 }); window.scrollTo(0, 0); },
-      projectId: "#SI-" + (s.pzip || "83340") + "-4172",
+      projectId: "#SI-" + String(s.projectId || "").slice(0, 8).toUpperCase(), postedAgo: s.postedAgo || "just now",
       summaryTitle: (s.type || "Sauna install") + " install",
       sizeLine,
       notesSummary: s.notes.trim() ? s.notes.trim() : "No special notes added — installers will ask if they need more detail."
