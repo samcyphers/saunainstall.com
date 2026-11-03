@@ -33,7 +33,7 @@ The user will download a new version of the three `.html` files from the design 
 
 ## Backend (Supabase + Stripe)
 - `js/si.js` — dependency-free connector loaded by `contractors.html` and `list-project.html` (exposes `window.SI`): accounts, projects, bids, reviews (Supabase project "Saunainstall Project", ref `knpxvuicsjlhruqpdmzy`) and membership checkout / billing portal (Supabase edge functions `create-checkout`, `billing-portal`, `stripe-webhook`).
-- Database access is enforced by row-level security in Supabase; Stripe keys live in Supabase Vault, never in this repo.
+- Database access is enforced by row-level security in Supabase; Stripe and Resend keys live in Supabase Vault, never in this repo.
 - **After replacing `contractors.html` or `list-project.html` with a new design-tool export, re-apply the wiring** (otherwise forms go back to demo-only):
   ```
   python3 tools/unpack.py contractors.html /tmp/c.tpl.html && python3 tools/wire-backend.py contractors /tmp/c.tpl.html /tmp/c.new.html && python3 tools/repack.py contractors.html /tmp/c.new.html
@@ -43,5 +43,5 @@ The user will download a new version of the three `.html` files from the design 
 
 ## Current limitations
 - Contractor payouts and homeowner payments are not handled on the site; homeowners pay installers directly (no Stripe Connect yet).
-- No transactional email yet (new-proposal and hired notifications); sign-up email confirmation is turned off in Supabase until an email service is connected.
+- Marketplace emails are sent by the Supabase edge function `notify` through Resend (from notifications@saunainstall.com), triggered by database changes to `bids`: new proposal → homeowner; accepted → contractor (with homeowner contact); declined / not selected → contractor. Auth emails (sign-up confirmation, password reset) go through Resend SMTP configured in Supabase.
 - No password-reset or log-out links in the page designs yet.
