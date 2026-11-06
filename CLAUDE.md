@@ -10,6 +10,7 @@ A static marketing + flow prototype for saunainstall.com, a marketplace connecti
 - `privacy.html`, `terms.html` — Privacy Policy and Terms of Service for Sauna Install LLC (served at `/privacy` and `/terms`). Plain static pages (not design-tool bundles); keep in sync with the Google Docs drafts in the saunainstall-site Drive folder.
 - `support.html` — customer support page (served at `/support`); its URL is the customer support URL given to Stripe.
 - `images/` — site photos. Must be deployed; the homepage "What we install" cards load from `/images/`.
+- `favicon.ico`, `favicon.svg`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png`, `site.webmanifest` — site icons (the diamond logo). Every page's `<head>` links them; after a design-tool re-export, re-add the icon `<link>` tags (browsers still fall back to `/favicon.ico`).
 - `vercel.json` — enables clean URLs (`/contractors` instead of `/contractors.html`)
 - `design-source/` — the editable design files these pages were compiled from. Reference only; do NOT deploy this folder.
 
