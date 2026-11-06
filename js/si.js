@@ -264,6 +264,18 @@
   var LOGIN_TEXT = /^(sauna owner log in|contractor log in|my proposals|my bids)$/i;
   function activeRole() { return load() ? getRole() : null; }
   var decorating = false;
+  var LOGOUT_STYLE = "background:none;border:0;padding:8px 4px;margin:0 2px;font:inherit;font-size:13.5px;font-weight:600;color:#6B6253;" +
+    "text-decoration:underline;text-underline-offset:3px;cursor:pointer;white-space:nowrap;align-self:center;";
+  function logoutButton(role) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.textContent = "Log out";
+    b.setAttribute("data-si-added", role);
+    b.setAttribute("data-si-logout", "");
+    b.setAttribute("aria-label", "Log out");
+    b.setAttribute("style", LOGOUT_STYLE);
+    return b;
+  }
   function decorate() {
     if (decorating || typeof document === "undefined" || !document.body) return;
     decorating = true;
@@ -275,7 +287,11 @@
         var st = document.createElement("style");
         st.id = "si-style";
         st.textContent = "html[data-si] [data-si-hide]{display:none!important}html:not([data-si]) [data-si-added]{display:none!important}" +
-          "[data-si-phone]{display:none!important}@media (max-width:760px){[data-si-phone]{display:flex!important}}";
+          "[data-si-phone]{display:none!important}@media (max-width:760px){[data-si-phone]{display:flex!important}}" +
+          // narrow phones: tighten the header so the logo, Log out and My proposals stay on one line
+          "@media (max-width:400px){header [data-si-phone][data-si-logout]{padding:8px 2px!important;margin-right:-14px!important;font-size:13px!important}" +
+          "header a[data-si-phone]{padding:0 9px!important;font-size:14px!important}}" +
+          "@media (max-width:374px){html[data-si] header a[href='/']{font-size:17px!important;gap:8px!important}}";
         (document.head || root).appendChild(st);
       }
       var label = role === "contractor" ? "My bids" : "My proposals";
@@ -306,6 +322,7 @@
           a.setAttribute("style", (desk.getAttribute("style") || "").replace(/display\s*:[^;]*;?/g, "") + ";display:inline-flex;align-items:center;");
           a.textContent = label;
           desk.parentNode.insertBefore(a, desk);
+          desk.parentNode.insertBefore(logoutButton(role), a.nextSibling);
         }
       }
       // phone menus ("Log in" dropdowns): hide the dropdown, show a direct link styled like its button
@@ -333,6 +350,12 @@
           else if (seenText && n.nodeType === 1 && n.tagName.toLowerCase() === "svg") n.remove();
         });
         d.parentNode.insertBefore(a, d.nextSibling);
+        if (a.hasAttribute("data-si-phone")) {
+          var lo = logoutButton(role);
+          lo.setAttribute("data-si-phone", "");
+          if (a.style.marginLeft === "auto") { a.style.marginLeft = "0"; lo.style.marginLeft = "auto"; }
+          d.parentNode.insertBefore(lo, a);
+        }
       });
     } finally { decorating = false; }
   }
@@ -344,6 +367,13 @@
     };
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", watch); else watch();
     window.addEventListener("storage", function (e) { if (e.key === STORE || e.key === ROLE) decorate(); });
+    document.addEventListener("click", function (e) {
+      var t = e.target && e.target.closest && e.target.closest("[data-si-logout]");
+      if (!t) return;
+      e.preventDefault();
+      t.disabled = true;
+      signOut().then(function () { window.location.href = "/"; });
+    });
     // sessions from before the account type was cached: look it up once
     if (load() && !getRole()) setTimeout(function () { me().catch(function () {}); }, 0);
   }

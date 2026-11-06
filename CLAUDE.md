@@ -33,7 +33,7 @@ The user will download a new version of the three `.html` files from the design 
 2. Run `vercel --prod` (or commit + push if using GitHub).
 
 ## Backend (Supabase + Stripe)
-- `js/si.js` — dependency-free connector loaded by `index.html`, `contractors.html` and `list-project.html` (exposes `window.SI`; while someone is logged in it swaps the header's log-in links for "My proposals" / "My bids"): accounts, projects, bids, reviews (Supabase project "Saunainstall Project", ref `knpxvuicsjlhruqpdmzy`) and membership checkout / billing portal (Supabase edge functions `create-checkout`, `billing-portal`, `stripe-webhook`).
+- `js/si.js` — dependency-free connector loaded by `index.html`, `contractors.html` and `list-project.html` (exposes `window.SI`; while someone is logged in it swaps the header's log-in links for "My proposals" / "My bids" plus a small "Log out"): accounts, projects, bids, reviews (Supabase project "Saunainstall Project", ref `knpxvuicsjlhruqpdmzy`) and membership checkout / billing portal (Supabase edge functions `create-checkout`, `billing-portal`, `stripe-webhook`).
 - Database access is enforced by row-level security in Supabase; Stripe and Resend keys live in Supabase Vault, never in this repo.
 - **After replacing `contractors.html` or `list-project.html` with a new design-tool export, re-apply the wiring** (otherwise forms go back to demo-only):
   ```
@@ -46,4 +46,4 @@ The user will download a new version of the three `.html` files from the design 
 ## Current limitations
 - Contractor payouts and homeowner payments are not handled on the site; homeowners pay installers directly (no Stripe Connect yet).
 - Marketplace emails are sent by the Supabase edge function `notify` through Resend (from notifications@saunainstall.com), triggered by database changes to `bids`: new proposal → homeowner; accepted → contractor (with homeowner contact); declined / not selected → contractor. Auth emails (sign-up confirmation, password reset) go through Resend SMTP configured in Supabase.
-- No password-reset or log-out links in the page designs yet.
+- No password-reset link yet.
