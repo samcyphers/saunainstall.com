@@ -81,6 +81,7 @@
 
   // ---------- friendly errors ----------
   function friendly(e) {
+    if (e && e.code === "user") return e.message;
     var m = String((e && e.message) || e || "");
     if (/already registered|already been registered|user_already_exists/i.test(m)) return "An account with this email already exists. Log in instead.";
     if (/invalid login credentials/i.test(m)) return "That email and password don't match. Try again.";
@@ -141,6 +142,29 @@
     return d.url;
   }
   async function startCheckout() { window.location.href = await fn("create-checkout"); }
+
+  // ---------- job payments + contractor payouts (function: job-payments) ----------
+  async function jobFn(body) {
+    try { return await authed("/functions/v1/job-payments", { method: "POST", body: body }); }
+    catch (e) { if (e && e.message && !/^Request failed/.test(e.message) && e.code !== "no_session") throw SIError(e.message, "user"); throw e; }
+  }
+  async function payJob(projectId, method) {
+    var d = await jobFn({ action: "pay", project_id: projectId, method: method });
+    window.location.href = d.url;
+  }
+  async function payoutSetup() { var d = await jobFn({ action: "connect_link" }); window.location.href = d.url; }
+  async function payoutDashboard() { var d = await jobFn({ action: "connect_dashboard" }); window.location.href = d.url; }
+  function payoutStatus() { return jobFn({ action: "connect_status" }); }
+  // Stripe's standard US rates (exact fee is taken from Stripe at payment time)
+  function estimateFees(amount) {
+    amount = Math.max(0, Number(amount) || 0);
+    var bank = Math.min(Math.round(amount * 0.8) / 100, 5), card = amount ? Math.round(amount * 2.9 + 30) / 100 : 0;
+    return { amount: amount, bankFee: bank, bankNet: Math.max(0, amount - bank), cardFee: card, cardNet: Math.max(0, amount - card) };
+  }
+  function money(n) {
+    n = Number(n) || 0;
+    return "$" + n.toLocaleString("en-US", { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 });
+  }
   async function openBillingPortal() { window.location.href = await fn("billing-portal"); }
   // After Stripe Checkout, the webhook updates the membership within a few seconds.
   async function waitForMembership(maxMs) {
@@ -200,7 +224,7 @@
   }
   async function myBids() {
     var s = await session();
-    var rows = await rest("bids?select=id,amount,start_date,note,status,created_at,project:projects(id,city,zip,sauna_type,model,status,awarded_bid_id)&contractor_id=eq." + s.user.id + "&order=created_at.desc");
+    var rows = await rest("bids?select=id,amount,start_date,note,status,created_at,project:projects(id,city,zip,sauna_type,model,status,awarded_bid_id),payment:payments(status,amount_cents,stripe_fee_cents,transfer_cents,transfer_id)&contractor_id=eq." + s.user.id + "&order=created_at.desc");
     return rows.map(function (b) {
       var p = b.project || {}, status, note;
       if (b.status === "accepted") {
@@ -209,8 +233,16 @@
       } else if (b.status === "declined") { status = "Declined"; note = p.awarded_bid_id ? "Homeowner chose another installer." : "Homeowner declined this proposal."; }
       else if (b.status === "withdrawn") { status = "Declined"; note = "You withdrew this proposal."; }
       else { status = "Sent"; note = "Waiting on the homeowner to review your proposal."; }
+      var pay = Array.isArray(b.payment) ? b.payment[0] : b.payment, payoutText = "", payoutFg = "";
+      if (pay && pay.status === "succeeded" && pay.transfer_id) { status = "Paid"; payoutText = "Payout " + money(pay.transfer_cents / 100) + " sent"; payoutFg = "#3E7A4E"; note = "Paid. Stripe fee " + money((pay.stripe_fee_cents || 0) / 100) + " deducted."; }
+      else if (pay && pay.status === "succeeded") { status = "Paid"; payoutText = "Paid · payout pending"; payoutFg = "#B07C1E"; note = "The homeowner paid. Your payout is sent once payouts are set up."; }
+      else if (pay && pay.status === "processing") { payoutText = "Bank payment processing"; payoutFg = "#B07C1E"; }
+      else if (pay && pay.status === "failed") { payoutText = "Homeowner payment failed"; payoutFg = "#C0492F"; }
+      else if (pay && (pay.status === "refunded" || pay.status === "disputed")) { payoutText = pay.status === "refunded" ? "Refunded" : "Payment disputed"; payoutFg = "#C0492F"; }
+      else if (status === "Completed") { payoutText = "Awaiting homeowner payment"; payoutFg = "#B07C1E"; }
+      else if (status === "Hired") { payoutText = "Paid after completion"; }
       var name = p.model && p.model !== "Other / not listed" ? p.model : (p.sauna_type || "Sauna");
-      return { id: b.id, title: name + " install", meta: place(p.city, p.zip) + " · sent " + ago(b.created_at), amount: Number(b.amount), start: shortDate(b.start_date), status: status, note: note };
+      return { id: b.id, title: name + " install", meta: place(p.city, p.zip) + " · sent " + ago(b.created_at), amount: Number(b.amount), start: shortDate(b.start_date), status: status, note: note, payoutText: payoutText, payoutFg: payoutFg };
     });
   }
   async function saveServiceAreas(list) {
@@ -246,7 +278,8 @@
     });
     var review = null;
     if (p.status === "completed") { var rr = await rest("reviews?select=rating&project_id=eq." + p.id); review = rr[0] || null; }
-    return { project: p, proposals: proposals, review: review };
+    var pays = await rest("payments?select=status,method,amount_cents&project_id=eq." + p.id);
+    return { project: p, proposals: proposals, review: review, payment: pays[0] || null };
   }
   function acceptBid(id) { return rpc("accept_bid", { p_bid: id }); }
   function declineBid(id) { return rpc("decline_bid", { p_bid: id }); }
@@ -384,6 +417,8 @@
     startCheckout: startCheckout, openBillingPortal: openBillingPortal, waitForMembership: waitForMembership,
     openProjects: openProjects, sendBid: sendBid, myBids: myBids, saveServiceAreas: saveServiceAreas,
     createProject: createProject, myProject: myProject, acceptBid: acceptBid, declineBid: declineBid, completeAndReview: completeAndReview,
-    longDate: longDate, ago: ago
+    longDate: longDate, ago: ago,
+    payJob: payJob, payoutSetup: payoutSetup, payoutDashboard: payoutDashboard, payoutStatus: payoutStatus,
+    estimateFees: estimateFees, money: money
   };
 })();

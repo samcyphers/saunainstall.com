@@ -41,9 +41,20 @@ The user will download a new version of the three `.html` files from the design 
   python3 tools/unpack.py index.html /tmp/i.tpl.html && python3 tools/wire-backend.py index /tmp/i.tpl.html /tmp/i.new.html && python3 tools/repack.py index.html /tmp/i.new.html
   python3 tools/unpack.py list-project.html /tmp/h.tpl.html && python3 tools/wire-backend.py homeowner /tmp/h.tpl.html /tmp/h.new.html && python3 tools/repack.py list-project.html /tmp/h.new.html
   ```
-  `wire-backend.py` reports any edit that no longer matches the new design; fix those before publishing.
+  Then apply the job-payment wiring on top (same unpack → wire → repack pattern, using the files wire-backend produced):
+  ```
+  python3 tools/wire-payments.py contractors /tmp/c.new.html /tmp/c.pay.html && python3 tools/repack.py contractors.html /tmp/c.pay.html
+  python3 tools/wire-payments.py homeowner /tmp/h.new.html /tmp/h.pay.html && python3 tools/repack.py list-project.html /tmp/h.pay.html
+  python3 tools/wire-payments.py index /tmp/i.new.html /tmp/i.pay.html && python3 tools/repack.py index.html /tmp/i.pay.html
+  ```
+  Both scripts report any edit that no longer matches the new design; fix those before publishing.
+
+## Job payments (Stripe Connect)
+- Homeowners pay the accepted bid price through saunainstall after the job is done and rated (bank account shown first as recommended, or card) — Supabase edge function `job-payments` (action `pay`) creates a Stripe Checkout Session; payment state lives in the `payments` table.
+- Separate charges and transfers: the platform collects the payment, then transfers price minus the exact Stripe fee to the contractor's Express connected account (Sauna Install pays Connect account/payout fees and is liable for negative balances). Contractors set up payouts from their dashboard (`connect_link` / `connect_status` / `connect_dashboard`).
+- `stripe-webhook` records payment success/processing/failure, disputes and refunds; `notify` emails reminders, receipts, payout notices and dispute alerts (source in `supabase/functions/notify/`, not deployed by Vercel).
+- Database schedules (pg_cron): `payment-reminders` (one email 24h after the install date if unpaid) and `release-payouts` (retries pending transfers hourly).
 
 ## Current limitations
-- Contractor payouts and homeowner payments are not handled on the site; homeowners pay installers directly (no Stripe Connect yet).
 - Marketplace emails are sent by the Supabase edge function `notify` through Resend (from notifications@saunainstall.com), triggered by database changes to `bids`: new proposal → homeowner; accepted → contractor (with homeowner contact); declined / not selected → contractor. Auth emails (sign-up confirmation, password reset) go through Resend SMTP configured in Supabase.
 - No password-reset link yet.
