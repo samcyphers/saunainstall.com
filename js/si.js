@@ -7,6 +7,22 @@
   var KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtucHh2dWljc2psaHJ1cXBkbXp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI2ODc1NDAsImV4cCI6MjEwODI2MzU0MH0._kxyBhvhERQBFbTir84UYoecON5cLMipUrBK3ZUORvE";
   var STORE = "si.session";
 
+  // Arriving from an email confirmation link: Supabase appends tokens (or an error) after "#".
+  // Remove them from the address bar and open the login screen.
+  (function () {
+    try {
+      var h = window.location.hash || "";
+      if (/access_token=|error_code=|type=signup/.test(h)) {
+        var q = new URLSearchParams(window.location.search);
+        q.set("login", "1");
+        history.replaceState(null, "", window.location.pathname + "?" + q.toString());
+      }
+    } catch (e) {}
+  })();
+  function wantsLogin() {
+    return window.location.hash === "#login" || /[?&]login=1(&|$)/.test(window.location.search);
+  }
+
   // ---------- session storage ----------
   function load() { try { return JSON.parse(localStorage.getItem(STORE) || "null"); } catch (e) { return null; } }
   function save(s) { try { s ? localStorage.setItem(STORE, JSON.stringify(s)) : localStorage.removeItem(STORE); } catch (e) {} }
@@ -70,7 +86,9 @@
 
   // ---------- auth ----------
   async function signUp(email, password, meta) {
-    var d = await http("/auth/v1/signup", { method: "POST", body: { email: email.trim().toLowerCase(), password: password, data: meta || {} } });
+    // The confirmation email links back to the login page for this account type
+    var back = window.location.origin + ((meta && meta.role === "contractor") ? "/contractors" : "/list-project") + "?login=1";
+    var d = await http("/auth/v1/signup?redirect_to=" + encodeURIComponent(back), { method: "POST", body: { email: email.trim().toLowerCase(), password: password, data: meta || {} } });
     var s = fromAuth(d);
     if (s) { save(s); return { session: s, needsConfirm: false }; }
     // Supabase returns a fake user with no identities when the email is already taken (and confirmations are on)
@@ -230,7 +248,7 @@
 
   window.SI = {
     session: session, signUp: signUp, signIn: signIn, signOut: signOut, resetPassword: resetPassword,
-    me: me, isActive: isActive, friendly: friendly,
+    me: me, isActive: isActive, friendly: friendly, wantsLogin: wantsLogin,
     startCheckout: startCheckout, openBillingPortal: openBillingPortal, waitForMembership: waitForMembership,
     openProjects: openProjects, sendBid: sendBid, myBids: myBids, saveServiceAreas: saveServiceAreas,
     createProject: createProject, myProject: myProject, acceptBid: acceptBid, declineBid: declineBid, completeAndReview: completeAndReview,

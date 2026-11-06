@@ -232,6 +232,7 @@ if kind == "contractors":
     rep('A card on file is required and processed once before your first bid. ACH payout details are added in the same step.</p>',
         'Add a card or bank account before your first bid. You won\'t be charged until your free month ends.</p>')
     rep('Fixed price, all-in. Paid by ACH when the homeowner marks the project completed.</p>', 'Fixed price, all-in. The homeowner pays you directly.</p>')
+    rep('const wantLogin = window.location.hash === "#login";', 'const wantLogin = window.SI ? SI.wantsLogin() : window.location.hash === "#login";')
     # real projects: location text + empty-safe active project
     rep('meta: p.city + ", " + p.st + " " + p.zip + " · " + p.posted,', 'meta: p.place + " · " + p.posted,')
     rep('const a = this.PROJECTS.filter(p => p.id === s.activeId)[0] || this.PROJECTS[0];\n    const name',
@@ -393,6 +394,8 @@ elif kind == "homeowner":
         "Proposals keep arriving for about a week after a project goes live. Check back here to see new ones.</p>")
     rep('live.length + " proposals to review.",', 'live.length + (live.length === 1 ? " proposal to review." : " proposals to review."),')
     rep('projectId: "#SI-" + String(s.projectId || "").slice(0, 8).toUpperCase(),', 'projectId: "#SI-" + String(s.projectId || "").slice(0, 8).toUpperCase(), postedAgo: s.postedAgo || "just now",')
+    rep('if (typeof window !== "undefined" && window.location.hash === "#login") this.setState({ step: 3 });', 'if (typeof window !== "undefined" && (window.SI ? SI.wantsLogin() : window.location.hash === "#login")) this.setState({ step: 3 });')
+    rep('<input placeholder="Ketchum" value="{{ cityVal }}"', '<input placeholder="" value="{{ cityVal }}"')
     rep('goDash: () => { this.setState({ step: 4, err: {} }); window.scrollTo(0, 0); },',
         'goDash: () => { this.setState({ busy: true }); this.loadDash(4).then(() => window.scrollTo(0, 0)).catch(() => this.setState({ busy: false, step: 4 })); },')
 open(dst, "w", encoding="utf-8").write(t)
