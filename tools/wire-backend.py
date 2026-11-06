@@ -36,6 +36,10 @@ def field(key, label, ph, typ="text", extra=""):
 # Load the connector before the page runtime
 rep_re(r'(<meta name="viewport"[^>]*>)', lambda m: m.group(1) + '\n<script src="/js/si.js"></script>')
 
+# Phones: 44px footer links and larger tap areas for small inline links (all pages)
+if 'si-mobile-taps' not in t:
+    rep('</head>', '<style id="si-mobile-taps">@media (max-width:760px){footer a{display:inline-flex!important;align-items:center;min-height:44px}footer [style*="gap: 10px"]{gap:0!important}p > a[style*="underline"]{display:inline-block;padding:12px 0;margin:-12px 0}p > button[style*="underline"]{padding:12px 6px!important;margin:-12px -6px!important}summary[style="cursor: pointer; font-weight: 600;"]{padding:12px 0;margin:-12px 0}}</style>\n' + '</head>')
+
 if kind == "index":
     pass  # homepage only needs the connector (header shows My proposals / My bids when logged in)
 
@@ -399,6 +403,7 @@ elif kind == "homeowner":
     rep('projectId: "#SI-" + String(s.projectId || "").slice(0, 8).toUpperCase(),', 'projectId: "#SI-" + String(s.projectId || "").slice(0, 8).toUpperCase(), postedAgo: s.postedAgo || "just now",')
     rep('if (typeof window !== "undefined" && window.location.hash === "#login") this.setState({ step: 3 });', 'if (typeof window !== "undefined" && (window.SI ? SI.wantsLogin() : window.location.hash === "#login")) this.setState({ step: 3 });')
     rep('<input placeholder="Ketchum" value="{{ cityVal }}"', '<input placeholder="" value="{{ cityVal }}"')
+    rep('const railDefs = [["1", "Create account"], ["2", "Project details"], ["3", "Proposals"]];', 'const railDefs = [["1", "Account"], ["2", "Project"], ["3", "Proposals"]];')
     rep('goDash: () => { this.setState({ step: 4, err: {} }); window.scrollTo(0, 0); },',
         'goDash: () => { this.setState({ busy: true }); this.loadDash(4).then(() => window.scrollTo(0, 0)).catch(() => this.setState({ busy: false, step: 4 })); },')
 open(dst, "w", encoding="utf-8").write(t)
