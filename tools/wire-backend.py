@@ -1,5 +1,5 @@
 """Apply Supabase/Stripe wiring to the design-tool pages.
-Usage: python3 -I patch.py contractors|homeowner <in.html> <out.html>
+Usage: python3 tools/wire-backend.py contractors|homeowner|index <in.html> <out.html>
 Works on the unpacked template or the design-source file. Every edit must match exactly once."""
 import sys, re
 
@@ -36,7 +36,10 @@ def field(key, label, ph, typ="text", extra=""):
 # Load the connector before the page runtime
 rep_re(r'(<meta name="viewport"[^>]*>)', lambda m: m.group(1) + '\n<script src="/js/si.js"></script>')
 
-if kind == "contractors":
+if kind == "index":
+    pass  # homepage only needs the connector (header shows My proposals / My bids when logged in)
+
+elif kind == "contractors":
     # ---------- markup: business name + password on sign-up ----------
     rep('              <hr style="border: none; border-top: 1px solid #E4D8C5; margin: 26px 0;">\n              <div style="font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8A8071;">Business address</div>',
         '              <div data-m="fields" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px;">\n                '

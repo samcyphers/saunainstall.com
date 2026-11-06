@@ -33,11 +33,12 @@ The user will download a new version of the three `.html` files from the design 
 2. Run `vercel --prod` (or commit + push if using GitHub).
 
 ## Backend (Supabase + Stripe)
-- `js/si.js` — dependency-free connector loaded by `contractors.html` and `list-project.html` (exposes `window.SI`): accounts, projects, bids, reviews (Supabase project "Saunainstall Project", ref `knpxvuicsjlhruqpdmzy`) and membership checkout / billing portal (Supabase edge functions `create-checkout`, `billing-portal`, `stripe-webhook`).
+- `js/si.js` — dependency-free connector loaded by `index.html`, `contractors.html` and `list-project.html` (exposes `window.SI`; while someone is logged in it swaps the header's log-in links for "My proposals" / "My bids"): accounts, projects, bids, reviews (Supabase project "Saunainstall Project", ref `knpxvuicsjlhruqpdmzy`) and membership checkout / billing portal (Supabase edge functions `create-checkout`, `billing-portal`, `stripe-webhook`).
 - Database access is enforced by row-level security in Supabase; Stripe and Resend keys live in Supabase Vault, never in this repo.
 - **After replacing `contractors.html` or `list-project.html` with a new design-tool export, re-apply the wiring** (otherwise forms go back to demo-only):
   ```
   python3 tools/unpack.py contractors.html /tmp/c.tpl.html && python3 tools/wire-backend.py contractors /tmp/c.tpl.html /tmp/c.new.html && python3 tools/repack.py contractors.html /tmp/c.new.html
+  python3 tools/unpack.py index.html /tmp/i.tpl.html && python3 tools/wire-backend.py index /tmp/i.tpl.html /tmp/i.new.html && python3 tools/repack.py index.html /tmp/i.new.html
   python3 tools/unpack.py list-project.html /tmp/h.tpl.html && python3 tools/wire-backend.py homeowner /tmp/h.tpl.html /tmp/h.new.html && python3 tools/repack.py list-project.html /tmp/h.new.html
   ```
   `wire-backend.py` reports any edit that no longer matches the new design; fix those before publishing.

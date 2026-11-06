@@ -25,7 +25,16 @@
 
   // ---------- session storage ----------
   function load() { try { return JSON.parse(localStorage.getItem(STORE) || "null"); } catch (e) { return null; } }
-  function save(s) { try { s ? localStorage.setItem(STORE, JSON.stringify(s)) : localStorage.removeItem(STORE); } catch (e) {} }
+  function save(s) {
+    try { s ? localStorage.setItem(STORE, JSON.stringify(s)) : localStorage.removeItem(STORE); } catch (e) {}
+    if (!s) setRole(null);
+  }
+  var ROLE = "si.role";
+  function getRole() { try { return localStorage.getItem(ROLE); } catch (e) { return null; } }
+  function setRole(r) {
+    try { r ? localStorage.setItem(ROLE, r) : localStorage.removeItem(ROLE); } catch (e) {}
+    decorate();
+  }
   function fromAuth(d) {
     if (!d || !d.access_token) return null;
     return { access_token: d.access_token, refresh_token: d.refresh_token, expires_at: d.expires_at || (Math.floor(Date.now() / 1000) + (d.expires_in || 3600)), user: d.user };
@@ -90,7 +99,7 @@
     var back = window.location.origin + ((meta && meta.role === "contractor") ? "/contractors" : "/list-project") + "?login=1";
     var d = await http("/auth/v1/signup?redirect_to=" + encodeURIComponent(back), { method: "POST", body: { email: email.trim().toLowerCase(), password: password, data: meta || {} } });
     var s = fromAuth(d);
-    if (s) { save(s); return { session: s, needsConfirm: false }; }
+    if (s) { save(s); setRole(meta && meta.role === "contractor" ? "contractor" : "owner"); return { session: s, needsConfirm: false }; }
     // Supabase returns a fake user with no identities when the email is already taken (and confirmations are on)
     var user = d && (d.user || d);
     if (user && Array.isArray(user.identities) && user.identities.length === 0) throw SIError("User already registered", "user_already_exists");
@@ -116,6 +125,7 @@
     var id = s.user.id;
     var rows = await rest("profiles?select=*&id=eq." + id);
     var profile = rows[0] || null, contractor = null;
+    if (profile) setRole(profile.role);
     if (profile && profile.role === "contractor") {
       var c = await rest("contractors?select=*&id=eq." + id);
       contractor = c[0] || null;
@@ -246,9 +256,101 @@
     await rest("reviews", { method: "POST", body: { project_id: projectId, owner_id: s.user.id, contractor_id: contractorId, rating: rating, body: text || null } });
   }
 
+
+  // ---------- header: logged-in state ----------
+  // While logged in, hide every "log in" link/menu and show one "My proposals" (owner) or "My bids" (contractor) link
+  // in the same places: desktop header, phone header menu and phone bottom bar.
+  var LOGIN_HREFS = ["/list-project#login", "/contractors#login"];
+  var LOGIN_TEXT = /^(sauna owner log in|contractor log in|my proposals|my bids)$/i;
+  function activeRole() { return load() ? getRole() : null; }
+  var decorating = false;
+  function decorate() {
+    if (decorating || typeof document === "undefined" || !document.body) return;
+    decorating = true;
+    try {
+      var role = activeRole();
+      var root = document.documentElement;
+      if (role) root.setAttribute("data-si", role); else root.removeAttribute("data-si");
+      if (!document.getElementById("si-style")) {
+        var st = document.createElement("style");
+        st.id = "si-style";
+        st.textContent = "html[data-si] [data-si-hide]{display:none!important}html:not([data-si]) [data-si-added]{display:none!important}" +
+          "[data-si-phone]{display:none!important}@media (max-width:760px){[data-si-phone]{display:flex!important}}";
+        (document.head || root).appendChild(st);
+      }
+      var label = role === "contractor" ? "My bids" : "My proposals";
+      var href = role === "contractor" ? "/contractors?login=1" : "/list-project?login=1";
+      // remove links added for a different state
+      Array.prototype.forEach.call(document.querySelectorAll("[data-si-added]"), function (a) {
+        if (!role || a.getAttribute("data-si-added") !== role) a.remove();
+      });
+      if (!role) return;
+      var header = document.querySelector("header");
+      var scopes = [header].concat(Array.prototype.slice.call(document.querySelectorAll("details"))).filter(Boolean);
+      // desktop header: hide log-in links/buttons (and the page's own My proposals/My bids button), add ours
+      if (header) {
+        var desk = null;
+        Array.prototype.forEach.call(header.querySelectorAll("a, button"), function (el) {
+          if (el.closest("details") || el.hasAttribute("data-si-added")) return;
+          var txt = (el.textContent || "").trim();
+          if (LOGIN_HREFS.indexOf(el.getAttribute("href")) !== -1 || LOGIN_TEXT.test(txt)) {
+            el.setAttribute("data-si-hide", "");
+            if (!desk && el.tagName === "A") desk = el;
+            if (!desk) desk = el;
+          }
+        });
+        if (desk && !desk.parentNode.querySelector("[data-si-added]")) {
+          var a = document.createElement("a");
+          a.setAttribute("href", href);
+          a.setAttribute("data-si-added", role);
+          a.setAttribute("style", (desk.getAttribute("style") || "").replace(/display\s*:[^;]*;?/g, "") + ";display:inline-flex;align-items:center;");
+          a.textContent = label;
+          desk.parentNode.insertBefore(a, desk);
+        }
+      }
+      // phone menus ("Log in" dropdowns): hide the dropdown, show a direct link styled like its button
+      Array.prototype.forEach.call(document.querySelectorAll("details"), function (d) {
+        var sum = d.querySelector("summary");
+        if (!sum || !/log in/i.test(sum.textContent || "")) return;
+        d.setAttribute("data-si-hide", "");
+        var next = d.nextElementSibling;
+        if (next && next.getAttribute("data-si-added") === role) return;
+        var a = document.createElement("a");
+        a.setAttribute("href", href);
+        a.setAttribute("data-si-added", role);
+        var dStyle = d.getAttribute("style") || "";
+        a.setAttribute("style", (sum.getAttribute("style") || "") + ";text-decoration:none;" + (dStyle.indexOf("margin-left") !== -1 ? "margin-left:auto;" : ""));
+        // header menu only exists on phones (the site's 760px breakpoint); the bottom bar is already phone-only
+        if (/display\s*:\s*none/.test(d.getAttribute("style") || "")) a.setAttribute("data-si-phone", "");
+        a.innerHTML = sum.innerHTML;
+        // replace the "Log in" text node, keep the icon
+        Array.prototype.forEach.call(a.childNodes, function (n) { if (n.nodeType === 3 && /log in/i.test(n.textContent)) n.textContent = label; });
+        if (!/my (proposals|bids)/i.test(a.textContent)) a.insertBefore(document.createTextNode(label), a.firstChild);
+        // drop the dropdown arrow that followed "Log in" (this is a direct link now); keep leading icons
+        var seenText = false;
+        Array.prototype.slice.call(a.childNodes).forEach(function (n) {
+          if (n.nodeType === 3 && n.textContent.trim()) seenText = true;
+          else if (seenText && n.nodeType === 1 && n.tagName.toLowerCase() === "svg") n.remove();
+        });
+        d.parentNode.insertBefore(a, d.nextSibling);
+      });
+    } finally { decorating = false; }
+  }
+  if (typeof window !== "undefined") {
+    var schedule = function () { (window.requestAnimationFrame || setTimeout)(decorate); };
+    var watch = function () {
+      decorate();
+      try { new MutationObserver(function () { if (!decorating) schedule(); }).observe(document.body, { childList: true, subtree: true }); } catch (e) {}
+    };
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", watch); else watch();
+    window.addEventListener("storage", function (e) { if (e.key === STORE || e.key === ROLE) decorate(); });
+    // sessions from before the account type was cached: look it up once
+    if (load() && !getRole()) setTimeout(function () { me().catch(function () {}); }, 0);
+  }
+
   window.SI = {
     session: session, signUp: signUp, signIn: signIn, signOut: signOut, resetPassword: resetPassword,
-    me: me, isActive: isActive, friendly: friendly, wantsLogin: wantsLogin,
+    me: me, role: activeRole, isActive: isActive, friendly: friendly, wantsLogin: wantsLogin,
     startCheckout: startCheckout, openBillingPortal: openBillingPortal, waitForMembership: waitForMembership,
     openProjects: openProjects, sendBid: sendBid, myBids: myBids, saveServiceAreas: saveServiceAreas,
     createProject: createProject, myProject: myProject, acceptBid: acceptBid, declineBid: declineBid, completeAndReview: completeAndReview,
