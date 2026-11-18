@@ -155,7 +155,7 @@
   async function payoutSetup() { var d = await jobFn({ action: "connect_link" }); window.location.href = d.url; }
   async function payoutDashboard() { var d = await jobFn({ action: "connect_dashboard" }); window.location.href = d.url; }
   function payoutStatus() { return jobFn({ action: "connect_status" }); }
-  // admin page (/admin): only emails on the saunainstall admin list
+  // staff page (/team): only emails on the saunainstall admin list
   function adminList() { return jobFn({ action: "admin_list" }); }
   function adminAct(action, paymentId, note) { return jobFn({ action: "admin_" + action, payment_id: paymentId, note: note }); }
   // Stripe's standard US rates (exact fee is taken from Stripe at payment time)
