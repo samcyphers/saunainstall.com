@@ -97,7 +97,7 @@
   // ---------- auth ----------
   async function signUp(email, password, meta) {
     // The confirmation email links back to the login page for this account type
-    var back = window.location.origin + ((meta && meta.role === "contractor") ? "/contractors" : "/list-project") + "?login=1";
+    var back = window.location.origin + ((meta && meta.role === "contractor") ? "/contractors" : (meta && meta.role === "admin") ? "/admin" : "/list-project") + "?login=1";
     var d = await http("/auth/v1/signup?redirect_to=" + encodeURIComponent(back), { method: "POST", body: { email: email.trim().toLowerCase(), password: password, data: meta || {} } });
     var s = fromAuth(d);
     if (s) { save(s); setRole(meta && meta.role === "contractor" ? "contractor" : "owner"); return { session: s, needsConfirm: false }; }
@@ -155,6 +155,9 @@
   async function payoutSetup() { var d = await jobFn({ action: "connect_link" }); window.location.href = d.url; }
   async function payoutDashboard() { var d = await jobFn({ action: "connect_dashboard" }); window.location.href = d.url; }
   function payoutStatus() { return jobFn({ action: "connect_status" }); }
+  // admin page (/admin): only emails on the saunainstall admin list
+  function adminList() { return jobFn({ action: "admin_list" }); }
+  function adminAct(action, paymentId, note) { return jobFn({ action: "admin_" + action, payment_id: paymentId, note: note }); }
   // Stripe's standard US rates (exact fee is taken from Stripe at payment time)
   function estimateFees(amount) {
     amount = Math.max(0, Number(amount) || 0);
@@ -224,7 +227,7 @@
   }
   async function myBids() {
     var s = await session();
-    var rows = await rest("bids?select=id,amount,start_date,note,status,created_at,project:projects(id,city,zip,sauna_type,model,status,awarded_bid_id),payment:payments(status,amount_cents,stripe_fee_cents,transfer_cents,transfer_id)&contractor_id=eq." + s.user.id + "&order=created_at.desc");
+    var rows = await rest("bids?select=id,amount,start_date,note,status,created_at,project:projects(id,city,zip,sauna_type,model,status,awarded_bid_id),payment:payments(status,amount_cents,stripe_fee_cents,transfer_cents,transfer_id,auto_release_on,on_hold,release_requested_at)&contractor_id=eq." + s.user.id + "&order=created_at.desc");
     return rows.map(function (b) {
       var p = b.project || {}, status, note;
       if (b.status === "accepted") {
@@ -233,14 +236,19 @@
       } else if (b.status === "declined") { status = "Declined"; note = p.awarded_bid_id ? "Homeowner chose another installer." : "Homeowner declined this proposal."; }
       else if (b.status === "withdrawn") { status = "Declined"; note = "You withdrew this proposal."; }
       else { status = "Sent"; note = "Waiting on the homeowner to review your proposal."; }
+      // Homeowners pay when they hire; saunainstall holds it until the job is done, then sends the payout
       var pay = Array.isArray(b.payment) ? b.payment[0] : b.payment, payoutText = "", payoutFg = "";
+      var hired = b.status === "accepted";
+      var releaseOn = pay && pay.auto_release_on ? longDate(pay.auto_release_on) : "";
       if (pay && pay.status === "succeeded" && pay.transfer_id) { status = "Paid"; payoutText = "Payout " + money(pay.transfer_cents / 100) + " sent"; payoutFg = "#3E7A4E"; note = "Paid. Stripe fee " + money((pay.stripe_fee_cents || 0) / 100) + " deducted."; }
-      else if (pay && pay.status === "succeeded") { status = "Paid"; payoutText = "Paid · payout pending"; payoutFg = "#B07C1E"; note = "The homeowner paid. Your payout is sent once payouts are set up."; }
-      else if (pay && pay.status === "processing") { payoutText = "Bank payment processing"; payoutFg = "#B07C1E"; }
-      else if (pay && pay.status === "failed") { payoutText = "Homeowner payment failed"; payoutFg = "#C0492F"; }
-      else if (pay && (pay.status === "refunded" || pay.status === "disputed")) { payoutText = pay.status === "refunded" ? "Refunded" : "Payment disputed"; payoutFg = "#C0492F"; }
-      else if (status === "Completed") { payoutText = "Awaiting homeowner payment"; payoutFg = "#B07C1E"; }
-      else if (status === "Hired") { payoutText = "Paid after completion"; }
+      else if (pay && pay.status === "succeeded" && pay.on_hold) { payoutText = "Payment on hold"; payoutFg = "#C0492F"; note = "saunainstall is holding this payment while we look into an issue. We'll be in touch, or contact support."; }
+      else if (pay && pay.status === "succeeded" && pay.release_requested_at) { payoutText = "Released · payout pending"; payoutFg = "#B07C1E"; note = "The payment was released to you. Set up payouts so we can send it to your bank."; }
+      else if (pay && pay.status === "succeeded") { payoutText = "Payment secured · held"; payoutFg = "#3E7A4E"; note = "The homeowner paid. You're good to start. saunainstall holds the payment until the homeowner rates your work" + (releaseOn ? ", or automatically on " + releaseOn + "." : "."); }
+      else if (pay && pay.status === "processing") { payoutText = "Homeowner bank payment clearing"; payoutFg = "#B07C1E"; note = "The homeowner paid by bank. It takes about 4 business days to clear. Wait for the “Payment secured” email before you start."; }
+      else if (pay && pay.status === "failed") { payoutText = "Homeowner payment failed"; payoutFg = "#C0492F"; note = "The homeowner's payment didn't go through. Don't start until it's secured."; }
+      else if (pay && pay.status === "refunded") { status = "Declined"; payoutText = "Cancelled · refunded"; payoutFg = "#C0492F"; note = "This job was cancelled and the homeowner was refunded."; }
+      else if (pay && pay.status === "disputed") { payoutText = "Payment disputed"; payoutFg = "#C0492F"; }
+      else if (hired) { payoutText = "Awaiting homeowner payment"; payoutFg = "#B07C1E"; note = "You were hired. Schedule with the homeowner, and start once their payment is secured. We'll email you."; }
       var name = p.model && p.model !== "Other / not listed" ? p.model : (p.sauna_type || "Sauna");
       return { id: b.id, title: name + " install", meta: place(p.city, p.zip) + " · sent " + ago(b.created_at), amount: Number(b.amount), start: shortDate(b.start_date), status: status, note: note, payoutText: payoutText, payoutFg: payoutFg };
     });
@@ -278,7 +286,7 @@
     });
     var review = null;
     if (p.status === "completed") { var rr = await rest("reviews?select=rating&project_id=eq." + p.id); review = rr[0] || null; }
-    var pays = await rest("payments?select=status,method,amount_cents&project_id=eq." + p.id);
+    var pays = await rest("payments?select=status,method,amount_cents,transfer_id,auto_release_on,on_hold,release_requested_at&project_id=eq." + p.id);
     return { project: p, proposals: proposals, review: review, payment: pays[0] || null };
   }
   function acceptBid(id) { return rpc("accept_bid", { p_bid: id }); }
@@ -419,6 +427,6 @@
     createProject: createProject, myProject: myProject, acceptBid: acceptBid, declineBid: declineBid, completeAndReview: completeAndReview,
     longDate: longDate, ago: ago,
     payJob: payJob, payoutSetup: payoutSetup, payoutDashboard: payoutDashboard, payoutStatus: payoutStatus,
-    estimateFees: estimateFees, money: money
+    estimateFees: estimateFees, money: money, adminList: adminList, adminAct: adminAct
   };
 })();

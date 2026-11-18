@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin · held job payments · saunainstall</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#FCF8F1;color:#272019;font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;font-size:15px;line-height:1.45}
+  header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;border-bottom:1px solid #E4D8C5;background:#FFFDF9}
+  .logo{font-weight:800;font-size:19px;letter-spacing:-.01em;color:#272019;text-decoration:none}.logo span{color:#8A5424}
+  main{max-width:1080px;margin:0 auto;padding:24px 20px 60px}
+  h1{font-size:26px;letter-spacing:-.02em;margin:0 0 6px}
+  .muted{color:#8A8071}
+  .card{background:#FFFDF9;border:1px solid #E4D8C5;border-radius:16px;padding:18px 20px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}
+  .stat .k{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8A8071}
+  .stat .v{font-size:24px;font-weight:800;letter-spacing:-.02em;margin-top:4px}
+  .warn{background:#FBEFD9;border:1px solid #E9CF9F;color:#6B4A12;border-radius:12px;padding:12px 14px;margin:0 0 16px;font-size:14px}
+  .err{color:#C0492F;font-weight:600;font-size:14px;margin-top:10px}
+  .pay{display:grid;grid-template-columns:1.4fr 1fr auto;gap:14px;align-items:start;padding:16px 0;border-top:1px solid #F0E6D6}
+  .pay:first-child{border-top:0}
+  .pill{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 9px;border-radius:999px;border:1px solid #E4D8C5;background:#F4ECE0;color:#8A8071}
+  .pill.ok{color:#3E7A4E;background:#E9F1EA;border-color:#CFE3D3}.pill.warn{color:#8A5A12;background:#FBEFD9;border-color:#E9CF9F}.pill.bad{color:#C0492F;background:#F8E5E0;border-color:#EDC6BC}
+  .amt{font-size:20px;font-weight:800;letter-spacing:-.02em}
+  .actions{display:flex;flex-direction:column;gap:8px;min-width:170px}
+  button{font:inherit;font-weight:600;font-size:14px;border-radius:10px;padding:10px 14px;min-height:42px;cursor:pointer;border:1px solid #D8C8AF;background:#FFFDF9;color:#272019}
+  button.primary{background:#8A5424;border-color:#8A5424;color:#fff}
+  button.danger{color:#C0492F;border-color:#EDC6BC}
+  button:disabled{opacity:.5;cursor:default}
+  input{font:inherit;font-size:16px;width:100%;padding:12px 13px;border:1px solid #E4D8C5;border-radius:10px;background:#FCF8F1;margin-top:6px}
+  label{display:block;font-size:13.5px;font-weight:600;margin-top:14px}
+  .login{max-width:420px;margin:40px auto}
+  .filters{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px}
+  .filters button{min-height:36px;padding:6px 12px;font-size:13.5px}
+  .filters button.on{background:#272019;color:#fff;border-color:#272019}
+  small{font-size:13px}
+  @media (max-width:760px){.stats{grid-template-columns:1fr 1fr}.pay{grid-template-columns:1fr}.actions{flex-direction:row;flex-wrap:wrap}.actions button{flex:1 1 140px}}
+</style>
+</head>
+<body>
+<header><a class="logo" href="/">sauna<span>install</span></a><span class="muted" id="who"></span></header>
+<main>
+  <section id="login" class="card login" hidden>
+    <h1>Admin log in</h1>
+    <p class="muted">For saunainstall staff. Use the admin email and its password.</p>
+    <label>Email<input id="email" type="email" autocomplete="username" value="info@saunainstall.com"></label>
+    <label>Password<input id="pass" type="password" autocomplete="current-password"></label>
+    <button class="primary" id="go" style="width:100%;margin-top:18px">Log in</button>
+    <div class="err" id="loginErr"></div>
+    <p style="margin:18px 0 0;font-size:14px" class="muted">First time? <a href="#" id="create" style="color:#8A5424">Create the admin password</a> for this email. We'll email a confirmation link.</p>
+  </section>
+
+  <section id="app" hidden>
+    <h1>Held job payments</h1>
+    <p class="muted">Homeowners pay when they hire. Payments stay here until the homeowner rates the job, 7 days after the install date, or you release them.</p>
+    <div id="schedWarn" class="warn" hidden></div>
+    <div class="stats">
+      <div class="card stat"><div class="k">Held for jobs</div><div class="v" id="sHeld">–</div><small class="muted">owed to installers</small></div>
+      <div class="card stat"><div class="k">Stripe available</div><div class="v" id="sAvail">–</div><small class="muted">in your Stripe balance</small></div>
+      <div class="card stat"><div class="k">Stripe pending</div><div class="v" id="sPend">–</div><small class="muted">still clearing</small></div>
+      <div class="card stat"><div class="k">Safe to withdraw</div><div class="v" id="sSafe">–</div><small class="muted">available minus held</small></div>
+    </div>
+    <div class="filters" id="filters"></div>
+    <div class="card" id="list"><p class="muted">Loading…</p></div>
+    <div class="err" id="appErr"></div>
+  </section>
+</main>
+<script src="/js/si.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var money = function (c) { return SI.money((c || 0) / 100); };
+  var data = null, filter = "held";
+  var FILTERS = [["held", "Held"], ["action", "Needs attention"], ["paid", "Paid out"], ["all", "All"]];
+
+  function show(id) { $("login").hidden = id !== "login"; $("app").hidden = id !== "app"; }
+
+  function state(r) {
+    if (r.status === "refunded") return ["Refunded " + money(r.refund_cents), "bad"];
+    if (r.status === "disputed") return ["Disputed", "bad"];
+    if (r.status === "failed") return ["Homeowner payment failed", "bad"];
+    if (r.status === "pending") return ["Awaiting homeowner payment", ""];
+    if (r.status === "processing") return ["Bank payment clearing", "warn"];
+    if (r.transfer_id) return ["Paid out " + money(r.transfer_cents), "ok"];
+    if (r.on_hold) return ["On hold", "bad"];
+    if (r.release_requested_at) return [r.contractor && r.contractor.payouts_enabled ? "Releasing" : "Released · installer must set up payouts", "warn"];
+    return ["Held", "ok"];
+  }
+  function matches(r) {
+    if (filter === "all") return true;
+    if (filter === "paid") return !!r.transfer_id;
+    if (filter === "action") return r.on_hold || r.status === "disputed" || r.status === "failed" || (r.release_requested_at && !r.transfer_id);
+    return (r.status === "succeeded" || r.status === "processing") && !r.transfer_id;
+  }
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function person(p) {
+    if (!p) return "—";
+    var n = [p.first_name, p.last_name].filter(Boolean).join(" ");
+    return n ? esc(n) + ' <span class="muted">' + esc(p.email || "") + "</span>" : '<span class="muted">' + esc(p.email || "") + "</span>";
+  }
+
+  function render() {
+    var b = data.balance;
+    $("sHeld").textContent = money(b.held);
+    $("sAvail").textContent = money(b.available);
+    $("sPend").textContent = money(b.pending);
+    $("sSafe").textContent = money(Math.max(0, b.available - b.held));
+    var w = $("schedWarn");
+    if (b.payout_interval && b.payout_interval !== "manual") {
+      w.hidden = false;
+      w.innerHTML = "<b>Stripe payouts are set to " + esc(b.payout_interval) + ".</b> Automatic payouts move held job money to your bank, and installer payouts can then fail. Set payouts to manual in Stripe (Settings → Payouts) and withdraw only the “Safe to withdraw” amount.";
+    } else w.hidden = true;
+    $("filters").innerHTML = FILTERS.map(function (f) { return '<button data-f="' + f[0] + '" class="' + (f[0] === filter ? "on" : "") + '">' + f[1] + "</button>"; }).join("");
+    var rows = data.rows.filter(matches);
+    if (!rows.length) { $("list").innerHTML = '<p class="muted">Nothing here.</p>'; return; }
+    $("list").innerHTML = rows.map(function (r) {
+      var st = state(r), p = r.project || {}, c = r.contractor || {};
+      var job = (p.model && p.model !== "Other / not listed" ? p.model : (p.sauna_type || "Sauna")) + " install";
+      var canAct = r.status === "succeeded" && !r.transfer_id;
+      var acts = [];
+      if (canAct) {
+        acts.push('<button class="primary" data-a="release" data-id="' + r.id + '">Release to installer</button>');
+        acts.push(r.on_hold ? '<button data-a="unhold" data-id="' + r.id + '">Remove hold</button>' : '<button data-a="hold" data-id="' + r.id + '">Put on hold</button>');
+        acts.push('<button class="danger" data-a="refund" data-id="' + r.id + '">Cancel &amp; refund</button>');
+      } else if (r.status === "processing" && !r.transfer_id) {
+        acts.push(r.on_hold ? '<button data-a="unhold" data-id="' + r.id + '">Remove hold</button>' : '<button data-a="hold" data-id="' + r.id + '">Put on hold</button>');
+      }
+      return '<div class="pay"><div><b>' + esc(job) + '</b> <span class="muted">· ' + esc([p.city, p.zip].filter(Boolean).join(", ")) + "</span>" +
+        '<div style="margin-top:6px"><span class="pill ' + st[1] + '">' + esc(st[0]) + "</span></div>" +
+        '<div style="margin-top:8px"><small>Homeowner: ' + person(r.owner) + "</small></div>" +
+        "<div><small>Installer: " + esc(c.business_name || "") + " " + person(c) + "</small></div>" +
+        (r.hold_note ? '<div><small class="muted">Hold note: ' + esc(r.hold_note) + "</small></div>" : "") + "</div>" +
+        '<div><div class="amt">' + money(r.amount_cents) + "</div>" +
+        "<small class=\"muted\">" + (r.method === "card" ? "Card" : r.method ? "Bank (ACH)" : "") + (r.stripe_fee_cents != null ? " · Stripe fee " + money(r.stripe_fee_cents) : "") + "</small>" +
+        (r.paid_at ? "<div><small>Paid " + esc(new Date(r.paid_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })) + "</small></div>" : "") +
+        (r.auto_release_on && !r.transfer_id && canAct ? "<div><small>Auto-release " + esc(SI.longDate(r.auto_release_on)) + "</small></div>" : "") +
+        (r.release_reason ? "<div><small class=\"muted\">Released by: " + esc({ homeowner_review: "homeowner rating", auto_7_days: "7-day auto-release", admin: "admin" }[r.release_reason] || r.release_reason) + "</small></div>" : "") +
+        '</div><div class="actions">' + acts.join("") + "</div></div>";
+    }).join("");
+  }
+
+  function load() {
+    $("appErr").textContent = "";
+    return SI.adminList().then(function (d) { data = d; render(); }).catch(function (e) {
+      if (/admin access/i.test(e.message || "")) { SI.signOut(); show("login"); $("loginErr").textContent = "This account isn't an admin."; return; }
+      $("appErr").textContent = SI.friendly(e);
+    });
+  }
+
+  document.addEventListener("click", function (e) {
+    var f = e.target.closest("[data-f]");
+    if (f) { filter = f.getAttribute("data-f"); render(); return; }
+    var a = e.target.closest("[data-a]");
+    if (!a) return;
+    var id = a.getAttribute("data-id"), act = a.getAttribute("data-a"), r = data.rows.filter(function (x) { return x.id === id; })[0];
+    var note;
+    if (act === "release" && !confirm("Release " + money(r.amount_cents) + " to " + ((r.contractor || {}).business_name || "the installer") + " now? Their payout is the price minus Stripe's fee. This can't be undone.")) return;
+    if (act === "hold") { note = prompt("Reason for the hold (shown to you only):", ""); if (note === null) return; }
+    if (act === "refund" && !confirm("Cancel this job and refund the homeowner " + money(r.amount_cents - (r.stripe_fee_cents || 0)) + " (price minus Stripe's " + money(r.stripe_fee_cents) + " fee)? This can't be undone.")) return;
+    a.disabled = true;
+    SI.adminAct(act, id, note).then(load).catch(function (err) { a.disabled = false; $("appErr").textContent = SI.friendly(err); });
+  });
+
+  function login() {
+    $("loginErr").textContent = "";
+    $("go").disabled = true;
+    SI.signIn($("email").value, $("pass").value).then(start).catch(function (e) { $("loginErr").textContent = SI.friendly(e); }).finally(function () { $("go").disabled = false; });
+  }
+  $("go").addEventListener("click", login);
+  $("create").addEventListener("click", function (e) {
+    e.preventDefault();
+    $("loginErr").textContent = "";
+    if ($("pass").value.length < 8) { $("loginErr").textContent = "Choose a password of at least 8 characters, then click Create again."; return; }
+    SI.signUp($("email").value, $("pass").value, { role: "admin" }).then(function (r) {
+      if (r.session) return start();
+      $("loginErr").style.color = "#3E7A4E";
+      $("loginErr").textContent = "Check " + $("email").value + " for the confirmation link, then log in here.";
+    }).catch(function (err) { $("loginErr").style.color = ""; $("loginErr").textContent = SI.friendly(err); });
+  });
+  $("pass").addEventListener("keydown", function (e) { if (e.key === "Enter") login(); });
+
+  function start() {
+    return SI.session().then(function (s) {
+      if (!s) { show("login"); return; }
+      $("who").innerHTML = esc(s.user.email) + ' · <button data-si-logout style="min-height:0;padding:4px 8px;font-size:13px">Log out</button>';
+      show("app");
+      return load();
+    });
+  }
+  start();
+})();
+</script>
+</body>
+</html>

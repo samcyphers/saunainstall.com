@@ -24,6 +24,7 @@ const projName = (p: any) => (p?.model && p.model !== "Other / not listed" ? p.m
 // Stripe's standard US rates; the exact fee is taken from Stripe when the homeowner pays
 const bankFee = (amt: number) => Math.min(Math.round(amt * 0.8) / 100, 5);
 const cardFee = (amt: number) => Math.round(amt * 2.9 + 30) / 100;
+const releaseOn = (pay: any) => pay?.auto_release_on ? day(pay.auto_release_on) : "7 days after the install date";
 const methodName = (m?: string | null) => m === "card" ? "card" : "bank account (ACH)";
 
 function layout(title: string, intro: string, rows: [string, string][], cta: [string, string] | null, foot: string, after = "") {
@@ -94,9 +95,9 @@ async function bidStatus(bidId: string, status: string) {
     const ownerName = [owner.first_name, owner.last_name].filter(Boolean).join(" ") || "The homeowner";
     const amt = Number(bid.amount);
     const payoutSetup = contractor?.payouts_enabled ? "" :
-      note(`<b>Set up payouts now</b> so you can be paid as soon as the homeowner pays: open your dashboard and choose <b>Set up payouts</b> (about 5 minutes, bank account required).`);
+      note(`<b>Set up payouts now</b> so your payment can be sent as soon as it's released: open your dashboard and choose <b>Set up payouts</b> (about 5 minutes, bank account required).`);
     return send(cProfile.email, `You're hired: ${job} in ${project.city || project.zip}`,
-      layout("You won the job.", `Hi ${esc(name)}, ${esc(ownerName)} accepted your ${money(amt)} proposal. Reach out to schedule the install.`,
+      layout("You won the job.", `Hi ${esc(name)}, ${esc(ownerName)} accepted your ${money(amt)} proposal. Reach out to schedule the install. Start work once the homeowner's payment is secured.`,
         [["Project", esc(job)], ["Location", esc(place(project))], ["Install date", day(project.install_date)], ["Proposed start", day(bid.start_date)],
          ["Homeowner", esc(ownerName)], ["Email", `<a href="mailto:${esc(owner.email)}" style="color:#8A5424">${esc(owner.email)}</a>`], ["Phone", esc(owner.phone || "—")],
          ["Job price", money(amt)],
@@ -104,7 +105,7 @@ async function bidStatus(bidId: string, status: string) {
          ["Your payout", `${money(amt - bankFee(amt))} by bank · ${money(amt - cardFee(amt))} by card`]],
         ["Open my bids", `${SITE}/contractors?login=1`],
         "You can reply to this email to reach the homeowner directly.",
-        note(`The homeowner pays through saunainstall within 24 hours of the job being completed, after rating your work. Stripe's processing fee is deducted from your payout; the exact amount depends on how the homeowner pays.`) + payoutSetup),
+        note(`The homeowner pays the full price through saunainstall to confirm your hire. <b>Wait for our &ldquo;Payment secured&rdquo; email before you start work.</b> We hold the payment until the job is done and release it when the homeowner rates your work, or automatically 7 days after the install date. Stripe's processing fee is deducted from your payout; the exact amount depends on how the homeowner pays.`) + payoutSetup),
       `bid-accepted-${bid.id}`, owner.email);
   }
   let why = "The homeowner decided not to move forward with this proposal.";
@@ -120,24 +121,39 @@ async function bidStatus(bidId: string, status: string) {
 
 async function paymentReminder(projectId: string) {
   const { data: project } = await admin.from("projects").select("*").eq("id", projectId).single();
-  if (!project?.awarded_bid_id) return { skipped: "no hire" };
+  if (!project?.awarded_bid_id || project.status !== "awarded") return { skipped: "no hire" };
   const { bid, contractor, owner } = await load(project.awarded_bid_id);
-  const { data: review } = await admin.from("reviews").select("id").eq("project_id", projectId).maybeSingle();
   const company = contractor?.business_name || "your installer";
-  return send(owner.email, `Reminder: rate and pay for your sauna install`,
-    layout("Time to wrap up your install.", `Hi ${esc(owner.first_name || "there")}, your installation with <b>${esc(company)}</b> was scheduled for ${day(project.install_date)}. ` +
-      (review ? "Thanks for your rating. Please complete payment so we can pay your installer." : "Please rate your installer, then complete payment so we can pay them."),
-      [["Installer", esc(company)], ["Amount due", money(bid.amount)], ["Pay by", "Bank account (recommended) or card"]],
-      [review ? "Pay now" : "Rate & pay", `${SITE}/list-project?login=1`],
-      "Payment is due within 24 hours of your installation being completed. Your payment is held by saunainstall and released to your installer, so we can step in if something isn't right.",
-      note(`Not finished yet, or something wrong with the install? Reply to this email and we'll help before any money moves.`)),
+  return send(owner.email, `Reminder: pay to confirm ${company}`,
+    layout("Confirm your installer.", `Hi ${esc(owner.first_name || "there")}, you hired <b>${esc(company)}</b> for your sauna install. Pay through saunainstall to confirm the job. Your installer starts once your payment is secured.`,
+      [["Installer", esc(company)], ["Amount", money(bid.amount)], ["Pay by", "Bank account (recommended) or card"]],
+      ["Pay now", `${SITE}/list-project?login=1`],
+      "saunainstall holds your payment until the job is done. It's released to your installer when you rate the job, or automatically 7 days after the install date.",
+      note(`Changed your mind or need a different date? Reply to this email and we'll help.`)),
     `pay-reminder-${projectId}`);
+}
+
+// reminder 2: the day after the install date, paid but not rated
+async function releaseReminder(projectId: string) {
+  const { data: project } = await admin.from("projects").select("*").eq("id", projectId).single();
+  if (!project?.awarded_bid_id || project.status !== "awarded") return { skipped: "not awaiting rating" };
+  const { contractor, owner } = await load(project.awarded_bid_id);
+  const { data: pay } = await admin.from("payments").select("*").eq("project_id", projectId).maybeSingle();
+  if (!pay || pay.status !== "succeeded" || pay.transfer_id || pay.release_requested_at) return { skipped: "nothing held" };
+  const company = contractor?.business_name || "your installer";
+  return send(owner.email, `Is your sauna install done? Rate ${company}`,
+    layout("How did the install go?", `Hi ${esc(owner.first_name || "there")}, once you're happy with the finished sauna, rate <b>${esc(company)}</b>. Your rating releases your payment to them.`,
+      [["Installer", esc(company)], ["Held payment", cents(pay.amount_cents)], ["Releases automatically", releaseOn(pay)]],
+      ["Rate & release payment", `${SITE}/list-project?login=1`],
+      "If you don't rate the job, your payment is released automatically on the date above.",
+      note(`Something wrong with the install, or not finished yet? Reply to this email before ${releaseOn(pay)} and we'll hold the payment while we sort it out.`)),
+    `release-reminder-${projectId}`);
 }
 
 async function paymentProcessing(paymentId: string) {
   const { pay, project, contractor, owner } = await loadPayment(paymentId);
   return send(owner.email, `Payment started: ${cents(pay.amount_cents)} for your sauna install`,
-    layout("Your bank payment is on its way.", `Hi ${esc(owner.first_name || "there")}, thanks for paying by bank account. Bank payments take about 4 business days to clear. We'll email you when it's complete.`,
+    layout("Your bank payment is on its way.", `Hi ${esc(owner.first_name || "there")}, thanks for paying by bank account. Bank payments take about 4 business days to clear. We'll email you and your installer when it's secured, and they can start work then.`,
       [["Installer", esc(contractor?.business_name || "")], ["Amount", cents(pay.amount_cents)], ["Project", esc(projName(project))]],
       null, "This is your payment confirmation from saunainstall."),
     `pay-processing-${pay.id}`);
@@ -146,19 +162,37 @@ async function paymentProcessing(paymentId: string) {
 async function paymentReceived(paymentId: string) {
   const { pay, project, contractor, cProfile, owner } = await loadPayment(paymentId);
   const fee = pay.stripe_fee_cents;
-  await send(owner.email, `Paid: ${cents(pay.amount_cents)} for your sauna install`,
-    layout("Payment complete. Thank you!", `Hi ${esc(owner.first_name || "there")}, your payment to <b>${esc(contractor?.business_name || "your installer")}</b> through saunainstall is complete.`,
-      [["Amount", cents(pay.amount_cents)], ["Paid by", methodName(pay.method)], ["Project", esc(projName(project))]],
-      null, "Keep this email as your receipt."),
+  const company = contractor?.business_name || "your installer";
+  await send(owner.email, `Payment secured: ${cents(pay.amount_cents)} for your sauna install`,
+    layout("Payment secured. Thank you!", `Hi ${esc(owner.first_name || "there")}, saunainstall is holding your payment for <b>${esc(company)}</b>. We've told them they can start.`,
+      [["Amount", cents(pay.amount_cents)], ["Paid by", methodName(pay.method)], ["Project", esc(projName(project))], ["Released", `When you rate the job, or automatically on ${releaseOn(pay)}`]],
+      ["View my project", `${SITE}/list-project?login=1`],
+      "Keep this email as your receipt.",
+      note(`Something wrong with the job? Contact us before the payment is released and we'll hold it while we sort it out.`)),
     `pay-received-owner-${pay.id}`);
-  return send(cProfile.email, `Homeowner paid: ${cents(pay.amount_cents)} for ${projName(project)}`,
-    layout("The homeowner paid.", `Hi ${esc(cProfile.first_name || contractor?.business_name || "there")}, payment for your job in ${esc(place(project))} is complete.` +
-      (contractor?.payouts_enabled ? " Your payout is being sent to your bank." : " <b>Set up payouts</b> in your dashboard so we can send your money."),
+  return send(cProfile.email, `Payment secured: you're good to start ${projName(project)}`,
+    layout("Payment secured. You're good to start.", `Hi ${esc(cProfile.first_name || contractor?.business_name || "there")}, the homeowner paid ${cents(pay.amount_cents)} for your job in ${esc(place(project))}. saunainstall holds it until the job is done.` +
+      (contractor?.payouts_enabled ? "" : " <b>Set up payouts</b> in your dashboard so we can send your money when it's released."),
       [["Job price", cents(pay.amount_cents)], ["Paid by", methodName(pay.method)], ["Processing fee", fee != null ? cents(fee) : "Calculated by Stripe"],
-       ["Your payout", fee != null ? cents(pay.amount_cents - fee) : "Job price minus processing fee"]],
+       ["Your payout", fee != null ? cents(pay.amount_cents - fee) : "Job price minus processing fee"], ["Released", `When the homeowner rates your work, or automatically on ${releaseOn(pay)}`]],
       [contractor?.payouts_enabled ? "View my bids" : "Set up payouts", `${SITE}/contractors?login=1`],
       "Payouts arrive in your bank account by ACH, usually within 2 business days of release."),
     `pay-received-pro-${pay.id}`);
+}
+
+async function refundIssued(paymentId: string) {
+  const { pay, project, contractor, cProfile, owner } = await loadPayment(paymentId);
+  const company = contractor?.business_name || "your installer";
+  await send(owner.email, `Refund issued: ${cents(pay.refund_cents || 0)}`,
+    layout("Your project was cancelled and refunded.", `Hi ${esc(owner.first_name || "there")}, we cancelled your job with <b>${esc(company)}</b> and refunded your payment.`,
+      [["Paid", cents(pay.amount_cents)], ["Stripe processing fee (not refundable)", pay.amount_cents - (pay.refund_cents || 0) > 0 ? "−" + cents(pay.amount_cents - (pay.refund_cents || 0)) : "$0"], ["Refunded", cents(pay.refund_cents || 0)]],
+      null, "Refunds reach your bank or card in about 5–10 business days."),
+    `refund-owner-${pay.id}`);
+  return send(cProfile.email, `Job cancelled: ${projName(project)}`,
+    layout("This job was cancelled.", `Hi ${esc(cProfile.first_name || contractor?.business_name || "there")}, the ${esc(projName(project).toLowerCase())} in ${esc(place(project))} was cancelled and the homeowner's payment was refunded.`,
+      [["Project", esc(projName(project))], ["Location", esc(place(project))]],
+      ["Find more projects", `${SITE}/contractors`], "You're receiving this because you were hired for this job on saunainstall."),
+    `refund-pro-${pay.id}`);
 }
 
 async function payoutSent(paymentId: string) {
@@ -193,13 +227,13 @@ async function sample(to: string) {
   const t = Date.now();
   const amt = 2650;
   return send(to, "[Test] You're hired: Arosa 4-Person Barrel Sauna install in Ketchum",
-    layout("You won the job.", "Hi Sam, Jordan Avery accepted your $2,650 proposal. Reach out to schedule the install.",
+    layout("You won the job.", "Hi Sam, Jordan Avery accepted your $2,650 proposal. Reach out to schedule the install. Start work once the homeowner's payment is secured.",
       [["Project", "Arosa 4-Person Barrel Sauna install"], ["Location", "Ketchum, 83340"], ["Install date", day("2026-12-05")], ["Proposed start", day("2026-12-01")],
        ["Homeowner", "Jordan Avery"], ["Email", "jordan@example.com"], ["Phone", "(208) 555-0142"], ["Job price", money(amt)],
        ["Processing fee", `${money(bankFee(amt))} if paid by bank · ${money(cardFee(amt))} if paid by card`],
        ["Your payout", `${money(amt - bankFee(amt))} by bank · ${money(amt - cardFee(amt))} by card`]],
       ["Open my bids", `${SITE}/contractors?login=1`], "This is a test email from saunainstall.",
-      note("The homeowner pays through saunainstall within 24 hours of the job being completed, after rating your work. Stripe's processing fee is deducted from your payout; the exact amount depends on how the homeowner pays.")),
+      note("The homeowner pays the full price through saunainstall to confirm your hire. <b>Wait for our &ldquo;Payment secured&rdquo; email before you start work.</b> We hold the payment until the job is done and release it when the homeowner rates your work, or automatically 7 days after the install date. Stripe's processing fee is deducted from your payout; the exact amount depends on how the homeowner pays.")),
     `test-hired-${t}`);
 }
 
@@ -213,6 +247,8 @@ Deno.serve(async (req) => {
       case "bid_created": out = await bidCreated(job.bid_id); break;
       case "bid_status": out = await bidStatus(job.bid_id, job.status); break;
       case "payment_reminder": out = await paymentReminder(job.project_id); break;
+      case "release_reminder": out = await releaseReminder(job.project_id); break;
+      case "refund_issued": out = await refundIssued(job.payment_id); break;
       case "payment_processing": out = await paymentProcessing(job.payment_id); break;
       case "payment_received": out = await paymentReceived(job.payment_id); break;
       case "payment_failed": out = await paymentFailed(job.payment_id); break;
