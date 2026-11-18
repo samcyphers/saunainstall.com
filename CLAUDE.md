@@ -8,7 +8,7 @@ A static marketing + flow prototype for saunainstall.com, a marketplace connecti
 - `list-project.html` — sauna owner flow (served at `/list-project`): account sign-up → list project → thank-you → owner login (`#login`) → owner dashboard with proposals
 - `contractors.html` — contractor flow (served at `/contractors`): pricing ($24.99/mo, first month free, unlimited bids) → sign-up → find projects by zip/city → payment (Stripe Checkout) → bid on project → contractor login (`#login`) → dashboard
 - `privacy.html`, `terms.html` — Privacy Policy and Terms of Service for Sauna Install LLC (served at `/privacy` and `/terms`). Plain static pages (not design-tool bundles); keep in sync with the Google Docs drafts in the saunainstall-site Drive folder.
-- `admin.html` — staff page (served at `/admin`, noindex) for held job payments: release, hold, cancel & refund. Only emails in the Supabase table `private.admin_emails` (info@saunainstall.com) can use it.
+- `team.html` — staff page (served at `/team`, not linked anywhere on the site, noindex) for held job payments: release, hold, cancel & refund. Only emails in the Supabase table `private.admin_emails` (info@saunainstall.com) can use it.
 - `support.html` — customer support page (served at `/support`); its URL is the customer support URL given to Stripe.
 - `images/` — site photos. Must be deployed; the homepage "What we install" cards load from `/images/`.
 - `favicon.ico`, `favicon.svg`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png`, `site.webmanifest` — site icons (the diamond logo). Every page's `<head>` links them; after a design-tool re-export, re-add the icon `<link>` tags (browsers still fall back to `/favicon.ico`).
@@ -52,8 +52,8 @@ The user will download a new version of the three `.html` files from the design 
 
 ## Job payments (Stripe Connect)
 - Homeowners pay the accepted bid price through saunainstall when they hire (bank account shown first as recommended, or card) — Supabase edge function `job-payments` (action `pay`) creates a Stripe Checkout Session; payment state lives in the `payments` table.
-- saunainstall holds the payment until it is released by: the homeowner's star rating (trigger on `reviews`), auto-release 7 days after the later of the install date and the installer's start date (`payments.auto_release_on`), or an admin on `/admin`. Admins can also put a payment on hold or cancel & refund (price minus Stripe's fee). Card disputes put unreleased payments on hold automatically.
-- Platform Stripe payouts must be **manual** so held money stays in the Stripe balance; withdraw only the "Safe to withdraw" amount shown on `/admin`.
+- saunainstall holds the payment until it is released by: the homeowner's star rating (trigger on `reviews`), auto-release 7 days after the later of the install date and the installer's start date (`payments.auto_release_on`), or an admin on `/team`. Admins can also put a payment on hold or cancel & refund (price minus Stripe's fee). Card disputes put unreleased payments on hold automatically.
+- Platform Stripe payouts must be **manual** so held money stays in the Stripe balance; withdraw only the "Safe to withdraw" amount shown on `/team`.
 - Edge function sources live in `supabase/functions/` (job-payments, stripe-webhook, notify); deploy them with the Supabase tools, not Vercel.
 - Separate charges and transfers: the platform collects the payment, then transfers price minus the exact Stripe fee to the contractor's Express connected account (Sauna Install pays Connect account/payout fees and is liable for negative balances). Contractors set up payouts from their dashboard (`connect_link` / `connect_status` / `connect_dashboard`).
 - `stripe-webhook` records payment success/processing/failure, disputes and refunds; `notify` emails reminders, receipts, payout notices and dispute alerts (source in `supabase/functions/notify/`, not deployed by Vercel).

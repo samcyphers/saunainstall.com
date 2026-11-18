@@ -97,7 +97,7 @@
   // ---------- auth ----------
   async function signUp(email, password, meta) {
     // The confirmation email links back to the login page for this account type
-    var back = window.location.origin + ((meta && meta.role === "contractor") ? "/contractors" : (meta && meta.role === "admin") ? "/admin" : "/list-project") + "?login=1";
+    var back = window.location.origin + ((meta && meta.role === "contractor") ? "/contractors" : (meta && meta.role === "admin") ? "/team" : "/list-project") + "?login=1";
     var d = await http("/auth/v1/signup?redirect_to=" + encodeURIComponent(back), { method: "POST", body: { email: email.trim().toLowerCase(), password: password, data: meta || {} } });
     var s = fromAuth(d);
     if (s) { save(s); setRole(meta && meta.role === "contractor" ? "contractor" : "owner"); return { session: s, needsConfirm: false }; }
